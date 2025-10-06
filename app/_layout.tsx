@@ -4,11 +4,21 @@ import { Provider } from 'react-redux';
 export default function RootLayout() {
   return (
     <Provider store={store}>
-      <AppStack />
+      <AppNavigationStack />
     </Provider>
   );
 }
 
-function AppStack() {
-  return <Stack />;
+function AppNavigationStack() {
+  const user = true;
+  return (
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        animation: 'fade',
+      }}
+    >
+      {user ? <Stack.Screen name="(root)" /> : <Stack.Screen name="(auth)" />}
+    </Stack>
+  );
 }
