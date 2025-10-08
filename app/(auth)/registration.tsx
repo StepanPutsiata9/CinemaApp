@@ -94,7 +94,7 @@ export default function LoginScreen() {
               onPress={() => router.push('/(auth)/login')}
               style={styles.touchOpacity}
             >
-              <Text style={styles.noAccountText}>Нет аккаунта? Зарегистрироваться</Text>
+              <Text style={styles.noAccountText}>Есть аккаунт? Войти</Text>
             </TouchableOpacity>
             <PrimaryButton title="Зарегистрироваться" onPress={() => {}} colors={colors} />
           </View>
