@@ -3,3 +3,5 @@ export { PrimaryButton } from './components/PrimaryButton';
 export { AuthBanner } from './utils/AuthBanner';
 export { GreetingBanner } from './utils/GreetingBanner';
 export { GreetingLogo } from './utils/GreetingLogo';
+export { HeaderLogo } from './utils/HeaderLogo';
+export { RegistartionBanner } from './utils/RegistartionBanner';

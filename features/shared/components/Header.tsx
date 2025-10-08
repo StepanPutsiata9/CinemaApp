@@ -1,10 +1,10 @@
 import { StyleSheet, View } from 'react-native';
-import { AuthBanner } from '../utils/AuthBanner';
+import { HeaderLogo } from '../utils/HeaderLogo';
 
 export const Header = () => {
   return (
     <View style={styles.header}>
-      <AuthBanner />
+      <HeaderLogo />
     </View>
   );
 };
