@@ -1,7 +1,7 @@
+import { useRegistrationValidation } from '@/features/auth';
 import { Header, PrimaryButton, RegistartionBanner } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
 import { useRouter } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
 import {
   Animated,
   KeyboardAvoidingView,
@@ -19,24 +19,17 @@ export default function LoginScreen() {
   const { colors } = useTheme();
   const styles = useStyles(colors);
   const router = useRouter();
-  const [loginText, setLoginText] = useState<string>('');
-  const [passwordText, setPasswordText] = useState<string>('');
-  const [repitPassword, setRepitPassword] = useState<string>('');
-
-  // const { authError } = useSelector((state: RootState) => state.auth);
-  const authError = false;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  useEffect(() => {
-    if (authError) {
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      fadeAnim.setValue(0);
-    }
-  }, [fadeAnim, authError]);
+  const {
+    loginText,
+    setLogin,
+    registError,
+    fadeAnim,
+    passwordText,
+    setPassword,
+    setRepitPassword,
+    repitPasswordText,
+    handleRegistration,
+  } = useRegistrationValidation();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -55,8 +48,8 @@ export default function LoginScreen() {
               <TextInput
                 value={loginText}
                 placeholder="Логин"
-                style={[styles.loginInput, authError && styles.errorInput]}
-                onChangeText={setLoginText}
+                style={[styles.loginInput, registError && styles.errorInput]}
+                onChangeText={setLogin}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 placeholderTextColor="#9E9B9B"
@@ -64,30 +57,31 @@ export default function LoginScreen() {
               <TextInput
                 value={passwordText}
                 placeholder="Пароль"
-                style={[styles.passwordInput, authError && styles.errorInput]}
-                onChangeText={setPasswordText}
+                style={[styles.passwordInput, registError && styles.errorInput]}
+                onChangeText={setPassword}
                 placeholderTextColor="#9E9B9B"
                 secureTextEntry={true}
               />
               <TextInput
-                value={repitPassword}
+                value={repitPasswordText}
                 placeholder="Повторите пароль"
-                style={[styles.passwordInput, authError && styles.errorInput]}
+                style={[styles.passwordInput, registError && styles.errorInput]}
                 onChangeText={setRepitPassword}
                 placeholderTextColor="#9E9B9B"
                 secureTextEntry={true}
               />
             </View>
-            {authError ? (
+            {registError ? (
               <Animated.View
                 style={{
                   width: '100%',
                   flexDirection: 'row',
                   justifyContent: 'flex-start',
                   opacity: fadeAnim,
+                  marginTop: -20,
                 }}
               >
-                <Text style={styles.errorText}>{'Ошибка'}</Text>
+                <Text style={styles.errorText}>{registError}</Text>
               </Animated.View>
             ) : null}
             <TouchableOpacity
@@ -96,7 +90,11 @@ export default function LoginScreen() {
             >
               <Text style={styles.noAccountText}>Есть аккаунт? Войти</Text>
             </TouchableOpacity>
-            <PrimaryButton title="Зарегистрироваться" onPress={() => {}} colors={colors} />
+            <PrimaryButton
+              title="Зарегистрироваться"
+              onPress={handleRegistration}
+              colors={colors}
+            />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

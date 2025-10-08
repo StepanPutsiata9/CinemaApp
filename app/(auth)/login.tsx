@@ -1,7 +1,7 @@
+import { useAuthValidation } from '@/features/auth';
 import { AuthBanner, Header, PrimaryButton } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
 import { useRouter } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
 import {
   Animated,
   KeyboardAvoidingView,
@@ -19,23 +19,8 @@ export default function LoginScreen() {
   const { colors } = useTheme();
   const styles = useStyles(colors);
   const router = useRouter();
-  const [loginText, setLoginText] = useState<string>('');
-  const [passwordText, setPasswordText] = useState<string>('');
-
-  // const { authError } = useSelector((state: RootState) => state.auth);
-  const authError = false;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  useEffect(() => {
-    if (authError) {
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      fadeAnim.setValue(0);
-    }
-  }, [fadeAnim, authError]);
+  const { passwordText, loginText, setLogin, setPassword, authError, handleLogin, fadeAnim } =
+    useAuthValidation();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -55,7 +40,7 @@ export default function LoginScreen() {
                 value={loginText}
                 placeholder="Логин"
                 style={[styles.loginInput, authError && styles.errorInput]}
-                onChangeText={setLoginText}
+                onChangeText={setLogin}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 placeholderTextColor="#9E9B9B"
@@ -64,7 +49,7 @@ export default function LoginScreen() {
                 value={passwordText}
                 placeholder="Пароль"
                 style={[styles.passwordInput, authError && styles.errorInput]}
-                onChangeText={setPasswordText}
+                onChangeText={setPassword}
                 placeholderTextColor="#9E9B9B"
                 secureTextEntry={true}
               />
@@ -76,9 +61,10 @@ export default function LoginScreen() {
                   flexDirection: 'row',
                   justifyContent: 'flex-start',
                   opacity: fadeAnim,
+                  marginTop: -20,
                 }}
               >
-                <Text style={styles.errorText}>{'Ошибка'}</Text>
+                <Text style={styles.errorText}>{authError}</Text>
               </Animated.View>
             ) : null}
             <TouchableOpacity
@@ -87,7 +73,7 @@ export default function LoginScreen() {
             >
               <Text style={styles.noAccountText}>Нет аккаунта? Зарегистрироваться</Text>
             </TouchableOpacity>
-            <PrimaryButton title="Войти" onPress={() => {}} colors={colors} />
+            <PrimaryButton title="Войти" onPress={handleLogin} colors={colors} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -138,7 +124,7 @@ function useStyles(colors: IColorsTheme) {
       height: 50,
       borderRadius: 18,
       paddingHorizontal: 17,
-      marginBottom: 12,
+      marginBottom: 22,
       fontSize: 16,
       backgroundColor: '#242424',
       fontFamily: 'Montserrat',
