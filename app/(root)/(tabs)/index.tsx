@@ -1,9 +1,10 @@
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeTab() {
   return (
-    <View>
+    <SafeAreaView>
       <Text>Home Tab</Text>
-    </View>
+    </SafeAreaView>
   );
 }

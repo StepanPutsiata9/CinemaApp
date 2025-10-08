@@ -1,20 +1,25 @@
-import { Header, PrimaryButton } from '@/features/shared';
+import { GreetingBanner, GreetingLogo, PrimaryButton } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function LoginScreen() {
+export default function GrettingScreen() {
   const { colors } = useTheme();
   const styles = useStyles(colors);
   const router = useRouter();
   return (
     <SafeAreaView style={styles.container}>
-      <Header />
-      <View style={styles.content}>
-        <Text style={styles.greetText}>Добро пожаловать!</Text>
-        <PrimaryButton title="Войти" onPress={() => {}} colors={colors} />
+      <View style={styles.bannerView}>
+        <GreetingBanner />
       </View>
+      <View style={styles.logoView}>
+        <GreetingLogo />
+      </View>
+      <View style={styles.textView}>
+        <Text style={styles.bannerText}>{`Окунитесь в магию\nбольшого экрана!`}</Text>
+      </View>
+      <PrimaryButton title="Начать" onPress={() => router.push('/(auth)/login')} colors={colors} />
     </SafeAreaView>
   );
 }
@@ -24,7 +29,8 @@ function useStyles(colors: IColorsTheme) {
     container: {
       flex: 1,
       backgroundColor: colors.background,
-      paddingHorizontal: 16,
+      alignItems: 'center',
+      paddingTop: 40,
     },
     bannerText: {
       color: colors.text.title,
@@ -32,15 +38,14 @@ function useStyles(colors: IColorsTheme) {
       fontFamily: 'MontserratBold',
       textAlign: 'center',
     },
-    content: {
-      flexDirection: 'column',
-      alignItems: 'center',
+    logoView: {
+      marginBottom: 20,
     },
-    greetText: {
-      color: colors.text.title,
-      fontSize: 24,
-      fontFamily: 'Montserrat',
-      marginBottom: 22,
+    textView: {
+      marginBottom: 60,
+    },
+    bannerView: {
+      marginBottom: 40,
     },
   });
 }

@@ -1,16 +1,12 @@
 import { store } from '@/store';
+import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
 import { Provider } from 'react-redux';
-export default function RootLayout() {
-  return (
-    <Provider store={store}>
-      <AppNavigationStack />
-    </Provider>
-  );
-}
 
 function AppNavigationStack() {
-  const user = true;
+  const user = false;
   return (
     <Stack
       screenOptions={{
@@ -20,5 +16,29 @@ function AppNavigationStack() {
     >
       {user ? <Stack.Screen name="(root)" /> : <Stack.Screen name="(auth)" />}
     </Stack>
+  );
+}
+
+SplashScreen.preventAutoHideAsync();
+export default function RootLayout() {
+  const [loaded, error] = useFonts({
+    Montserrat: require('@/assets/fonts/Montserrat.ttf'),
+    MontserratBold: require('@/assets/fonts/MontserratBold.ttf'),
+    MontserratRegular: require('@/assets/fonts/MontserratRegular.ttf'),
+  });
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) {
+    return null;
+  }
+  return (
+    <Provider store={store}>
+      <AppNavigationStack />
+    </Provider>
   );
 }
