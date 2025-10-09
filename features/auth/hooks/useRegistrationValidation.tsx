@@ -74,7 +74,6 @@ export const useRegistrationValidation = () => {
     if (!checkErrorInputs()) {
       return;
     }
-    console.log(2);
   };
   const setNullError = () => dispatch(setAuthError(null));
   return {

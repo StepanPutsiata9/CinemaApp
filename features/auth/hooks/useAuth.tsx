@@ -1,12 +1,13 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import api from '../services/authApi';
-import { login, setAuthError, setLoading } from '../store/auth.slice';
+import { isFirstLaunch, setAppLaunched } from '../services/authStorage';
+import { loadUser, login, setAuthError, setIsFirstLaunch, setLoading } from '../store/auth.slice';
 import { useAuthValidation } from './useAuthValidation';
 import { useRegistrationValidation } from './useRegistrationValidation';
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector(state => state.auth);
+  const { user, isLoading } = useAppSelector(state => state.auth);
   const {
     checkErrorInputs: checkErrorAuthInputs,
     loginText,
@@ -17,11 +18,11 @@ export const useAuth = () => {
   const { checkErrorInputs: checkErrorRegistInputs, setNullInputs: setNullRegistInputs } =
     useRegistrationValidation();
   const handleLogin = async () => {
-    dispatch(setLoading(true));
-    dispatch(setAuthError(null));
     if (!checkErrorAuthInputs()) {
       return;
     }
+    dispatch(setLoading(true));
+    dispatch(setAuthError(null));
     try {
       const response = await api.post('auth/login', {
         login: loginText,
@@ -44,11 +45,11 @@ export const useAuth = () => {
     }
   };
   const handleRegistration = async () => {
-    dispatch(setLoading(true));
-    dispatch(setAuthError(null));
     if (!checkErrorRegistInputs()) {
       return;
     }
+    dispatch(setLoading(true));
+    dispatch(setAuthError(null));
     try {
       const response = await api.post('auth/registration', {
         login: loginText,
@@ -63,9 +64,22 @@ export const useAuth = () => {
       setNullRegistInputs();
     }
   };
+  const loadApp = () => {
+    dispatch(loadUser());
+    const checkFirstLaunch = async () => {
+      const firstLaunch = await isFirstLaunch();
+      dispatch(setIsFirstLaunch(firstLaunch));
+      if (firstLaunch) {
+        await setAppLaunched();
+      }
+    };
+    checkFirstLaunch();
+  };
   return {
     user,
     handleLogin,
     handleRegistration,
+    isLoading,
+    loadApp,
   };
 };

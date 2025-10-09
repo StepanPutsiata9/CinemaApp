@@ -1,40 +1,40 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Keychain from 'react-native-keychain';
+import * as SecureStore from 'expo-secure-store';
 
 export interface Tokens {
   accessToken: string;
   refreshToken: string;
 }
 
+const STORAGE_KEYS = {
+  ACCESS_TOKEN: 'access_token',
+  REFRESH_TOKEN: 'refresh_token',
+  FIRST_LAUNCH: 'first_launch',
+} as const;
+
 export const storeTokens = async ({ accessToken, refreshToken }: Tokens): Promise<boolean> => {
   try {
-    await Keychain.setGenericPassword('accessToken', accessToken, {
-      service: 'accessToken',
-    });
+    await SecureStore.setItemAsync(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
+    await SecureStore.setItemAsync(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
 
-    await Keychain.setGenericPassword('refreshToken', refreshToken, {
-      service: 'refreshToken',
-    });
     return true;
   } catch (error) {
     console.error('Error storing tokens:', error);
     return false;
   }
 };
+
 export const getTokens = async (): Promise<Tokens | null> => {
   try {
-    const accessTokenCredentials = await Keychain.getGenericPassword({
-      service: 'accessToken',
-    });
+    const [accessToken, refreshToken] = await Promise.all([
+      SecureStore.getItemAsync(STORAGE_KEYS.ACCESS_TOKEN),
+      SecureStore.getItemAsync(STORAGE_KEYS.REFRESH_TOKEN),
+    ]);
 
-    const refreshTokenCredentials = await Keychain.getGenericPassword({
-      service: 'refreshToken',
-    });
-
-    if (accessTokenCredentials && refreshTokenCredentials) {
+    if (accessToken && refreshToken) {
       return {
-        accessToken: accessTokenCredentials.password,
-        refreshToken: refreshTokenCredentials.password,
+        accessToken,
+        refreshToken,
       };
     }
 
@@ -47,9 +47,10 @@ export const getTokens = async (): Promise<Tokens | null> => {
 
 export const clearTokens = async (): Promise<boolean> => {
   try {
-    await Keychain.resetGenericPassword({ service: 'accessToken' });
-
-    await Keychain.resetGenericPassword({ service: 'refreshToken' });
+    await Promise.all([
+      SecureStore.deleteItemAsync(STORAGE_KEYS.ACCESS_TOKEN),
+      SecureStore.deleteItemAsync(STORAGE_KEYS.REFRESH_TOKEN),
+    ]);
 
     return true;
   } catch (error) {
@@ -58,11 +59,20 @@ export const clearTokens = async (): Promise<boolean> => {
   }
 };
 
-export const setAppLaunched = async () => {
-  await AsyncStorage.setItem('first_launch', 'false');
+export const setAppLaunched = async (): Promise<void> => {
+  try {
+    await AsyncStorage.setItem(STORAGE_KEYS.FIRST_LAUNCH, 'false');
+  } catch (error) {
+    console.error('Error setting app launch:', error);
+  }
 };
 
-export const isFirstLaunch = async () => {
-  const value = await AsyncStorage.getItem('first_launch');
-  return value === null;
+export const isFirstLaunch = async (): Promise<boolean> => {
+  try {
+    const value = await AsyncStorage.getItem(STORAGE_KEYS.FIRST_LAUNCH);
+    return value === null;
+  } catch (error) {
+    console.error('Error checking first launch:', error);
+    return true;
+  }
 };

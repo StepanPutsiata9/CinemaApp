@@ -4,10 +4,19 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { ActivityIndicator } from 'react-native';
 import { Provider } from 'react-redux';
 
 function AppNavigationStack() {
-  const { user } = useAuth();
+  const { user, isLoading, loadApp } = useAuth();
+
+  useEffect(() => {
+    loadApp();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
   return (
     <Stack
       screenOptions={{

@@ -49,8 +49,7 @@ export const loadUser = createAsyncThunk('auth/loadUser', async (_, { rejectWith
       return { decoded };
     } else {
       const decoded = null;
-      const avatarka = null;
-      return { decoded, avatarka };
+      return { decoded };
     }
   } catch (error) {
     return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
@@ -93,7 +92,6 @@ export const login = createAsyncThunk(
 export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValue }) => {
   try {
     await clearTokens();
-    console.log('logout');
   } catch (error) {
     return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
   }
