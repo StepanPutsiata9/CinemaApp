@@ -1,42 +1,40 @@
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { Animated } from 'react-native';
+import { setAuthError } from '../store/auth.slice';
 
 export const useAuthValidation = () => {
   const [loginText, setLoginText] = useState<string>('');
   const [passwordText, setPasswordText] = useState<string>('');
-  const [authError, setAuthError] = useState<string | null>(null);
+  const { authError } = useAppSelector(state => state.auth);
+  const dispatch = useAppDispatch();
   const setNullInputs = () => {
     setLoginText('');
     setPasswordText('');
   };
-  const handleLogin = async () => {
-    if (!checkErrorInputs()) {
-      return;
-    }
-    console.log('1');
-  };
 
   const setLogin = (text: string) => {
     if (text.length === 1) {
-      setAuthError(null);
+      dispatch(setAuthError(null));
     }
     setLoginText(text);
   };
   const setPassword = (text: string) => {
     if (text.length === 1) {
-      setAuthError(null);
+      dispatch(setAuthError(null));
     }
     setPasswordText(text);
   };
 
   const checkErrorInputs = () => {
     if (loginText.trim().length === 0 || passwordText.trim().length === 0) {
-      setAuthError('Все поля должны быть заполненными');
+      dispatch(setAuthError('Все поля должны быть заполненными'));
       setNullInputs();
       return false;
     }
     if (loginText.trim().length < 8 || passwordText.trim().length < 8) {
-      setAuthError('Логин и пароль должны состоять минимум из 8 символов');
+      dispatch(setAuthError('Логин и пароль должны состоять минимум из 8 символов'));
       setNullInputs();
       return false;
     }
@@ -55,6 +53,21 @@ export const useAuthValidation = () => {
       fadeAnim.setValue(0);
     }
   }, [fadeAnim, authError]);
+
+  const checkError = (err: unknown) => {
+    // eslint-disable-next-line import/no-named-as-default-member
+    if (axios.isAxiosError(err)) {
+      dispatch(
+        setAuthError(err.response?.data?.message || err.message || 'Произошла ошибка при входе')
+      );
+    } else if (err instanceof Error) {
+      dispatch(setAuthError(err.message || 'Произошла ошибка при входе'));
+    } else {
+      dispatch(setAuthError('Произошла неизвестная ошибка при входе'));
+    }
+  };
+
+  const setNullError = () => dispatch(setAuthError(null));
   return {
     loginText,
     passwordText,
@@ -62,7 +75,10 @@ export const useAuthValidation = () => {
     setAuthError,
     setLogin,
     setPassword,
-    handleLogin,
+    checkErrorInputs,
     fadeAnim,
+    setNullInputs,
+    checkError,
+    setNullError,
   };
 };

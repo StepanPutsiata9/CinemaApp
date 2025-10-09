@@ -1,4 +1,4 @@
-import { useAuthValidation } from '@/features/auth';
+import { useAuth, useAuthValidation } from '@/features/auth';
 import { AuthBanner, Header, PrimaryButton } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
 import { useRouter } from 'expo-router';
@@ -19,9 +19,9 @@ export default function LoginScreen() {
   const { colors } = useTheme();
   const styles = useStyles(colors);
   const router = useRouter();
-  const { passwordText, loginText, setLogin, setPassword, authError, handleLogin, fadeAnim } =
+  const { passwordText, loginText, setLogin, setPassword, authError, fadeAnim, setNullError } =
     useAuthValidation();
-
+  const { handleLogin } = useAuth();
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -68,7 +68,10 @@ export default function LoginScreen() {
               </Animated.View>
             ) : null}
             <TouchableOpacity
-              onPress={() => router.push('/(auth)/registration')}
+              onPress={() => {
+                router.push('/(auth)/registration');
+                setNullError();
+              }}
               style={styles.touchOpacity}
             >
               <Text style={styles.noAccountText}>Нет аккаунта? Зарегистрироваться</Text>

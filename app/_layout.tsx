@@ -1,3 +1,4 @@
+import { useAuth } from '@/features/auth';
 import { store } from '@/store';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -6,7 +7,7 @@ import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 
 function AppNavigationStack() {
-  const user = false;
+  const { user } = useAuth();
   return (
     <Stack
       screenOptions={{
@@ -14,7 +15,7 @@ function AppNavigationStack() {
         animation: 'fade',
       }}
     >
-      <Stack.Protected guard={user}>
+      <Stack.Protected guard={!!user}>
         <Stack.Screen name="(root)" />
       </Stack.Protected>
       <Stack.Screen name="(auth)" />

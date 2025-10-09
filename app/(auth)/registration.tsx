@@ -1,4 +1,4 @@
-import { useRegistrationValidation } from '@/features/auth';
+import { useAuth, useRegistrationValidation } from '@/features/auth';
 import { Header, PrimaryButton, RegistartionBanner } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
 import { useRouter } from 'expo-router';
@@ -22,15 +22,15 @@ export default function LoginScreen() {
   const {
     loginText,
     setLogin,
-    registError,
+    authError,
     fadeAnim,
     passwordText,
     setPassword,
     setRepitPassword,
     repitPasswordText,
-    handleRegistration,
+    setNullError,
   } = useRegistrationValidation();
-
+  const { handleRegistration } = useAuth();
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -48,7 +48,7 @@ export default function LoginScreen() {
               <TextInput
                 value={loginText}
                 placeholder="Логин"
-                style={[styles.loginInput, registError && styles.errorInput]}
+                style={[styles.loginInput, authError && styles.errorInput]}
                 onChangeText={setLogin}
                 keyboardType="email-address"
                 autoCapitalize="none"
@@ -57,7 +57,7 @@ export default function LoginScreen() {
               <TextInput
                 value={passwordText}
                 placeholder="Пароль"
-                style={[styles.passwordInput, registError && styles.errorInput]}
+                style={[styles.passwordInput, authError && styles.errorInput]}
                 onChangeText={setPassword}
                 placeholderTextColor="#9E9B9B"
                 secureTextEntry={true}
@@ -65,13 +65,13 @@ export default function LoginScreen() {
               <TextInput
                 value={repitPasswordText}
                 placeholder="Повторите пароль"
-                style={[styles.passwordInput, registError && styles.errorInput]}
+                style={[styles.passwordInput, authError && styles.errorInput]}
                 onChangeText={setRepitPassword}
                 placeholderTextColor="#9E9B9B"
                 secureTextEntry={true}
               />
             </View>
-            {registError ? (
+            {authError ? (
               <Animated.View
                 style={{
                   width: '100%',
@@ -81,11 +81,14 @@ export default function LoginScreen() {
                   marginTop: -20,
                 }}
               >
-                <Text style={styles.errorText}>{registError}</Text>
+                <Text style={styles.errorText}>{authError}</Text>
               </Animated.View>
             ) : null}
             <TouchableOpacity
-              onPress={() => router.push('/(auth)/login')}
+              onPress={() => {
+                router.push('/(auth)/login');
+                setNullError();
+              }}
               style={styles.touchOpacity}
             >
               <Text style={styles.noAccountText}>Есть аккаунт? Войти</Text>

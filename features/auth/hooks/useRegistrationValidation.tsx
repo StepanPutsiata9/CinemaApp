@@ -1,14 +1,17 @@
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useEffect, useRef, useState } from 'react';
 import { Animated } from 'react-native';
+import { setAuthError } from '../store/auth.slice';
 
 export const useRegistrationValidation = () => {
   const [loginText, setLoginText] = useState<string>('');
   const [passwordText, setPasswordText] = useState<string>('');
   const [repitPasswordText, setRepitPasswordText] = useState<string>('');
-  const [registError, setRegistError] = useState<string | null>(null);
+  const { authError } = useAppSelector(state => state.auth);
+  const dispatch = useAppDispatch();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   useEffect(() => {
-    if (registError) {
+    if (authError) {
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 300,
@@ -17,23 +20,28 @@ export const useRegistrationValidation = () => {
     } else {
       fadeAnim.setValue(0);
     }
-  }, [registError, fadeAnim]);
+  }, [authError, fadeAnim]);
 
+  const setNullInputs = () => {
+    setLoginText('');
+    setPasswordText('');
+    setRepitPasswordText('');
+  };
   const setLogin = (text: string) => {
     if (loginText.trim().length === 1) {
-      setRegistError(null);
+      dispatch(setAuthError(null));
     }
     setLoginText(text);
   };
   const setPassword = (text: string) => {
     if (passwordText.trim().length === 1) {
-      setRegistError(null);
+      dispatch(setAuthError(null));
     }
     setPasswordText(text);
   };
   const setRepitPassword = (text: string) => {
     if (repitPasswordText.trim().length === 1) {
-      setRegistError(null);
+      dispatch(setAuthError(null));
     }
     setRepitPasswordText(text);
   };
@@ -44,46 +52,43 @@ export const useRegistrationValidation = () => {
       passwordText.trim().length === 0 ||
       repitPasswordText.trim().length === 0
     ) {
-      setRegistError('Все поля должны быть заполненными');
-      setLoginText('');
-      setPasswordText('');
-      setRepitPasswordText('');
+      dispatch(setAuthError('Все поля должны быть заполненными'));
+      setNullInputs();
       return false;
     }
     if (loginText.trim().length < 8 || passwordText.trim().length < 8) {
-      setRegistError('Логин и пароль должны состоять минимум из 8 символов');
-      setLoginText('');
-      setPasswordText('');
-      setRepitPasswordText('');
+      dispatch(setAuthError('Логин и пароль должны состоять минимум из 8 символов'));
+      setNullInputs();
       return false;
     }
     if (passwordText.trim() !== repitPasswordText.trim()) {
-      setRegistError('Пароли должны совпадать');
-      setLoginText('');
-      setPasswordText('');
-      setRepitPasswordText('');
+      dispatch(setAuthError('Пароли должны совпадать'));
+      setNullInputs();
       return false;
     }
     return true;
   };
   const handleRegistration = async () => {
-    setRegistError(null);
+    dispatch(setAuthError(null));
+
     if (!checkErrorInputs()) {
       return;
     }
     console.log(2);
   };
-
+  const setNullError = () => dispatch(setAuthError(null));
   return {
     loginText,
     passwordText,
-    registError,
-    setRegistError,
+    authError,
     setLogin,
     setPassword,
     repitPasswordText,
     setRepitPassword,
     handleRegistration,
     fadeAnim,
+    setNullInputs,
+    setNullError,
+    checkErrorInputs,
   };
 };
