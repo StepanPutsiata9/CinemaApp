@@ -1,8 +1,8 @@
-import { store } from '@/store/';
+import { store } from '@/store';
 import axios from 'axios';
+import { clearTokens, getTokens, storeTokens } from '../storage/authStorage';
 import { logout } from '../store/auth.slice';
-import { clearTokens, getTokens, storeTokens } from './authStorage';
-const api = axios.create({
+export const api = axios.create({
   baseURL: 'backend',
 });
 
@@ -45,5 +45,3 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-export default api;

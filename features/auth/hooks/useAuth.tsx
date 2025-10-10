@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import api from '../services/authApi';
-import { isFirstLaunch, setAppLaunched } from '../services/authStorage';
+import { api } from '../services';
+import { isFirstLaunch, setAppLaunched } from '../storage';
 import { loadUser, login, setAuthError, setIsFirstLaunch, setLoading } from '../store/auth.slice';
 import { useAuthValidation } from './useAuthValidation';
 import { useRegistrationValidation } from './useRegistrationValidation';

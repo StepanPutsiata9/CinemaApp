@@ -6,3 +6,7 @@ export interface AuthState {
   isFirstLaunch: boolean;
   authError: string | null;
 }
+export interface Tokens {
+  accessToken: string;
+  refreshToken: string;
+}

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Svg, { Path, SvgProps } from 'react-native-svg';
-export const RegistartionBanner = (props: SvgProps) => (
+export const RegistrationBanner = (props: SvgProps) => (
   <Svg width={180} height={180} fill="none" {...props}>
     <Path
       fill="#2B2B2B"

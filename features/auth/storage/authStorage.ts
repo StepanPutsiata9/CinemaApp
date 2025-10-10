@@ -1,10 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
-
-export interface Tokens {
-  accessToken: string;
-  refreshToken: string;
-}
+import { Tokens } from '../types';
 
 const STORAGE_KEYS = {
   ACCESS_TOKEN: 'access_token',

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { jwtDecode } from 'jwt-decode';
-import { clearTokens, getTokens, storeTokens, Tokens } from '../services/authStorage';
-import { AuthState } from '../types/interfaces';
+import { clearTokens, getTokens, storeTokens } from '../storage';
+import { AuthState, Tokens } from '../types';
 interface JwtPayload {
   exp?: number;
   iat?: number;

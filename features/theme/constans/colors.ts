@@ -1,4 +1,4 @@
-import { IColorsTheme } from '../types/interfaces';
+import { IColorsTheme } from '../types';
 
 export const darkTheme: IColorsTheme = {
   primary: {

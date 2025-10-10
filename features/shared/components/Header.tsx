@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { HeaderLogo } from '../utils/HeaderLogo';
+import { HeaderLogo } from '../utils';
 
 export const Header = () => {
   return (

@@ -2,7 +2,7 @@
 // import { useMemo } from 'react';
 // import { RootState } from '@/store';
 import { darkTheme } from '../constans/colors';
-import { IColorsTheme } from '../types/interfaces';
+import { IColorsTheme } from '../types';
 
 export const useTheme = () => {
   //   const themeMode = useSelector((state: RootState) => state.theme.mode);

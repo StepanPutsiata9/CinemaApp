@@ -27,7 +27,9 @@ function AppNavigationStack() {
       <Stack.Protected guard={!!user}>
         <Stack.Screen name="(root)" />
       </Stack.Protected>
-      <Stack.Screen name="(auth)" />
+      <Stack.Protected guard={!user}>
+        <Stack.Screen name="(auth)" />
+      </Stack.Protected>
     </Stack>
   );
 }

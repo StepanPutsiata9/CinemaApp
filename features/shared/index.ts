@@ -1,7 +1,2 @@
-export { Header } from './components/Header';
-export { PrimaryButton } from './components/PrimaryButton';
-export { AuthBanner } from './utils/AuthBanner';
-export { GreetingBanner } from './utils/GreetingBanner';
-export { GreetingLogo } from './utils/GreetingLogo';
-export { HeaderLogo } from './utils/HeaderLogo';
-export { RegistartionBanner } from './utils/RegistartionBanner';
+export { Header, PrimaryButton } from './components';
+export { AuthBanner, GreetingBanner, GreetingLogo, HeaderLogo, RegistrationBanner } from './utils';

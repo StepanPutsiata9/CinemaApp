@@ -1,5 +1,5 @@
 import { useAuth, useRegistrationValidation } from '@/features/auth';
-import { Header, PrimaryButton, RegistartionBanner } from '@/features/shared';
+import { Header, PrimaryButton, RegistrationBanner } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
 import { useRouter } from 'expo-router';
 import {
@@ -42,7 +42,7 @@ export default function LoginScreen() {
           <View style={styles.content}>
             <Text style={styles.greetText}>Добро пожаловать!</Text>
             <View style={styles.bannerView}>
-              <RegistartionBanner />
+              <RegistrationBanner />
             </View>
             <View style={styles.inputsContainer}>
               <TextInput
