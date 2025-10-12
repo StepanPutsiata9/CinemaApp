@@ -2,97 +2,110 @@ import { useAuth, useAuthValidation } from '@/features/auth';
 import { AuthBanner, Header, PrimaryButton } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
 import { useRouter } from 'expo-router';
-import {
-  Animated,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { useState } from 'react';
+import { Animated, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 export default function LoginScreen() {
   const { colors } = useTheme();
   const styles = useStyles(colors);
   const router = useRouter();
-  const { passwordText, loginText, setLogin, setPassword, authError, fadeAnim, setNullError } =
-    useAuthValidation();
+  const [loginText, setLoginText] = useState<string>('');
+  const [passwordText, setPasswordText] = useState<string>('');
+
+  const { authError, fadeAnim, clearError } = useAuthValidation();
   const { handleLogin } = useAuth();
+
+  const handleInputChange = () => {
+    if (authError) {
+      clearError();
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      <KeyboardAwareScrollView
+        bottomOffset={65}
+        showsVerticalScrollIndicator={false}
         style={styles.keyboardAvoidingView}
+        scrollEnabled={false}
       >
-        <ScrollView>
-          <Header />
-          <View style={styles.content}>
-            <Text style={styles.greetText}>Добро пожаловать!</Text>
-            <View style={styles.bannerView}>
-              <AuthBanner />
-            </View>
-            <View style={styles.inputsContainer}>
-              <TextInput
-                value={loginText}
-                placeholder="Логин"
-                style={[styles.loginInput, authError && styles.errorInput]}
-                onChangeText={setLogin}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                placeholderTextColor="#9E9B9B"
-              />
-              <TextInput
-                value={passwordText}
-                placeholder="Пароль"
-                style={[styles.passwordInput, authError && styles.errorInput]}
-                onChangeText={setPassword}
-                placeholderTextColor="#9E9B9B"
-                secureTextEntry={true}
-              />
-            </View>
-            {authError ? (
-              <Animated.View
-                style={{
-                  width: '100%',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  opacity: fadeAnim,
-                  marginTop: -20,
-                }}
-              >
-                <Text style={styles.errorText}>{authError}</Text>
-              </Animated.View>
-            ) : null}
-            <TouchableOpacity
-              onPress={() => {
-                router.push('/(auth)/registration');
-                setNullError();
-              }}
-              style={styles.touchOpacity}
-            >
-              <Text style={styles.noAccountText}>Нет аккаунта? Зарегистрироваться</Text>
-            </TouchableOpacity>
-            <PrimaryButton title="Войти" onPress={handleLogin} colors={colors} />
+        <Header />
+        <View style={styles.content}>
+          <Text style={styles.greetText}>Добро пожаловать!</Text>
+          <View style={styles.bannerView}>
+            <AuthBanner />
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+          <View style={styles.inputsContainer}>
+            <TextInput
+              value={loginText}
+              placeholder="Логин"
+              style={[styles.loginInput, authError && styles.errorInput]}
+              onChangeText={(text: string) => {
+                setLoginText(text);
+                handleInputChange();
+              }}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              placeholderTextColor="#9E9B9B"
+            />
+            <TextInput
+              value={passwordText}
+              placeholder="Пароль"
+              style={[styles.passwordInput, authError && styles.errorInput]}
+              onChangeText={(text: string) => {
+                setPasswordText(text);
+                handleInputChange();
+              }}
+              placeholderTextColor="#9E9B9B"
+              secureTextEntry={true}
+            />
+          </View>
+
+          {authError && (
+            <Animated.View
+              style={{
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                opacity: fadeAnim,
+                marginTop: -20,
+              }}
+            >
+              <Text style={styles.errorText}>{authError}</Text>
+            </Animated.View>
+          )}
+
+          <TouchableOpacity
+            onPress={() => {
+              router.push('/(auth)/registration');
+              clearError();
+            }}
+            style={styles.touchOpacity}
+          >
+            <Text style={styles.noAccountText}>Нет аккаунта? Зарегистрироваться</Text>
+          </TouchableOpacity>
+
+          <PrimaryButton
+            title="Войти"
+            onPress={() => handleLogin(loginText, passwordText)}
+            colors={colors}
+          />
+        </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
-
 function useStyles(colors: IColorsTheme) {
   return StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.background,
+      paddingHorizontal: 16,
     },
     keyboardAvoidingView: {
       flex: 1,
-      paddingHorizontal: 16,
+      marginBottom: 65,
     },
     content: {
       flex: 1,

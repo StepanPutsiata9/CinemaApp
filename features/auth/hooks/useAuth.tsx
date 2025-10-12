@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { useRouter } from 'expo-router';
 import { api } from '../services';
 import { isFirstLaunch, setAppLaunched } from '../storage';
 import { loadUser, login, setAuthError, setIsFirstLaunch, setLoading } from '../store/auth.slice';
@@ -7,18 +8,15 @@ import { useRegistrationValidation } from './useRegistrationValidation';
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
-  const { user, isLoading } = useAppSelector(state => state.auth);
-  const {
-    checkErrorInputs: checkErrorAuthInputs,
-    loginText,
-    passwordText,
-    setNullInputs: setNullAuthError,
-    checkError: checkAuthError,
-  } = useAuthValidation();
-  const { checkErrorInputs: checkErrorRegistInputs, setNullInputs: setNullRegistInputs } =
-    useRegistrationValidation();
-  const handleLogin = async () => {
-    if (!checkErrorAuthInputs()) {
+  const { user, isLoading, isFirstLaunch: firstLaunch } = useAppSelector(state => state.auth);
+  const { validateInputs: validateRegisterInputs } = useRegistrationValidation();
+  const { validateInputs: validateAuthInputs } = useAuthValidation();
+  const router = useRouter();
+
+  const handleLogin = async (loginText: string, passwordText: string) => {
+    const validationError = validateAuthInputs(loginText, passwordText);
+    if (validationError) {
+      dispatch(setAuthError(validationError));
       return;
     }
     dispatch(setLoading(true));
@@ -28,24 +26,31 @@ export const useAuth = () => {
         login: loginText,
         password: passwordText,
       });
+
       if (response.data === null) {
-        dispatch(setLoading(false));
-        dispatch(setAuthError('Неверный login или пароль'));
+        dispatch(setAuthError('Неверный логин или пароль'));
         return;
       }
+
       const { accessToken, refreshToken } = response.data;
       if (accessToken && refreshToken) {
         await dispatch(login({ accessToken, refreshToken }));
-        setNullAuthError();
       }
-    } catch (err: unknown) {
       dispatch(setLoading(false));
-      checkAuthError(err);
-      setNullAuthError();
+    } catch {
+      dispatch(setAuthError('Произошла ошибка при входе'));
+      router.push('/(auth)/login');
+      dispatch(setLoading(false));
     }
   };
-  const handleRegistration = async () => {
-    if (!checkErrorRegistInputs()) {
+  const handleRegistration = async (
+    loginText: string,
+    passwordText: string,
+    repitPasswordText: string
+  ) => {
+    const validationError = validateRegisterInputs(loginText, passwordText, repitPasswordText);
+    if (validationError) {
+      dispatch(setAuthError(validationError));
       return;
     }
     dispatch(setLoading(true));
@@ -56,30 +61,38 @@ export const useAuth = () => {
         password: passwordText,
       });
       const { accessToken, refreshToken } = response.data;
-      await dispatch(login({ accessToken, refreshToken }));
-      setNullRegistInputs();
-    } catch (err: unknown) {
+      if (accessToken && refreshToken) {
+        await dispatch(login({ accessToken, refreshToken }));
+      }
       dispatch(setLoading(false));
-      checkAuthError(err);
-      setNullRegistInputs();
+    } catch {
+      dispatch(setAuthError('Произошла ошибка при регистрации'));
+      router.push('/(auth)/registration');
+      dispatch(setLoading(false));
     }
+  };
+  const checkFirstLaunch = async () => {
+    const launch = await isFirstLaunch();
+    dispatch(setIsFirstLaunch(launch));
+
+    if (launch) {
+      await setAppLaunched();
+      return true;
+    }
+    return false;
   };
   const loadApp = () => {
     dispatch(loadUser());
-    const checkFirstLaunch = async () => {
-      const firstLaunch = await isFirstLaunch();
-      dispatch(setIsFirstLaunch(firstLaunch));
-      if (firstLaunch) {
-        await setAppLaunched();
-      }
-    };
     checkFirstLaunch();
   };
+
   return {
     user,
     handleLogin,
     handleRegistration,
     isLoading,
     loadApp,
+    checkFirstLaunch,
+    firstLaunch,
   };
 };

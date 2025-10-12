@@ -2,105 +2,104 @@ import { useAuth, useRegistrationValidation } from '@/features/auth';
 import { Header, PrimaryButton, RegistrationBanner } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
 import { useRouter } from 'expo-router';
-import {
-  Animated,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { useState } from 'react';
+import { Animated, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
   const { colors } = useTheme();
   const styles = useStyles(colors);
   const router = useRouter();
-  const {
-    loginText,
-    setLogin,
-    authError,
-    fadeAnim,
-    passwordText,
-    setPassword,
-    setRepitPassword,
-    repitPasswordText,
-    setNullError,
-  } = useRegistrationValidation();
+  const [loginText, setLoginText] = useState<string>('');
+  const [passwordText, setPasswordText] = useState<string>('');
+  const [repitPasswordText, setRepitPasswordText] = useState<string>('');
+  const { authError, fadeAnim, clearError } = useRegistrationValidation();
   const { handleRegistration } = useAuth();
+  const handleInputChange = () => {
+    if (authError) {
+      clearError();
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      <KeyboardAwareScrollView
+        bottomOffset={65}
+        showsVerticalScrollIndicator={false}
         style={styles.keyboardAvoidingView}
       >
-        <ScrollView>
-          <Header />
-          <View style={styles.content}>
-            <Text style={styles.greetText}>Добро пожаловать!</Text>
-            <View style={styles.bannerView}>
-              <RegistrationBanner />
-            </View>
-            <View style={styles.inputsContainer}>
-              <TextInput
-                value={loginText}
-                placeholder="Логин"
-                style={[styles.loginInput, authError && styles.errorInput]}
-                onChangeText={setLogin}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                placeholderTextColor="#9E9B9B"
-              />
-              <TextInput
-                value={passwordText}
-                placeholder="Пароль"
-                style={[styles.passwordInput, authError && styles.errorInput]}
-                onChangeText={setPassword}
-                placeholderTextColor="#9E9B9B"
-                secureTextEntry={true}
-              />
-              <TextInput
-                value={repitPasswordText}
-                placeholder="Повторите пароль"
-                style={[styles.passwordInput, authError && styles.errorInput]}
-                onChangeText={setRepitPassword}
-                placeholderTextColor="#9E9B9B"
-                secureTextEntry={true}
-              />
-            </View>
-            {authError ? (
-              <Animated.View
-                style={{
-                  width: '100%',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  opacity: fadeAnim,
-                  marginTop: -20,
-                }}
-              >
-                <Text style={styles.errorText}>{authError}</Text>
-              </Animated.View>
-            ) : null}
-            <TouchableOpacity
-              onPress={() => {
-                router.push('/(auth)/login');
-                setNullError();
+        <Header />
+        <View style={styles.content}>
+          <Text style={styles.greetText}>Добро пожаловать!</Text>
+          <View style={styles.bannerView}>
+            <RegistrationBanner />
+          </View>
+          <View style={styles.inputsContainer}>
+            <TextInput
+              value={loginText}
+              placeholder="Логин"
+              style={[styles.loginInput, authError && styles.errorInput]}
+              onChangeText={(text: string) => {
+                setLoginText(text);
+                handleInputChange();
               }}
-              style={styles.touchOpacity}
-            >
-              <Text style={styles.noAccountText}>Есть аккаунт? Войти</Text>
-            </TouchableOpacity>
-            <PrimaryButton
-              title="Зарегистрироваться"
-              onPress={handleRegistration}
-              colors={colors}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              placeholderTextColor="#9E9B9B"
+            />
+            <TextInput
+              value={passwordText}
+              placeholder="Пароль"
+              style={[styles.passwordInput, authError && styles.errorInput]}
+              onChangeText={(text: string) => {
+                setPasswordText(text);
+                handleInputChange();
+              }}
+              placeholderTextColor="#9E9B9B"
+              secureTextEntry={true}
+            />
+            <TextInput
+              value={repitPasswordText}
+              placeholder="Повторите пароль"
+              style={[styles.passwordInput, authError && styles.errorInput]}
+              onChangeText={(text: string) => {
+                setRepitPasswordText(text);
+                handleInputChange();
+              }}
+              placeholderTextColor="#9E9B9B"
+              secureTextEntry={true}
             />
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+          {authError ? (
+            <Animated.View
+              style={{
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                opacity: fadeAnim,
+                marginTop: -20,
+              }}
+            >
+              <Text style={styles.errorText}>{authError}</Text>
+            </Animated.View>
+          ) : null}
+          <TouchableOpacity
+            onPress={() => {
+              router.push('/(auth)/login');
+              clearError();
+            }}
+            style={styles.touchOpacity}
+          >
+            <Text style={styles.noAccountText}>Есть аккаунт? Войти</Text>
+          </TouchableOpacity>
+          <PrimaryButton
+            title="Зарегистрироваться"
+            onPress={() => handleRegistration(loginText, passwordText, repitPasswordText)}
+            colors={colors}
+          />
+        </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
@@ -110,10 +109,11 @@ function useStyles(colors: IColorsTheme) {
     container: {
       flex: 1,
       backgroundColor: colors.background,
+      paddingHorizontal: 16,
     },
     keyboardAvoidingView: {
       flex: 1,
-      paddingHorizontal: 16,
+      marginBottom: 65,
     },
     content: {
       flex: 1,

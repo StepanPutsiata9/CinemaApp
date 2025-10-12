@@ -37,7 +37,7 @@ const checkTokenExpiration = (token: string) => {
 const initialState: AuthState = {
   user: null,
   isLoading: false,
-  isFirstLaunch: true,
+  isFirstLaunch: null,
   authError: null,
 };
 
@@ -113,16 +113,16 @@ const authSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(loadUser.pending, state => {
-        state.isLoading = true;
-      })
+      // .addCase(loadUser.pending, state => {
+      //   // state.isLoading = true;
+      // })
       .addCase(loadUser.fulfilled, (state, action) => {
         state.user = action.payload.decoded;
-        state.isLoading = false;
+        // state.isLoading = false;
       })
       .addCase(loadUser.rejected, state => {
         state.user = null;
-        state.isLoading = false;
+        // state.isLoading = false;
       })
 
       .addCase(login.pending, state => {
