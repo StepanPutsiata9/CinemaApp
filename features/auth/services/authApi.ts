@@ -3,7 +3,7 @@ import axios from 'axios';
 import { clearTokens, getTokens, storeTokens } from '../storage/authStorage';
 import { logout } from '../store/auth.slice';
 export const api = axios.create({
-  baseURL: 'backend',
+  baseURL: 'https://starlight-cinema-backend.onrender.com/',
 });
 
 api.interceptors.request.use(async config => {
@@ -27,9 +27,12 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && tokens?.refreshToken && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        const response = await axios.post('backend/auth/refresh', {
-          refreshToken: tokens.refreshToken,
-        });
+        const response = await axios.post(
+          'https://starlight-cinema-backend.onrender.com/auth/refresh',
+          {
+            refreshToken: tokens.refreshToken,
+          }
+        );
         const { accessToken, refreshToken } = response.data;
         await storeTokens({ accessToken, refreshToken });
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;

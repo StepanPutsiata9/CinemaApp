@@ -28,7 +28,6 @@ export default function LoginScreen() {
         bottomOffset={65}
         showsVerticalScrollIndicator={false}
         style={styles.keyboardAvoidingView}
-        scrollEnabled={false}
       >
         <Header />
         <View style={styles.content}>
