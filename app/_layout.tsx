@@ -1,24 +1,65 @@
+import { useAuth } from '@/features/auth';
 import { store } from '@/store';
+import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
+import { ActivityIndicator } from 'react-native';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Provider } from 'react-redux';
-export default function RootLayout() {
+SplashScreen.preventAutoHideAsync();
+
+function AppNavigationStack() {
+  const { user, isLoading, loadApp } = useAuth();
+  useEffect(() => {
+    loadApp();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  if (isLoading) {
+    return <ActivityIndicator size={100} />;
+  }
   return (
-    <Provider store={store}>
-      <AppNavigationStack />
-    </Provider>
+    <>
+      <StatusBar style="light" />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          animation: 'fade',
+        }}
+      >
+        <Stack.Protected guard={!!user}>
+          <Stack.Screen name="(root)" />
+        </Stack.Protected>
+        <Stack.Protected guard={!user}>
+          <Stack.Screen name="(auth)" />
+        </Stack.Protected>
+      </Stack>
+    </>
   );
 }
 
-function AppNavigationStack() {
-  const user = true;
+export default function RootLayout() {
+  const [loaded, error] = useFonts({
+    Montserrat: require('@/assets/fonts/Montserrat.ttf'),
+    MontserratBold: require('@/assets/fonts/MontserratBold.ttf'),
+    MontserratRegular: require('@/assets/fonts/MontserratRegular.ttf'),
+  });
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) {
+    return null;
+  }
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        animation: 'fade',
-      }}
-    >
-      {user ? <Stack.Screen name="(root)" /> : <Stack.Screen name="(auth)" />}
-    </Stack>
+    <Provider store={store}>
+      <KeyboardProvider>
+        <AppNavigationStack />
+      </KeyboardProvider>
+    </Provider>
   );
 }

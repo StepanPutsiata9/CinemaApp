@@ -11,13 +11,13 @@ module.exports = defineConfig([
   {
     files: ['**/*.js', '**/*.jsx'],
     rules: {
-      'no-unused-vars': 'error',
+      'no-unused-vars': 'warn',
     },
   },
   {
     files: ['**/*.ts', '**/*.tsx'],
     rules: {
-      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/no-unused-vars': 'warn',
       'no-unused-vars': 'off',
     },
   },

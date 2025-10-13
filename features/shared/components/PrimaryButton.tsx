@@ -1,0 +1,51 @@
+import { IColorsTheme } from '@/features/theme';
+import { LinearGradient } from 'expo-linear-gradient';
+import React from 'react';
+import { GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+interface PrimaryButtonProps {
+  title: string;
+  onPress: (event: GestureResponderEvent) => void;
+  colors: IColorsTheme;
+}
+
+export function PrimaryButton({ title, onPress, colors }: PrimaryButtonProps) {
+  const styles = useStyles(colors);
+  return (
+    <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
+      <LinearGradient
+        colors={[colors.primary.start, colors.primary.finish]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={styles.gradient}
+      >
+        <View style={styles.content}>
+          <Text style={styles.text}>{title}</Text>
+        </View>
+      </LinearGradient>
+    </TouchableOpacity>
+  );
+}
+
+function useStyles(colors: IColorsTheme) {
+  return StyleSheet.create({
+    gradient: {
+      borderRadius: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    content: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: 14,
+      paddingHorizontal: 85,
+    },
+    text: {
+      fontSize: 16,
+      color: colors.text.info,
+      fontWeight: '600',
+      textAlign: 'center',
+    },
+  });
+}

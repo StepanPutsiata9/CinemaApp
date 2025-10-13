@@ -8,6 +8,8 @@ export default function AuthLayout() {
         animation: 'fade',
       }}
     >
+      <Stack.Screen name="index" />
+      <Stack.Screen name="greeting" />
       <Stack.Screen name="login" />
       <Stack.Screen name="registration" />
     </Stack>
