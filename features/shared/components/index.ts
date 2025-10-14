@@ -1,3 +1,4 @@
 import { Header } from './Header';
 import { PrimaryButton } from './PrimaryButton';
-export { Header, PrimaryButton };
+import { MyTabBar } from './Tabbar';
+export { Header, MyTabBar, PrimaryButton };
