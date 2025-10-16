@@ -1,11 +1,13 @@
 import { useAuth, useAuthValidation } from '@/features/auth';
-import { AuthBanner, Header, PrimaryButton } from '@/features/shared';
+import { Header, PrimaryButton } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
 import { useRouter } from 'expo-router';
+import LottieView from 'lottie-react-native';
 import { useState } from 'react';
 import { Animated, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 export default function LoginScreen() {
   const { colors } = useTheme();
   const styles = useStyles(colors);
@@ -22,152 +24,174 @@ export default function LoginScreen() {
     }
   };
 
+  const handleLoginPress = () => {
+    handleLogin(loginText, passwordText);
+  };
+
+  const navigateToRegistration = () => {
+    router.push('/(auth)/registration');
+    clearError();
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <KeyboardAwareScrollView
+        contentContainerStyle={styles.scrollContent}
         bottomOffset={65}
         showsVerticalScrollIndicator={false}
-        style={styles.keyboardAvoidingView}
       >
-        <Header />
+        <View style={styles.headerContainer}>
+          <Header />
+        </View>
+
         <View style={styles.content}>
           <Text style={styles.greetText}>Добро пожаловать!</Text>
-          <View style={styles.bannerView}>
-            <AuthBanner />
-          </View>
-          <View style={styles.inputsContainer}>
-            <TextInput
-              value={loginText}
-              placeholder="Логин"
-              style={[styles.loginInput, authError && styles.errorInput]}
-              onChangeText={(text: string) => {
-                setLoginText(text);
-                handleInputChange();
-              }}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              placeholderTextColor="#9E9B9B"
-            />
-            <TextInput
-              value={passwordText}
-              placeholder="Пароль"
-              style={[styles.passwordInput, authError && styles.errorInput]}
-              onChangeText={(text: string) => {
-                setPasswordText(text);
-                handleInputChange();
-              }}
-              placeholderTextColor="#9E9B9B"
-              secureTextEntry={true}
+
+          <View style={styles.bannerContainer}>
+            <LottieView
+              source={require('@/assets/animations/Auth.json')}
+              autoPlay
+              loop
+              style={styles.animation}
             />
           </View>
 
-          {authError && (
-            <Animated.View
-              style={{
-                width: '100%',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                opacity: fadeAnim,
-                marginTop: -20,
-              }}
-            >
-              <Text style={styles.errorText}>{authError}</Text>
-            </Animated.View>
-          )}
+          <View style={styles.formContainer}>
+            <View style={styles.inputsContainer}>
+              <TextInput
+                value={loginText}
+                placeholder="Логин"
+                style={[styles.textInput, styles.loginInput, authError && styles.errorInput]}
+                onChangeText={(text: string) => {
+                  setLoginText(text);
+                  handleInputChange();
+                }}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                placeholderTextColor={'#9E9B9B'}
+                returnKeyType="next"
+              />
 
-          <TouchableOpacity
-            onPress={() => {
-              router.push('/(auth)/registration');
-              clearError();
-            }}
-            style={styles.touchOpacity}
-          >
-            <Text style={styles.noAccountText}>Нет аккаунта? Зарегистрироваться</Text>
-          </TouchableOpacity>
+              <TextInput
+                value={passwordText}
+                placeholder="Пароль"
+                style={[styles.textInput, styles.passwordInput, authError && styles.errorInput]}
+                onChangeText={(text: string) => {
+                  setPasswordText(text);
+                  handleInputChange();
+                }}
+                placeholderTextColor={'#9E9B9B'}
+                secureTextEntry={true}
+                autoCapitalize="none"
+                autoCorrect={false}
+                returnKeyType="done"
+                onSubmitEditing={handleLoginPress}
+              />
+            </View>
 
-          <PrimaryButton
-            title="Войти"
-            onPress={() => handleLogin(loginText, passwordText)}
-            colors={colors}
-          />
+            {authError && (
+              <Animated.View style={[styles.errorContainer, { opacity: fadeAnim }]}>
+                <Text style={styles.errorText}>{authError}</Text>
+              </Animated.View>
+            )}
+
+            <TouchableOpacity onPress={navigateToRegistration} style={styles.registrationLink}>
+              <Text style={styles.registrationText}>Нет аккаунта? Зарегистрироваться</Text>
+            </TouchableOpacity>
+
+            <View>
+              <PrimaryButton title="Войти" onPress={handleLoginPress} colors={colors} />
+            </View>
+          </View>
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
+
 function useStyles(colors: IColorsTheme) {
   return StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.background,
-      paddingHorizontal: 16,
     },
-    keyboardAvoidingView: {
-      flex: 1,
-      marginBottom: 65,
+    scrollContent: {
+      flexGrow: 1,
+    },
+    headerContainer: {
+      paddingHorizontal: 16,
     },
     content: {
       flex: 1,
-      flexDirection: 'column',
+      paddingHorizontal: 16,
       alignItems: 'center',
-      width: '100%',
     },
-    inputsContainer: {
+    formContainer: {
       width: '100%',
+      alignItems: 'center',
     },
     greetText: {
       color: colors.text.title,
       fontSize: 24,
       fontFamily: 'Montserrat',
-      marginBottom: 22,
+      textAlign: 'center',
+      marginTop: 8,
+      marginBottom: 16,
     },
-    bannerView: {
-      marginBottom: 35,
+    bannerContainer: {
+      alignItems: 'center',
+      marginBottom: 32,
+    },
+    animation: {
+      width: 300,
+      height: 300,
+    },
+    inputsContainer: {
+      width: '100%',
+      marginBottom: 8,
+    },
+    textInput: {
+      height: 56,
+      borderRadius: 16,
+      paddingHorizontal: 20,
+      fontSize: 16,
+      backgroundColor: '#242424',
+      fontFamily: 'Montserrat',
+      color: colors.text.title,
+      borderWidth: 1,
+      borderColor: 'transparent',
     },
     loginInput: {
-      height: 50,
-      borderRadius: 18,
-      paddingHorizontal: 17,
-      marginBottom: 25,
-      fontSize: 16,
-      backgroundColor: '#242424',
-      fontFamily: 'Montserrat',
-      color: '#ffffff',
-      width: '100%',
+      marginBottom: 16,
     },
     passwordInput: {
-      height: 50,
-      borderRadius: 18,
-      paddingHorizontal: 17,
-      marginBottom: 22,
-      fontSize: 16,
-      backgroundColor: '#242424',
-      fontFamily: 'Montserrat',
-      color: '#ffffff',
-      width: '100%',
+      marginBottom: 0,
     },
     errorInput: {
       borderColor: '#FF1B44',
-      borderWidth: 2,
+      borderWidth: 1,
     },
-    touchOpacity: {
-      marginBottom: 25,
-    },
-    noAccountText: {
-      color: colors.primary.start,
-      fontSize: 14,
-      lineHeight: 18,
-      fontFamily: 'Montesserat',
-      textDecorationLine: 'underline',
+    errorContainer: {
+      width: '100%',
+      alignSelf: 'flex-start',
+      marginBottom: 8,
     },
     errorText: {
       color: '#FF1B44',
       fontSize: 14,
-      textAlign: 'left',
-      marginBottom: 5,
-      paddingVertical: 3,
       fontFamily: 'Montserrat',
-      width: '100%',
+      textAlign: 'left',
+    },
+    registrationLink: {
+      marginBottom: 24,
+      paddingVertical: 8,
+    },
+    registrationText: {
+      color: colors.primary.start,
+      fontSize: 14,
+      fontFamily: 'Montserrat-Regular',
+      textDecorationLine: 'underline',
     },
   });
 }

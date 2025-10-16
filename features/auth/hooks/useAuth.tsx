@@ -37,8 +37,7 @@ export const useAuth = () => {
         await dispatch(login({ accessToken, refreshToken }));
       }
       dispatch(setLoading(false));
-    } catch (e) {
-      console.error(e);
+    } catch {
       dispatch(setAuthError('Произошла ошибка при входе'));
       router.push('/(auth)/login');
       dispatch(setLoading(false));
@@ -66,9 +65,7 @@ export const useAuth = () => {
         await dispatch(login({ accessToken, refreshToken }));
       }
       dispatch(setLoading(false));
-    } catch (e) {
-      console.error(e);
-
+    } catch {
       dispatch(setAuthError('Произошла ошибка при регистрации'));
       router.push('/(auth)/registration');
       dispatch(setLoading(false));

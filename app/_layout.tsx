@@ -1,27 +1,28 @@
 import { useAuth } from '@/features/auth';
+import { LoadingModal } from '@/features/shared/components';
 import { store } from '@/store';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import { ActivityIndicator } from 'react-native';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Provider } from 'react-redux';
+
 SplashScreen.preventAutoHideAsync();
 
 function AppNavigationStack() {
   const { user, isLoading, loadApp } = useAuth();
+
   useEffect(() => {
     loadApp();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  if (isLoading) {
-    return <ActivityIndicator size={100} />;
-  }
+
   return (
     <>
       <StatusBar style="light" />
+      <LoadingModal visible={isLoading} />
       <Stack
         screenOptions={{
           headerShown: false,
@@ -55,6 +56,7 @@ export default function RootLayout() {
   if (!loaded && !error) {
     return null;
   }
+
   return (
     <Provider store={store}>
       <KeyboardProvider>

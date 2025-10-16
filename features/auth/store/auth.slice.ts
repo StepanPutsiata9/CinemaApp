@@ -71,6 +71,7 @@ export const login = createAsyncThunk(
       }
       try {
         const tokens = await getTokens();
+        console.log(tokens);
         if (tokens?.accessToken && checkTokenExpiration(tokens.accessToken)) {
           const decoded = jwtDecode(tokens.accessToken);
           return decoded;
@@ -113,16 +114,12 @@ const authSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      // .addCase(loadUser.pending, state => {
-      //   // state.isLoading = true;
-      // })
+
       .addCase(loadUser.fulfilled, (state, action) => {
         state.user = action.payload.decoded;
-        // state.isLoading = false;
       })
       .addCase(loadUser.rejected, state => {
         state.user = null;
-        // state.isLoading = false;
       })
 
       .addCase(login.pending, state => {
