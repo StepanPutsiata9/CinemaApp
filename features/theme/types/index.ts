@@ -8,4 +8,5 @@ export interface IColorsTheme {
     title: string;
     info: string;
   };
+  inputBackground: string;
 }

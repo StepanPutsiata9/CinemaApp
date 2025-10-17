@@ -1,12 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { jwtDecode } from 'jwt-decode';
 import { clearTokens, getTokens, storeTokens } from '../storage';
-import { AuthState, Tokens } from '../types';
-interface JwtPayload {
-  exp?: number;
-  iat?: number;
-  [key: string]: any;
-}
+import { AuthState, JwtPayload, Tokens } from '../types';
 
 const isTokenValid = (decoded: unknown): boolean => {
   if (typeof decoded !== 'object' || decoded === null) {
