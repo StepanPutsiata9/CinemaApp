@@ -10,7 +10,7 @@ interface IHeaderConfig {
 }
 export const useCollapsibleHeader = (config: IHeaderConfig) => {
   const {
-    expandedHeight = 120,
+    expandedHeight = 100,
     collapsedHeight = 60,
     fadeStart = 0,
     fadeEnd = 50,

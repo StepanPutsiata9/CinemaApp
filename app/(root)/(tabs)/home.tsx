@@ -1,17 +1,15 @@
-import { Header, useCollapsibleHeader } from '@/features/moviesList';
+import { Header, MoviesList, PopularMoviesList, useCollapsibleHeader } from '@/features/moviesList';
 import { IColorsTheme, useTheme } from '@/features/theme';
 import React from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 const HomeTab = () => {
   const { headerHeight, greetingOpacity, greetingTranslateY, onScroll } = useCollapsibleHeader({
-    expandedHeight: 120,
+    expandedHeight: 115,
     collapsedHeight: 60,
   });
   const { colors } = useTheme();
   const styles = useStyles(colors);
-
-  const verticalItems = Array.from({ length: 30 }, (_, i) => i + 1);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -26,13 +24,28 @@ const HomeTab = () => {
         contentContainerStyle={styles.content}
         onScroll={onScroll}
         scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
       >
-        {verticalItems.map(item => (
-          <View key={item} style={styles.item}>
-            <Text style={styles.itemText}>Товар {item}</Text>
-            <Text style={styles.itemDescription}>Описание товара {item}</Text>
-          </View>
-        ))}
+        <View
+          style={{
+            width: '100%',
+            height: 160,
+            backgroundColor: '#FFA605',
+            borderRadius: 20,
+            marginBottom: 12,
+          }}
+        />
+        <View>
+          <Text style={styles.popularText}>Популярные</Text>
+          <PopularMoviesList
+            items={Array.from({ length: 30 }, (_, i) => ({ id: i + 1, number: i + 1 }))}
+          />
+        </View>
+        <View style={styles.moviesList}>
+          <MoviesList
+            items={Array.from({ length: 30 }, (_, i) => ({ id: i + 1, number: i + 1 }))}
+          />
+        </View>
       </Animated.ScrollView>
     </SafeAreaView>
   );
@@ -48,26 +61,17 @@ function useStyles(colors: IColorsTheme) {
     scrollView: {
       flex: 1,
     },
+    moviesList: {
+      marginBottom: 70,
+    },
     content: {
       paddingVertical: 16,
     },
-    item: {
-      backgroundColor: '#fafafa',
-      padding: 16,
-      borderRadius: 8,
-      marginBottom: 8,
-      borderWidth: 1,
-      borderColor: '#e0e0e0',
-    },
-    itemText: {
-      fontSize: 16,
-      fontWeight: '600',
-      color: '#333',
-    },
-    itemDescription: {
-      fontSize: 14,
-      color: '#666',
-      marginTop: 4,
+    popularText: {
+      fontFamily: 'Montserrat',
+      fontSize: 18,
+      color: colors.text.title,
+      marginBottom: 12,
     },
   });
 }

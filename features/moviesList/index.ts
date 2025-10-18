@@ -1,2 +1,2 @@
-export { Header } from './components';
+export { Header, MoviesList, PopularMoviesList } from './components';
 export { useCollapsibleHeader } from './hooks';
