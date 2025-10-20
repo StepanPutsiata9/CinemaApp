@@ -27,6 +27,7 @@ export const PopularMoviesList = memo(function PopularMoviesList({ movies }: IPo
 const styles = StyleSheet.create({
   content: {
     gap: 15,
+    marginBottom: 12,
   },
   image: {
     borderRadius: 20,
