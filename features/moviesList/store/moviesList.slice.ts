@@ -5,12 +5,17 @@ const initialState: IMoviesListState = {
   allMoviesList: null,
   moviesLoading: false,
   moviesError: null,
+  searchedMoviesList: null,
 };
 
 export const getAllMoviesList = createAsyncThunk(
   'moviesList/getAllMovies',
   async (moviesList: MoviesData, { rejectWithValue }) => {
-    return moviesList;
+    try {
+      return moviesList;
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
+    }
   }
 );
 
@@ -24,6 +29,24 @@ const moviesListSlice = createSlice({
     setMoviesLoading: (state, action) => {
       state.moviesLoading = action.payload;
     },
+    searchMovieByTitle(state, action) {
+      if ((!action.payload || typeof action.payload !== 'string') && state.allMoviesList?.main) {
+        state.searchedMoviesList = state.allMoviesList?.all;
+        return;
+      }
+
+      const searchTerm = action.payload.toLowerCase().trim();
+
+      if (!searchTerm && state.allMoviesList?.main) {
+        state.searchedMoviesList = state.allMoviesList?.all;
+        return;
+      }
+      if (state.allMoviesList?.all) {
+        state.searchedMoviesList = state.allMoviesList?.all.filter(movie =>
+          movie.name.toLowerCase().startsWith(searchTerm)
+        );
+      }
+    },
   },
   extraReducers: builder => {
     builder
@@ -32,6 +55,7 @@ const moviesListSlice = createSlice({
       })
       .addCase(getAllMoviesList.fulfilled, (state, action) => {
         state.allMoviesList = action.payload;
+        state.searchedMoviesList = action.payload.all;
         state.moviesLoading = false;
       })
       .addCase(getAllMoviesList.rejected, state => {
@@ -41,5 +65,5 @@ const moviesListSlice = createSlice({
   },
 });
 
-export const { setMoviesError, setMoviesLoading } = moviesListSlice.actions;
+export const { setMoviesError, setMoviesLoading, searchMovieByTitle } = moviesListSlice.actions;
 export default moviesListSlice.reducer;

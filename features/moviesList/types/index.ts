@@ -2,6 +2,7 @@ export interface IMoviesListState {
   allMoviesList: null | MoviesData;
   moviesLoading: boolean;
   moviesError: null | string;
+  searchedMoviesList: null | Movie[];
 }
 
 export interface Movie {

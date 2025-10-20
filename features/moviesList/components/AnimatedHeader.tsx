@@ -1,9 +1,9 @@
 import { useAuth } from '@/features/auth';
 import { SearchLogo, TVLogo } from '@/features/shared';
-
 import { IColorsTheme, useTheme } from '@/features/theme';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Animated, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useMoviesList } from '../hooks';
 interface IHeaderProps {
   greetingOpacity: Animated.AnimatedInterpolation<string | number>;
   greetingTranslateY: Animated.AnimatedInterpolation<string | number>;
@@ -13,6 +13,12 @@ export const Header = ({ greetingOpacity, greetingTranslateY, headerHeight }: IH
   const { user } = useAuth();
   const { colors } = useTheme();
   const styles = useStyles(colors);
+  const { searchMovie, searchQuery, clearSearch } = useMoviesList();
+  useEffect(() => {
+    return () => {
+      clearSearch();
+    };
+  }, [clearSearch]);
   return (
     <Animated.View style={[styles.header, { height: headerHeight }]}>
       <Animated.View
@@ -39,6 +45,9 @@ export const Header = ({ greetingOpacity, greetingTranslateY, headerHeight }: IH
           style={styles.searchInput}
           placeholder={'Поиск фильмов'}
           placeholderTextColor="#999"
+          value={searchQuery}
+          onChangeText={searchMovie}
+          clearButtonMode="while-editing"
         />
       </View>
     </Animated.View>
