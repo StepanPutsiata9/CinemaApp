@@ -1,47 +1,37 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { memo } from 'react';
+import { FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Movie } from '../types';
 
-export const PopularMoviesList = ({ items = [] }: { items: any[] }) => {
+interface IPopularMoviesList {
+  movies: Movie[];
+}
+export const PopularMoviesList = memo(function PopularMoviesList({ movies }: IPopularMoviesList) {
   return (
     <FlatList
       showsHorizontalScrollIndicator={false}
       horizontal
-      data={items}
-      keyExtractor={item => item.id.toString()}
+      data={movies}
+      keyExtractor={movie => movie.id.toString()}
       renderItem={({ item }) => {
         return (
-          <View style={styles.item}>
-            <Text style={styles.itemText}>Товар {item.number}</Text>
-            <Text style={styles.itemDescription}>Описание товара {item.number}</Text>
-          </View>
+          <TouchableOpacity onPress={() => {}}>
+            <Image source={{ uri: item?.url }} style={styles.image} resizeMode="cover" />
+          </TouchableOpacity>
         );
       }}
       contentContainerStyle={styles.content}
     />
   );
-};
+});
 
 const styles = StyleSheet.create({
   content: {
-    gap: 20,
+    gap: 15,
   },
-  item: {
-    backgroundColor: '#fafafa',
-    padding: 16,
-    borderRadius: 8,
+  image: {
+    borderRadius: 20,
     marginBottom: 8,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
     width: 150,
     height: 200,
-  },
-  itemText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-  },
-  itemDescription: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 4,
   },
 });

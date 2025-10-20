@@ -1,7 +1,7 @@
+import { clearTokens, getTokens, storeTokens } from '@/features/auth/storage/authStorage';
+import { logout } from '@/features/auth/store/auth.slice';
 import { store } from '@/store';
 import axios from 'axios';
-import { clearTokens, getTokens, storeTokens } from '../storage/authStorage';
-import { logout } from '../store/auth.slice';
 export const api = axios.create({
   baseURL: 'https://starlight-cinema-backend.onrender.com/',
 });

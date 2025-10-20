@@ -1,104 +1,41 @@
-// import { FlatList, StyleSheet, Text, View } from 'react-native';
-
-// export const MoviesList = ({ items = [] }: { items: any[] }) => {
-//   return (
-//     <FlatList
-//       showsVerticalScrollIndicator={false}
-//       numColumns={3}
-//       data={items}
-//       scrollEnabled={false}
-//       keyExtractor={item => item.id.toString()}
-//       renderItem={({ item }) => {
-//         return (
-//           <View style={styles.item}>
-//             <Text style={styles.itemText}>Товар {item.number}</Text>
-//             <Text style={styles.itemDescription}>Описание товара {item.number}</Text>
-//           </View>
-//         );
-//       }}
-//       contentContainerStyle={styles.content}
-//       columnWrapperStyle={styles.wrapper}
-//     />
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   content: {
-//     paddingVertical: 16,
-//     gap: 20,
-//   },
-//   wrapper: {
-//     width: '100%',
-//     justifyContent: 'space-between',
-//   },
-//   item: {
-//     backgroundColor: '#fafafa',
-//     padding: 16,
-//     borderRadius: 8,
-//     marginBottom: 8,
-//     borderWidth: 1,
-//     borderColor: '#e0e0e0',
-//     width: '30%',
-//     height: 125,
-//   },
-//   itemText: {
-//     fontSize: 16,
-//     fontWeight: '600',
-//     color: '#333',
-//   },
-//   itemDescription: {
-//     fontSize: 14,
-//     color: '#666',
-//     marginTop: 4,
-//   },
-// });
-
-import { StyleSheet, Text, View } from 'react-native';
-
-export const MoviesList = ({ items = [] }: { items: any[] }) => {
+import { memo } from 'react';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Movie } from '../types';
+interface IMoviesList {
+  movies: Movie[];
+}
+export const MoviesList = memo(function MoviesList({ movies }: IMoviesList) {
   return (
     <View style={styles.container}>
       <View style={styles.itemsContainer}>
-        {items.map(item => (
-          <View key={item.id} style={styles.item}>
-            <Text style={styles.itemText}>Товар {item.number}</Text>
-            <Text style={styles.itemDescription}>Описание товара {item.number}</Text>
-          </View>
+        {movies.map(movie => (
+          <TouchableOpacity style={styles.card} key={movie.id.toString()} onPress={() => {}}>
+            <Image source={{ uri: movie?.url }} style={styles.image} resizeMode="cover" />
+          </TouchableOpacity>
         ))}
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 16,
+    paddingHorizontal: 16,
   },
   itemsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'flex-start',
-    marginHorizontal: -6, // Компенсируем margins
+    justifyContent: 'space-between',
   },
-  item: {
-    backgroundColor: '#fafafa',
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-    width: '30%', // 3 в строке
-    height: 125,
-    marginHorizontal: 6,
+  card: {
+    width: '31%',
     marginBottom: 12,
+    aspectRatio: 2 / 3,
   },
-  itemText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
-  },
-  itemDescription: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 4,
+  image: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 8,
   },
 });

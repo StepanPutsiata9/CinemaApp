@@ -1,6 +1,14 @@
-import { Header, MoviesList, PopularMoviesList, useCollapsibleHeader } from '@/features/moviesList';
+import {
+  Header,
+  MainMovie,
+  MoviesList,
+  PopularMoviesList,
+  useCollapsibleHeader,
+  useMoviesList,
+} from '@/features/moviesList';
+import { ErrorContainer, LoadingModal } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 const HomeTab = () => {
@@ -10,15 +18,22 @@ const HomeTab = () => {
   });
   const { colors } = useTheme();
   const styles = useStyles(colors);
-
+  const { loadMoviesList, mainMovie, popularMovies, allMovies, moviesError, moviesLoading } =
+    useMoviesList();
+  useEffect(() => {
+    loadMoviesList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
+      <LoadingModal visible={moviesLoading} />
       <Header
         headerHeight={headerHeight}
         greetingOpacity={greetingOpacity}
         greetingTranslateY={greetingTranslateY}
       />
-
+      {/* {moviesLoading && <LoadingContainer />} */}
+      {moviesError && <ErrorContainer error={moviesError} />}
       <Animated.ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.content}
@@ -26,26 +41,18 @@ const HomeTab = () => {
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
       >
-        <View
-          style={{
-            width: '100%',
-            height: 160,
-            backgroundColor: '#FFA605',
-            borderRadius: 20,
-            marginBottom: 12,
-          }}
-        />
-        <View>
-          <Text style={styles.popularText}>Популярные</Text>
-          <PopularMoviesList
-            items={Array.from({ length: 30 }, (_, i) => ({ id: i + 1, number: i + 1 }))}
-          />
-        </View>
-        <View style={styles.moviesList}>
-          <MoviesList
-            items={Array.from({ length: 30 }, (_, i) => ({ id: i + 1, number: i + 1 }))}
-          />
-        </View>
+        {mainMovie && <MainMovie movie={mainMovie} />}
+        {popularMovies && popularMovies.length !== 0 && (
+          <View>
+            <Text style={styles.popularText}>Популярные</Text>
+            <PopularMoviesList movies={popularMovies} />
+          </View>
+        )}
+        {allMovies && allMovies.length !== 0 && (
+          <View style={styles.moviesList}>
+            <MoviesList movies={allMovies} />
+          </View>
+        )}
       </Animated.ScrollView>
     </SafeAreaView>
   );

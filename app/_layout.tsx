@@ -1,5 +1,5 @@
 import { useAuth } from '@/features/auth';
-import { LoadingModal } from '@/features/shared/components';
+import { LoadingModal } from '@/features/shared';
 import { store } from '@/store';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
