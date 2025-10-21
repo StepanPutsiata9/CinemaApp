@@ -21,7 +21,6 @@ export const MoviesList = memo(function MoviesList({ movies }: IMoviesList) {
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 16,
-    paddingHorizontal: 16,
   },
   itemsContainer: {
     flexDirection: 'row',
