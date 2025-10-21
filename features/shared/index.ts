@@ -1,5 +1,20 @@
-export { Header, PrimaryButton } from './components';
-export { AuthBanner, GreetingBanner, GreetingLogo, HeaderLogo, RegistrationBanner } from './utils';
+export {
+  ErrorContainer,
+  Header,
+  LoadingContainer,
+  LoadingModal,
+  MyTabBar,
+  PrimaryButton,
+} from './components';
+export {
+  AuthBanner,
+  GreetingBanner,
+  GreetingLogo,
+  HeaderLogo,
+  RegistrationBanner,
+  SearchLogo,
+  TVLogo,
+} from './utils';
 export {
   ActiveHome,
   ActiveProfile,

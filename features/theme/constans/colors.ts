@@ -15,6 +15,7 @@ export const darkTheme: IColorsTheme = {
     title: '#fff',
     info: '#121212',
   },
+  inputBackground: '#242424',
   //   common: {
   //     white: '#ffffff',
   //     black: '#000000',

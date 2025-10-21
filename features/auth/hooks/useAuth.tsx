@@ -1,6 +1,6 @@
+import { api } from '@/api/index';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useRouter } from 'expo-router';
-import { api } from '../services';
 import { isFirstLaunch, setAppLaunched } from '../storage';
 import { loadUser, login, setAuthError, setIsFirstLaunch, setLoading } from '../store/auth.slice';
 import { useAuthValidation } from './useAuthValidation';

@@ -1,5 +1,10 @@
-import { JwtPayload } from 'jwt-decode';
-
+export interface JwtPayload {
+  login?: string;
+  exp?: number;
+  foo?: string;
+  iat?: number;
+  [key: string]: any;
+}
 export interface AuthState {
   user: JwtPayload | null;
   isLoading: boolean;
