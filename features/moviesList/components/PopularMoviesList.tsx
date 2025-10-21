@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { memo } from 'react';
 import { FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Movie } from '../types';
@@ -6,6 +7,8 @@ interface IPopularMoviesList {
   movies: Movie[];
 }
 export const PopularMoviesList = memo(function PopularMoviesList({ movies }: IPopularMoviesList) {
+  const router = useRouter();
+
   return (
     <FlatList
       showsHorizontalScrollIndicator={false}
@@ -14,7 +17,7 @@ export const PopularMoviesList = memo(function PopularMoviesList({ movies }: IPo
       keyExtractor={movie => movie.id.toString()}
       renderItem={({ item }) => {
         return (
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => router.push('/(root)/(movieInfo)/movieInfo')}>
             <Image source={{ uri: item?.url }} style={styles.image} resizeMode="cover" />
           </TouchableOpacity>
         );

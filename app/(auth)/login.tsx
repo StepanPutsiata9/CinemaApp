@@ -101,7 +101,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
 
             <View>
-              <PrimaryButton title="Войти" onPress={handleLoginPress} colors={colors} />
+              <PrimaryButton title="Войти" onPress={handleLoginPress} />
             </View>
           </View>
         </View>

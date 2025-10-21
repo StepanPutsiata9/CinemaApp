@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { memo } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Movie } from '../types';
@@ -5,11 +6,16 @@ interface IMoviesList {
   movies: Movie[];
 }
 export const MoviesList = memo(function MoviesList({ movies }: IMoviesList) {
+  const router = useRouter();
   return (
     <View style={styles.container}>
       <View style={styles.itemsContainer}>
         {movies.map(movie => (
-          <TouchableOpacity style={styles.card} key={movie.id.toString()} onPress={() => {}}>
+          <TouchableOpacity
+            style={styles.card}
+            key={movie.id.toString()}
+            onPress={() => router.push('/(root)/(movieInfo)/movieInfo')}
+          >
             <Image source={{ uri: movie?.url }} style={styles.image} resizeMode="cover" />
           </TouchableOpacity>
         ))}

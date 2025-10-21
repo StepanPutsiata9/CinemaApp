@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { memo } from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Movie } from '../types';
@@ -7,8 +8,12 @@ interface IMainMovie {
 }
 
 export const MainMovie = memo(function MainMovie({ movie }: IMainMovie) {
+  const router = useRouter();
   return (
-    <TouchableOpacity style={styles.container} onPress={() => {}}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => router.push('/(root)/(movieInfo)/movieInfo')}
+    >
       <Image source={{ uri: movie?.url }} style={styles.image} resizeMode="cover" />
     </TouchableOpacity>
   );

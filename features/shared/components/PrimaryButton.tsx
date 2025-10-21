@@ -1,4 +1,4 @@
-import { IColorsTheme } from '@/features/theme';
+import { IColorsTheme, useTheme } from '@/features/theme';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -6,10 +6,10 @@ import { GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View } from 
 interface PrimaryButtonProps {
   title: string;
   onPress: (event: GestureResponderEvent) => void;
-  colors: IColorsTheme;
 }
 
-export function PrimaryButton({ title, onPress, colors }: PrimaryButtonProps) {
+export function PrimaryButton({ title, onPress }: PrimaryButtonProps) {
+  const { colors } = useTheme();
   const styles = useStyles(colors);
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
@@ -39,7 +39,7 @@ function useStyles(colors: IColorsTheme) {
       alignItems: 'center',
       justifyContent: 'center',
       paddingVertical: 14,
-      paddingHorizontal: 85,
+      paddingHorizontal: 55,
     },
     text: {
       fontSize: 16,
