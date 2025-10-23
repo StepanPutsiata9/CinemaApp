@@ -32,7 +32,7 @@ const MovieInfoScreen = () => {
       {selectedMovieError && <ErrorContainer error={selectedMovieError} />}
       <StatusBar hidden={true} />
       {!selectedMovieLoading && !selectedMovieError && (
-        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <ScrollView style={styles.container} showsHorizontalScrollIndicator={false}>
           <View style={styles.containerImage}>
             <ImageBackground
               source={
@@ -44,7 +44,7 @@ const MovieInfoScreen = () => {
               resizeMode="stretch"
             />
             <LinearGradient
-              colors={['transparent', 'rgba(0,0,0,0.3)', 'rgba(0,0,0,0.9)']}
+              colors={['transparent', 'rgba(18,18,18,0.3)', 'rgba(18,18,18,1.0)']}
               locations={[0.4, 0.7, 0.9]}
               style={styles.gradientOverlay}
             />
@@ -57,7 +57,12 @@ const MovieInfoScreen = () => {
           </View>
 
           <View style={styles.content}>
-            <View style={styles.statisticsLine}>
+            <ScrollView
+              horizontal
+              style={styles.statisticsLine}
+              contentContainerStyle={styles.statisticsLineContent}
+              showsHorizontalScrollIndicator={false}
+            >
               <LinearGradient
                 colors={[colors.primary.start, colors.primary.finish]}
                 start={{ x: 0, y: 0 }}
@@ -76,7 +81,11 @@ const MovieInfoScreen = () => {
                 <Text style={styles.ageTextTitle}>Возрастное ограничение: </Text>
                 <Text style={styles.ageText}>{selectedMovie?.ageRating}+</Text>
               </View>
-            </View>
+              <View style={styles.movieLengthView}>
+                <Text style={styles.movieLengthTitle}>Длина фильма: </Text>
+                <Text style={styles.movieLengtText}>{selectedMovie?.movieLength}</Text>
+              </View>
+            </ScrollView>
             <Text style={styles.title}>{selectedMovie?.name}</Text>
             <ScrollView style={styles.genreLine} horizontal showsHorizontalScrollIndicator={false}>
               {selectedMovie?.genres.map((g, index) => {
@@ -135,7 +144,7 @@ function useStyles(colors: IColorsTheme) {
       width: 42,
       height: 42,
       borderRadius: 12,
-      backgroundColor: 'rgba(0, 0, 0, 0.1)',
+      backgroundColor: 'rgba(0, 0, 0, 0.2)',
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -146,12 +155,14 @@ function useStyles(colors: IColorsTheme) {
       borderRadius: 15,
       alignItems: 'center',
       justifyContent: 'center',
+      marginRight: 10,
     },
     statisticsLine: {
       flexDirection: 'row',
-      gap: 15,
-      alignItems: 'center',
       marginBottom: 10,
+    },
+    statisticsLineContent: {
+      alignItems: 'center',
     },
     ratingView: {
       flexDirection: 'row',
@@ -165,13 +176,27 @@ function useStyles(colors: IColorsTheme) {
     },
     ageView: {
       flexDirection: 'row',
+      marginRight: 10,
+    },
+    movieLengthView: {
+      flexDirection: 'row',
     },
     ageText: {
       fontFamily: 'Montserrat',
       fontSize: 16,
       color: colors.primary.start,
     },
+    movieLengtText: {
+      fontFamily: 'Montserrat',
+      fontSize: 16,
+      color: colors.primary.start,
+    },
     ageTextTitle: {
+      fontFamily: 'Montserrat',
+      fontSize: 16,
+      color: colors.text.title,
+    },
+    movieLengthTitle: {
       fontFamily: 'Montserrat',
       fontSize: 16,
       color: colors.text.title,
