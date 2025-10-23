@@ -149,7 +149,7 @@ function useStyles(colors: IColorsTheme) {
       width: 42,
       height: 42,
       borderRadius: 12,
-      backgroundColor: 'rgba(0, 0, 0, 0.2)',
+      backgroundColor: 'rgba(0, 0, 0, 0.3)',
       alignItems: 'center',
       justifyContent: 'center',
     },
