@@ -12,7 +12,7 @@ export interface Movie {
 }
 
 export interface MoviesData {
-  main: Movie[];
+  main: Movie;
   popular: Movie[];
   all: Movie[];
 }

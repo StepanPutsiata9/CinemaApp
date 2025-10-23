@@ -121,11 +121,7 @@ export default function RegistrationScreen() {
               <Text style={styles.loginText}>Есть аккаунт? Войти</Text>
             </TouchableOpacity>
 
-            <PrimaryButton
-              title="Зарегистрироваться"
-              onPress={handleRegisterPress}
-              colors={colors}
-            />
+            <PrimaryButton title="Зарегистрироваться" onPress={handleRegisterPress} />
           </View>
         </View>
       </KeyboardAwareScrollView>

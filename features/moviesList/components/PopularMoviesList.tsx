@@ -1,3 +1,5 @@
+import { useSelectedMovie } from '@/features/selectedMovie';
+import { useRouter } from 'expo-router';
 import { memo } from 'react';
 import { FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Movie } from '../types';
@@ -6,6 +8,13 @@ interface IPopularMoviesList {
   movies: Movie[];
 }
 export const PopularMoviesList = memo(function PopularMoviesList({ movies }: IPopularMoviesList) {
+  const router = useRouter();
+  const { selectMovie } = useSelectedMovie();
+
+  const handleMovie = (id: number) => {
+    router.push('/(root)/(movieInfo)/movieInfo');
+    selectMovie(id);
+  };
   return (
     <FlatList
       showsHorizontalScrollIndicator={false}
@@ -14,8 +23,12 @@ export const PopularMoviesList = memo(function PopularMoviesList({ movies }: IPo
       keyExtractor={movie => movie.id.toString()}
       renderItem={({ item }) => {
         return (
-          <TouchableOpacity onPress={() => {}}>
-            <Image source={{ uri: item?.url }} style={styles.image} resizeMode="cover" />
+          <TouchableOpacity onPress={() => handleMovie(item.id)}>
+            <Image
+              source={item.url ? { uri: item?.url } : require('@/assets/images/icon.png')}
+              style={styles.image}
+              resizeMode="cover"
+            />
           </TouchableOpacity>
         );
       }}

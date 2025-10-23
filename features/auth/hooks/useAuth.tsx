@@ -29,6 +29,7 @@ export const useAuth = () => {
 
       if (response.data === null) {
         dispatch(setAuthError('Неверный логин или пароль'));
+        dispatch(setLoading(false));
         return;
       }
 

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { IMoviesListState, MoviesData } from '../types';
+import { getAllMovies } from '../services';
+import { IMoviesListState } from '../types';
 
 const initialState: IMoviesListState = {
   allMoviesList: null,
@@ -10,8 +11,10 @@ const initialState: IMoviesListState = {
 
 export const getAllMoviesList = createAsyncThunk(
   'moviesList/getAllMovies',
-  async (moviesList: MoviesData, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
+      const moviesList = await getAllMovies();
+      console.log(moviesList.main);
       return moviesList;
     } catch (error) {
       return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
