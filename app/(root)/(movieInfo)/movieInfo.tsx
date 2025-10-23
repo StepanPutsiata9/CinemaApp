@@ -37,7 +37,7 @@ const MovieInfoScreen = () => {
                   <Image
                     source={require('@/assets/images/icon.png')}
                     style={styles.image}
-                    resizeMode="contain"
+                    resizeMode="cover"
                   />
                 }
               />
@@ -45,7 +45,7 @@ const MovieInfoScreen = () => {
               <Image
                 source={require('@/assets/images/icon.png')}
                 style={styles.image}
-                resizeMode="contain"
+                resizeMode="cover"
               />
             )}
             <LinearGradient

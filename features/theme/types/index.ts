@@ -9,4 +9,5 @@ export interface IColorsTheme {
     info: string;
   };
   inputBackground: string;
+  error: string;
 }

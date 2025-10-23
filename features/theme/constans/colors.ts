@@ -5,22 +5,24 @@ export const darkTheme: IColorsTheme = {
     start: '#ff9900',
     finish: '#FFB412',
   },
-  //   secondary: {
-  //     main: '#dc004e',
-  //     light: '#ff5983',
-  //     dark: '#9a0036',
-  //   },
   background: '#121212',
   text: {
     title: '#fff',
     info: '#121212',
   },
   inputBackground: '#242424',
-  //   common: {
-  //     white: '#ffffff',
-  //     black: '#000000',
-  //   },
-  //   error: '#f44336',
-  //   warning: '#ff9800',
-  //   success: '#4caf50',
+  error: '#FF1B44',
+} as const;
+export const lightTheme: IColorsTheme = {
+  primary: {
+    start: '#ff9900',
+    finish: '#FFB412',
+  },
+  background: '#e4e4e4ff',
+  text: {
+    title: '#000000',
+    info: '#121212',
+  },
+  inputBackground: '#ffffffff',
+  error: '#FF1B44',
 } as const;

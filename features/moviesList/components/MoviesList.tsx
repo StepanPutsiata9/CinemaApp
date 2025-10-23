@@ -1,7 +1,7 @@
 import { useSelectedMovie } from '@/features/selectedMovie';
 import { useRouter } from 'expo-router';
 import { memo } from 'react';
-import { FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Movie } from '../types';
 
 interface IMoviesList {
@@ -17,27 +17,23 @@ export const MoviesList = memo(function MoviesList({ movies }: IMoviesList) {
     selectMovie(id);
   };
 
-  const renderItem = ({ item }: { item: Movie }) => (
-    <TouchableOpacity style={styles.card} onPress={() => handleMovie(item.id)}>
-      <Image
-        source={item.url ? { uri: item?.url } : require('@/assets/images/icon.png')}
-        style={styles.image}
-        resizeMode="cover"
-      />
-    </TouchableOpacity>
-  );
-
   return (
     <View style={styles.container}>
-      <FlatList
-        scrollEnabled={false}
-        data={movies}
-        renderItem={renderItem}
-        keyExtractor={item => item.id.toString()}
-        numColumns={3}
-        columnWrapperStyle={styles.columnWrapper}
-        showsVerticalScrollIndicator={false}
-      />
+      <View style={styles.grid}>
+        {movies.map((item, index) => (
+          <TouchableOpacity
+            key={item.id}
+            style={[styles.card, index % 3 === 2 && styles.lastInRow]}
+            onPress={() => handleMovie(item.id)}
+          >
+            <Image
+              source={item.url ? { uri: item.url } : require('@/assets/images/icon.png')}
+              style={styles.image}
+              resizeMode="cover"
+            />
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 });
@@ -46,14 +42,19 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 16,
   },
-  columnWrapper: {
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'flex-start',
   },
   card: {
     width: '31%',
-    marginBottom: 12,
     aspectRatio: 2 / 3,
     marginRight: '3.5%',
+    marginBottom: 12,
+  },
+  lastInRow: {
+    marginRight: 0,
   },
   image: {
     width: '100%',
