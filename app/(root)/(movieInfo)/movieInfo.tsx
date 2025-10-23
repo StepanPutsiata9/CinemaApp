@@ -2,18 +2,11 @@ import { useSelectedMovie } from '@/features/selectedMovie';
 import { ErrorContainer, LoadingContainer, PrimaryButton } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import CachedImage from 'expo-cached-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-
-import {
-  ImageBackground,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const MovieInfoScreen = () => {
   const { selectedMovie, selectedMovieError, selectedMovieLoading, clearSelectedMovie } =
@@ -34,15 +27,27 @@ const MovieInfoScreen = () => {
       {!selectedMovieLoading && !selectedMovieError && (
         <ScrollView style={styles.container} showsHorizontalScrollIndicator={false}>
           <View style={styles.containerImage}>
-            <ImageBackground
-              source={
-                selectedMovie?.poster
-                  ? { uri: selectedMovie?.poster }
-                  : require('@/assets/images/icon.png')
-              }
-              style={styles.image}
-              resizeMode="stretch"
-            />
+            {selectedMovie?.poster ? (
+              <CachedImage
+                source={{ uri: selectedMovie.poster }}
+                cacheKey={`movie-${selectedMovie.id}-poster`}
+                style={styles.image}
+                resizeMode="cover"
+                placeholderContent={
+                  <Image
+                    source={require('@/assets/images/icon.png')}
+                    style={styles.image}
+                    resizeMode="contain"
+                  />
+                }
+              />
+            ) : (
+              <Image
+                source={require('@/assets/images/icon.png')}
+                style={styles.image}
+                resizeMode="contain"
+              />
+            )}
             <LinearGradient
               colors={['transparent', 'rgba(18,18,18,0.3)', 'rgba(18,18,18,1.0)']}
               locations={[0.4, 0.7, 0.9]}
