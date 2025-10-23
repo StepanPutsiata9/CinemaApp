@@ -1,9 +1,11 @@
-import { PrimaryButton } from '@/features/shared';
+import { useSelectedMovie } from '@/features/selectedMovie';
+import { ErrorContainer, LoadingContainer, PrimaryButton } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+
 import {
   ImageBackground,
   ScrollView,
@@ -14,76 +16,88 @@ import {
 } from 'react-native';
 
 const MovieInfoScreen = () => {
+  const { selectedMovie, selectedMovieError, selectedMovieLoading, clearSelectedMovie } =
+    useSelectedMovie();
   const { colors } = useTheme();
   const styles = useStyles(colors);
 
   const handleClose = () => {
-    // Закрыть экран - вернуться назад
-    router.back(); // для Expo Router
-    // или navigation.goBack(); для React Navigation
+    router.back();
+    clearSelectedMovie();
   };
 
   return (
-    <>
+    <View style={styles.container}>
+      {selectedMovieLoading && <LoadingContainer />}
+      {selectedMovieError && <ErrorContainer error={selectedMovieError} />}
       <StatusBar hidden={true} />
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <View style={styles.containerImage}>
-          <ImageBackground
-            source={require('@/assets/images/test.png')}
-            style={styles.image}
-            resizeMode="stretch"
-          />
-          <LinearGradient
-            colors={['transparent', 'rgba(0,0,0,0.3)', 'rgba(0,0,0,0.9)']}
-            locations={[0.4, 0.7, 0.9]}
-            style={styles.gradientOverlay}
-          />
-
-          <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
-            <View style={styles.closeIcon}>
-              <AntDesign name="close" size={24} color={colors.primary.finish} />
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.content}>
-          <View style={styles.statisticsLine}>
+      {!selectedMovieLoading && !selectedMovieError && (
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+          <View style={styles.containerImage}>
+            <ImageBackground
+              source={
+                selectedMovie?.poster
+                  ? { uri: selectedMovie?.poster }
+                  : require('@/assets/images/icon.png')
+              }
+              style={styles.image}
+              resizeMode="stretch"
+            />
             <LinearGradient
-              colors={[colors.primary.start, colors.primary.finish]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.gradient}
-            >
-              <View style={styles.ratingView}>
-                <Text style={styles.ratingText}>КР 10.0</Text>
-              </View>
-            </LinearGradient>
-            <View>
-              <Text style={styles.viewersText}>8.9 млн просмотров</Text>
-            </View>
-          </View>
-          <Text style={styles.title}>Дэдпул</Text>
-          <View style={styles.genreLine}>
-            <View style={styles.genre}>
-              <Text style={styles.genreText}>Боевик</Text>
-            </View>
-            <View style={styles.genre}>
-              <Text style={styles.genreText}>Боевик</Text>
-            </View>
-          </View>
-          <View style={styles.description}>
-            <Text style={styles.descriptionText}>
-              Описание кино
-              ааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааа
-            </Text>
-          </View>
-        </View>
+              colors={['transparent', 'rgba(0,0,0,0.3)', 'rgba(0,0,0,0.9)']}
+              locations={[0.4, 0.7, 0.9]}
+              style={styles.gradientOverlay}
+            />
 
-        <View style={styles.buttonContainer}>
-          <PrimaryButton title="Купить билет" onPress={() => {}} />
-        </View>
-      </ScrollView>
-    </>
+            <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
+              <View style={styles.closeIcon}>
+                <AntDesign name="close" size={24} color={colors.primary.finish} />
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.content}>
+            <View style={styles.statisticsLine}>
+              <LinearGradient
+                colors={[colors.primary.start, colors.primary.finish]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.gradient}
+              >
+                <View style={styles.ratingView}>
+                  <AntDesign name="star" size={18} color="black" />
+                  <Text style={styles.ratingText}>
+                    {' '}
+                    {selectedMovie?.rating.toString().slice(0, 4)}
+                  </Text>
+                </View>
+              </LinearGradient>
+              <View style={styles.ageView}>
+                <Text style={styles.ageTextTitle}>Возрастное ограничение: </Text>
+                <Text style={styles.ageText}>{selectedMovie?.ageRating}+</Text>
+              </View>
+            </View>
+            <Text style={styles.title}>{selectedMovie?.name}</Text>
+            <ScrollView style={styles.genreLine} horizontal showsHorizontalScrollIndicator={false}>
+              {selectedMovie?.genres.map((g, index) => {
+                return (
+                  <View style={styles.genre} key={index}>
+                    <Text style={styles.genreText}>{g}</Text>
+                  </View>
+                );
+              })}
+            </ScrollView>
+            <View style={styles.description}>
+              <Text style={styles.descriptionText}>{selectedMovie?.description}</Text>
+            </View>
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <PrimaryButton title="Купить билет" onPress={() => {}} />
+          </View>
+        </ScrollView>
+      )}
+    </View>
   );
 };
 
@@ -140,17 +154,27 @@ function useStyles(colors: IColorsTheme) {
       marginBottom: 10,
     },
     ratingView: {
-      paddingHorizontal: 14,
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: 12,
       paddingVertical: 7,
     },
     ratingText: {
       fontFamily: 'Montserrat',
-      fontSize: 14,
+      fontSize: 16,
     },
-    viewersText: {
+    ageView: {
+      flexDirection: 'row',
+    },
+    ageText: {
       fontFamily: 'Montserrat',
       fontSize: 16,
       color: colors.primary.start,
+    },
+    ageTextTitle: {
+      fontFamily: 'Montserrat',
+      fontSize: 16,
+      color: colors.text.title,
     },
     title: {
       fontSize: 24,
@@ -161,13 +185,13 @@ function useStyles(colors: IColorsTheme) {
     genreLine: {
       marginBottom: 15,
       flexDirection: 'row',
-      gap: 10,
     },
     genre: {
       backgroundColor: colors.inputBackground,
       borderRadius: 15,
       paddingHorizontal: 16,
       paddingVertical: 7,
+      marginRight: 15,
     },
     genreText: {
       fontFamily: 'Montserrat',
@@ -185,6 +209,7 @@ function useStyles(colors: IColorsTheme) {
     buttonContainer: {
       width: '100%',
       alignItems: 'center',
+      marginBottom: 30,
     },
   });
 }

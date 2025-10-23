@@ -1,6 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useCallback, useRef, useState } from 'react';
-import { getAllMovies } from '../services';
 import {
   getAllMoviesList,
   searchMovieByTitle,
@@ -22,8 +21,7 @@ export const useMoviesList = () => {
       dispatch(setMoviesLoading(true));
       dispatch(setMoviesError(null));
 
-      const moviesList = await getAllMovies();
-      dispatch(getAllMoviesList(moviesList));
+      dispatch(getAllMoviesList());
     } catch (error) {
       dispatch(setMoviesError(error instanceof Error ? error.message : 'Unknown error'));
     } finally {
@@ -66,7 +64,7 @@ export const useMoviesList = () => {
     }
   }, []);
 
-  const mainMovie = allMoviesList?.main[0];
+  const mainMovie = allMoviesList?.main;
   const popularMovies = allMoviesList?.popular || [];
   const allMovies = searchedMoviesList || [];
 

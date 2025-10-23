@@ -1,3 +1,4 @@
+import { useSelectedMovie } from '@/features/selectedMovie';
 import { useRouter } from 'expo-router';
 import { memo } from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
@@ -9,12 +10,19 @@ interface IMainMovie {
 
 export const MainMovie = memo(function MainMovie({ movie }: IMainMovie) {
   const router = useRouter();
+  const { selectMovie } = useSelectedMovie();
+
+  const handleMovie = (id: number) => {
+    router.push('/(root)/(movieInfo)/movieInfo');
+    selectMovie(id);
+  };
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => router.push('/(root)/(movieInfo)/movieInfo')}
-    >
-      <Image source={{ uri: movie?.url }} style={styles.image} resizeMode="cover" />
+    <TouchableOpacity style={styles.container} onPress={() => handleMovie(movie.id)}>
+      <Image
+        source={movie.url ? { uri: movie?.url } : require('@/assets/images/icon.png')}
+        style={styles.image}
+        resizeMode="cover"
+      />
     </TouchableOpacity>
   );
 });
