@@ -1,10 +1,15 @@
 import { clearTokens, getTokens, storeTokens } from '@/features/auth/storage/authStorage';
-import { logout } from '@/features/auth/store/auth.slice';
-import { store } from '@/store';
 import axios from 'axios';
+
 export const api = axios.create({
   baseURL: 'https://starlight-cinema-backend.onrender.com/',
 });
+
+let onLogoutCallback: (() => void) | null = null;
+
+export const setOnLogoutCallback = (callback: () => void) => {
+  onLogoutCallback = callback;
+};
 
 api.interceptors.request.use(async config => {
   const tokens = await getTokens();
@@ -20,10 +25,14 @@ api.interceptors.response.use(
   async error => {
     const originalRequest = error.config;
     const tokens = await getTokens();
+
     if (error.response?.status === 403) {
-      store.dispatch(logout());
+      if (onLogoutCallback) {
+        onLogoutCallback();
+      }
       return Promise.reject('403');
     }
+
     if (error.response?.status === 401 && tokens?.refreshToken && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
@@ -39,12 +48,17 @@ api.interceptors.response.use(
         return axios(originalRequest);
       } catch (refreshError) {
         await clearTokens();
+        if (onLogoutCallback) {
+          onLogoutCallback();
+        }
         return Promise.reject(refreshError);
       }
     }
+
     if (error.response?.status === 404) {
       return { data: null };
     }
+
     return Promise.reject(error);
   }
 );

@@ -83,7 +83,7 @@ const MovieInfoScreen = () => {
               </View>
               <View style={styles.movieLengthView}>
                 <Text style={styles.movieLengthTitle}>Длина фильма: </Text>
-                <Text style={styles.movieLengtText}>{selectedMovie?.movieLength}</Text>
+                <Text style={styles.movieLengtText}>{selectedMovie?.movieLength} минут</Text>
               </View>
             </ScrollView>
             <Text style={styles.title}>{selectedMovie?.name}</Text>

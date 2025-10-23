@@ -30,6 +30,7 @@ export const MoviesList = memo(function MoviesList({ movies }: IMoviesList) {
   return (
     <View style={styles.container}>
       <FlatList
+        scrollEnabled={false}
         data={movies}
         renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
