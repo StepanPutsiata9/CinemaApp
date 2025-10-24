@@ -10,4 +10,5 @@ export interface IColorsTheme {
   };
   inputBackground: string;
   error: string;
+  tabbar: string;
 }

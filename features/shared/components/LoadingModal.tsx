@@ -4,8 +4,6 @@ export function LoadingModal({ visible }: { visible: boolean }) {
   return (
     <Modal visible={visible} transparent={true} animationType="fade" statusBarTranslucent={true}>
       <View style={styles.modalContainer}>
-        {/* <ActivityIndicator size={'large'} color="#FF7700" /> */}
-        {/* </View>  */}
         <LottieView
           source={require('@/assets/animations/Loading.json')}
           autoPlay

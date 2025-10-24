@@ -2,7 +2,6 @@ import { useSelectedMovie } from '@/features/selectedMovie';
 import { ErrorContainer, LoadingContainer, PrimaryButton } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import CachedImage from 'expo-cached-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -21,25 +20,17 @@ const MovieInfoScreen = () => {
 
   return (
     <View style={styles.container}>
-      {selectedMovieLoading && <LoadingContainer />}
-      {selectedMovieError && <ErrorContainer error={selectedMovieError} />}
+      {selectedMovieLoading && <LoadingContainer colors={colors} />}
+      {selectedMovieError && <ErrorContainer error={selectedMovieError} colors={colors} />}
       <StatusBar hidden={true} />
       {!selectedMovieLoading && !selectedMovieError && (
         <ScrollView style={styles.container} showsHorizontalScrollIndicator={false}>
           <View style={styles.containerImage}>
             {selectedMovie?.poster ? (
-              <CachedImage
+              <Image
                 source={{ uri: selectedMovie.poster }}
-                cacheKey={`movie-${selectedMovie.id}-poster`}
                 style={styles.image}
                 resizeMode="cover"
-                placeholderContent={
-                  <Image
-                    source={require('@/assets/images/icon.png')}
-                    style={styles.image}
-                    resizeMode="cover"
-                  />
-                }
               />
             ) : (
               <Image
@@ -107,7 +98,7 @@ const MovieInfoScreen = () => {
           </View>
 
           <View style={styles.buttonContainer}>
-            <PrimaryButton title="Купить билет" onPress={() => {}} />
+            <PrimaryButton title="Купить билет" onPress={() => {}} colors={colors} />
           </View>
         </ScrollView>
       )}

@@ -40,9 +40,10 @@ const HomeTab = () => {
           headerHeight={headerHeight}
           greetingOpacity={greetingOpacity}
           greetingTranslateY={greetingTranslateY}
+          colors={colors}
         />
-        {moviesLoading && <LoadingContainer />}
-        {moviesError && <ErrorContainer error={moviesError} />}
+        {moviesLoading && <LoadingContainer colors={colors} />}
+        {moviesError && <ErrorContainer error={moviesError} colors={colors} />}
         {!moviesLoading && !moviesError && (
           <Animated.ScrollView
             style={styles.scrollView}

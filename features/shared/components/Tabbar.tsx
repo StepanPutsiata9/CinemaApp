@@ -1,3 +1,4 @@
+import { IColorsTheme } from '@/features/theme';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useLinkBuilder } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -6,10 +7,19 @@ import { LayoutChangeEvent, StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import TabbarButton from './TabbarButton';
 
-export function MyTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+interface ITabbarProps {
+  colors: IColorsTheme;
+}
+export function MyTabBar({
+  state,
+  descriptors,
+  navigation,
+  colors,
+}: BottomTabBarProps & ITabbarProps) {
   const { buildHref } = useLinkBuilder();
   const [dimensions, setDimensions] = useState({ height: 20, width: 100 });
   const buttonWidth = dimensions.width / state.routes.length;
+  const styles = useStyles(colors);
   const onTabbarLayout = (e: LayoutChangeEvent) => {
     setDimensions({
       height: e.nativeEvent.layout.height,
@@ -34,7 +44,7 @@ export function MyTabBar({ state, descriptors, navigation }: BottomTabBarProps) 
         ]}
       >
         <LinearGradient
-          colors={['#FF9900', '#FFB412']}
+          colors={[colors.primary.start, colors.primary.finish]}
           style={{
             flex: 1,
             borderRadius: 35,
@@ -92,17 +102,18 @@ export function MyTabBar({ state, descriptors, navigation }: BottomTabBarProps) 
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  tabbar: {
-    position: 'absolute',
-    bottom: 50,
-    backgroundColor: '#2B2B2B',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginHorizontal: 40,
-    paddingVertical: 25,
-    borderRadius: 35,
-  },
-});
+function useStyles(colors: IColorsTheme) {
+  return StyleSheet.create({
+    tabbar: {
+      position: 'absolute',
+      bottom: 50,
+      backgroundColor: colors.tabbar,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginHorizontal: 40,
+      paddingVertical: 25,
+      borderRadius: 35,
+    },
+  });
+}

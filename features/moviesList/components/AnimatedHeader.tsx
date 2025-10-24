@@ -1,6 +1,6 @@
 import { useAuth } from '@/features/auth';
 import { SearchLogo, TVLogo } from '@/features/shared';
-import { IColorsTheme, useTheme } from '@/features/theme';
+import { IColorsTheme } from '@/features/theme';
 import React, { useEffect } from 'react';
 import { Animated, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useMoviesList } from '../hooks';
@@ -8,10 +8,15 @@ interface IHeaderProps {
   greetingOpacity: Animated.AnimatedInterpolation<string | number>;
   greetingTranslateY: Animated.AnimatedInterpolation<string | number>;
   headerHeight: Animated.AnimatedInterpolation<string | number>;
+  colors: IColorsTheme;
 }
-export const Header = ({ greetingOpacity, greetingTranslateY, headerHeight }: IHeaderProps) => {
+export const Header = ({
+  greetingOpacity,
+  greetingTranslateY,
+  headerHeight,
+  colors,
+}: IHeaderProps) => {
   const { user } = useAuth();
-  const { colors } = useTheme();
   const styles = useStyles(colors);
   const { searchMovie, searchQuery, clearSearch } = useMoviesList();
   useEffect(() => {

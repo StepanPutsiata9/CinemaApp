@@ -9,8 +9,8 @@ export default function SettingsTab() {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Настройки</Text>
-      <SwitchThemeButton />
-      <LogoutButton />
+      <SwitchThemeButton colors={colors} />
+      <LogoutButton colors={colors} />
     </SafeAreaView>
   );
 }

@@ -1,9 +1,13 @@
+import { IColorsTheme } from '@/features/theme';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
-export const LoadingContainer = () => {
+interface ILoadingContainer {
+  colors: IColorsTheme;
+}
+export const LoadingContainer = ({ colors }: ILoadingContainer) => {
   return (
     <View style={styles.container}>
-      <ActivityIndicator color={'#FFA605'} size={'large'} />
+      <ActivityIndicator color={colors.primary.finish} size={'large'} />
     </View>
   );
 };

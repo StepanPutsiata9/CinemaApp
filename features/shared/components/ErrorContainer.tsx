@@ -1,12 +1,19 @@
+import { IColorsTheme } from '@/features/theme';
 import { StyleSheet, Text, View } from 'react-native';
-
-export const ErrorContainer = ({ error }: { error: string }) => {
+interface IErrorContainer {
+  error: string;
+  colors: IColorsTheme;
+}
+export const ErrorContainer = ({ error, colors }: IErrorContainer) => {
+  const styles = useStyles(colors);
   return (
     <View style={styles.container}>
       <Text style={{ color: '#fff' }}>{error}</Text>
     </View>
   );
 };
-const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-});
+function useStyles(colors: IColorsTheme) {
+  return StyleSheet.create({
+    container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  });
+}

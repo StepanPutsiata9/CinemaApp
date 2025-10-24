@@ -19,7 +19,7 @@ export default function GrettingScreen() {
       <View style={styles.textView}>
         <Text style={styles.bannerText}>{`Окунитесь в магию\nбольшого экрана!`}</Text>
       </View>
-      <PrimaryButton title="Начать" onPress={() => router.push('/(auth)/login')} />
+      <PrimaryButton title="Начать" onPress={() => router.push('/(auth)/login')} colors={colors} />
     </SafeAreaView>
   );
 }

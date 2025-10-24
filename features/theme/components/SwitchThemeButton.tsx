@@ -1,10 +1,12 @@
-import { IColorsTheme, useTheme } from '@/features/theme';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import React, { useState } from 'react';
 import { Platform, StyleSheet, Switch, Text, View } from 'react-native';
+import { IColorsTheme } from '../types';
 
-export const SwitchThemeButton = () => {
-  const { colors } = useTheme();
+interface ISwitchThemeButton {
+  colors: IColorsTheme;
+}
+export const SwitchThemeButton = ({ colors }: ISwitchThemeButton) => {
   const [isDark, setIsDark] = useState<boolean>(true);
   const styles = useStyles(colors);
 

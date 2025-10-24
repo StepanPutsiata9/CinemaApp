@@ -1,12 +1,16 @@
+import { IColorsTheme } from '@/features/theme';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-export const LogoutButton = () => {
+interface ILogoutButton {
+  colors: IColorsTheme;
+}
+export const LogoutButton = ({ colors }: ILogoutButton) => {
   const router = useRouter();
-
+  const styles = useStyles(colors);
   const handleLogout = () => {
     Alert.alert(
       'Выход',
@@ -35,27 +39,29 @@ export const LogoutButton = () => {
   return (
     <TouchableOpacity style={styles.button} onPress={handleLogout}>
       <Text style={styles.buttonText}>Выйти из аккаунта</Text>
-      <MaterialIcons name="logout" size={24} color="#FF1B44" />
+      <MaterialIcons name="logout" size={24} color={colors.error} />
     </TouchableOpacity>
   );
 };
 
-const styles = StyleSheet.create({
-  button: {
-    paddingVertical: 16,
-    backgroundColor: '#242424',
-    borderRadius: 20,
-    marginBottom: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    fontSize: 16,
-    fontFamily: 'MontserratBold',
-    color: '#FF1B44',
-    marginRight: 15,
-  },
-});
+function useStyles(colors: IColorsTheme) {
+  return StyleSheet.create({
+    button: {
+      paddingVertical: 16,
+      backgroundColor: colors.tabbar,
+      borderRadius: 20,
+      marginBottom: 15,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    buttonText: {
+      fontSize: 16,
+      fontFamily: 'MontserratBold',
+      color: colors.error,
+      marginRight: 15,
+    },
+  });
+}
 
 export default LogoutButton;
