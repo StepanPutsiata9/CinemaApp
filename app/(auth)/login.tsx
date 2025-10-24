@@ -156,7 +156,7 @@ function useStyles(colors: IColorsTheme) {
       borderRadius: 16,
       paddingHorizontal: 20,
       fontSize: 16,
-      backgroundColor: '#242424',
+      backgroundColor: colors.inputBackground,
       fontFamily: 'Montserrat',
       color: colors.text.title,
       borderWidth: 1,

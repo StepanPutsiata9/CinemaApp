@@ -24,7 +24,7 @@ const MovieInfoScreen = () => {
       {selectedMovieError && <ErrorContainer error={selectedMovieError} colors={colors} />}
       <StatusBar hidden={true} />
       {!selectedMovieLoading && !selectedMovieError && (
-        <ScrollView style={styles.container} showsHorizontalScrollIndicator={false}>
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
           <View style={styles.containerImage}>
             {selectedMovie?.poster ? (
               <Image

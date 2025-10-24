@@ -4,6 +4,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useAuth } from '../hooks';
 
 interface ILogoutButton {
   colors: IColorsTheme;
@@ -11,7 +12,8 @@ interface ILogoutButton {
 export const LogoutButton = ({ colors }: ILogoutButton) => {
   const router = useRouter();
   const styles = useStyles(colors);
-  const handleLogout = () => {
+  const { handleLogout } = useAuth();
+  const logout = () => {
     Alert.alert(
       'Выход',
       'Вы уверены, что хотите выйти?',
@@ -25,6 +27,7 @@ export const LogoutButton = ({ colors }: ILogoutButton) => {
           style: 'destructive',
           onPress: async () => {
             try {
+              await handleLogout();
               router.replace('/(auth)/login');
             } catch (error) {
               console.error('Logout error:', error);
@@ -37,7 +40,7 @@ export const LogoutButton = ({ colors }: ILogoutButton) => {
   };
 
   return (
-    <TouchableOpacity style={styles.button} onPress={handleLogout}>
+    <TouchableOpacity style={styles.button} onPress={logout}>
       <Text style={styles.buttonText}>Выйти из аккаунта</Text>
       <MaterialIcons name="logout" size={24} color={colors.error} />
     </TouchableOpacity>

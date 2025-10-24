@@ -1,13 +1,14 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
-import React, { useState } from 'react';
+import React from 'react';
 import { Platform, StyleSheet, Switch, Text, View } from 'react-native';
+import { useTheme } from '../hooks';
 import { IColorsTheme } from '../types';
 
 interface ISwitchThemeButton {
   colors: IColorsTheme;
 }
 export const SwitchThemeButton = ({ colors }: ISwitchThemeButton) => {
-  const [isDark, setIsDark] = useState<boolean>(true);
+  const { isDark, handleToggleTheme } = useTheme();
   const styles = useStyles(colors);
 
   return (
@@ -24,7 +25,7 @@ export const SwitchThemeButton = ({ colors }: ISwitchThemeButton) => {
       <View style={styles.switchWrapper}>
         <Switch
           value={isDark}
-          onValueChange={() => setIsDark(!isDark)}
+          onValueChange={handleToggleTheme}
           trackColor={{ false: '#9CA3AF', true: colors.primary.start }}
           thumbColor={isDark ? 'white' : '#FDE68A'}
           ios_backgroundColor="#9CA3AF"
@@ -39,7 +40,7 @@ const useStyles = (colors: IColorsTheme) =>
     container: {
       paddingHorizontal: 16,
       paddingVertical: 16,
-      backgroundColor: colors.inputBackground,
+      backgroundColor: colors.tabbar,
       borderRadius: 20,
       marginBottom: 15,
       flexDirection: 'row',

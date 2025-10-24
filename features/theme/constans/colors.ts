@@ -14,6 +14,7 @@ export const darkTheme: IColorsTheme = {
   error: '#FF1B44',
   tabbar: '#2b2b2b',
 } as const;
+
 export const lightTheme: IColorsTheme = {
   primary: {
     start: '#ff9900',
@@ -26,5 +27,5 @@ export const lightTheme: IColorsTheme = {
   },
   inputBackground: '#ffffffff',
   error: '#FF1B44',
-  tabbar: '#e9e6e6ff',
+  tabbar: '#d9d8d8ff',
 } as const;
