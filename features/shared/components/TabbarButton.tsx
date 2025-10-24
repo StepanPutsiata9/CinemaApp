@@ -60,7 +60,7 @@ function TabbarButton({
     home: (props: { isFocused: boolean }) => (props.isFocused ? <ActiveHome /> : <InactiveHome />),
     tickets: (props: { isFocused: boolean }) =>
       props.isFocused ? <ActiveTicket /> : <InactiveTicket />,
-    profile: (props: { isFocused: boolean }) =>
+    settings: (props: { isFocused: boolean }) =>
       props.isFocused ? <ActiveProfile /> : <InactiveProfile />,
   };
   const IconComponent = icons[routeName];

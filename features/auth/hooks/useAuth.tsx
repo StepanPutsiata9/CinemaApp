@@ -1,8 +1,16 @@
-import { api } from '@/api/index';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useRouter } from 'expo-router';
+import { loginApi, registrationApi } from '../api';
+import { logoutApi } from '../api/authApi';
 import { isFirstLaunch, setAppLaunched } from '../storage';
-import { loadUser, login, setAuthError, setIsFirstLaunch, setLoading } from '../store/auth.slice';
+import {
+  loadUser,
+  login,
+  logout,
+  setAuthError,
+  setIsFirstLaunch,
+  setLoading,
+} from '../store/auth.slice';
 import { useAuthValidation } from './useAuthValidation';
 import { useRegistrationValidation } from './useRegistrationValidation';
 
@@ -22,18 +30,15 @@ export const useAuth = () => {
     dispatch(setLoading(true));
     dispatch(setAuthError(null));
     try {
-      const response = await api.post('auth/login', {
-        login: loginText,
-        password: passwordText,
-      });
+      const response = await loginApi(loginText, passwordText);
 
-      if (response.data === null) {
+      if (response === null) {
         dispatch(setAuthError('Неверный логин или пароль'));
         dispatch(setLoading(false));
         return;
       }
 
-      const { accessToken, refreshToken } = response.data;
+      const { accessToken, refreshToken } = response;
       if (accessToken && refreshToken) {
         await dispatch(login({ accessToken, refreshToken }));
       }
@@ -57,11 +62,8 @@ export const useAuth = () => {
     dispatch(setLoading(true));
     dispatch(setAuthError(null));
     try {
-      const response = await api.post('auth/registration', {
-        login: loginText,
-        password: passwordText,
-      });
-      const { accessToken, refreshToken } = response.data;
+      const response = await registrationApi(loginText, passwordText);
+      const { accessToken, refreshToken } = response;
       if (accessToken && refreshToken) {
         await dispatch(login({ accessToken, refreshToken }));
       }
@@ -69,6 +71,20 @@ export const useAuth = () => {
     } catch {
       dispatch(setAuthError('Произошла ошибка при регистрации'));
       router.push('/(auth)/registration');
+      dispatch(setLoading(false));
+    }
+  };
+
+  const handleLogout = async () => {
+    dispatch(setLoading(true));
+    dispatch(setAuthError(null));
+    try {
+      const response = await logoutApi();
+      if (response) {
+        dispatch(logout());
+      }
+    } catch {
+      dispatch(setAuthError('Произошла ошибка при выходе с аккаунта'));
       dispatch(setLoading(false));
     }
   };
@@ -95,5 +111,6 @@ export const useAuth = () => {
     loadApp,
     checkFirstLaunch,
     firstLaunch,
+    handleLogout,
   };
 };

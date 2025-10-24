@@ -1,5 +1,6 @@
 import { useAuth } from '@/features/auth';
 import { LoadingModal } from '@/features/shared';
+import { useTheme } from '@/features/theme';
 import { store } from '@/store';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -13,9 +14,10 @@ SplashScreen.preventAutoHideAsync();
 
 function AppNavigationStack() {
   const { user, isLoading, loadApp } = useAuth();
-
+  const { loadTheme } = useTheme();
   useEffect(() => {
     loadApp();
+    loadTheme();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

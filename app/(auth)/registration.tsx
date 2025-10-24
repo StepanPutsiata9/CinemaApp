@@ -121,7 +121,11 @@ export default function RegistrationScreen() {
               <Text style={styles.loginText}>Есть аккаунт? Войти</Text>
             </TouchableOpacity>
 
-            <PrimaryButton title="Зарегистрироваться" onPress={handleRegisterPress} />
+            <PrimaryButton
+              title="Зарегистрироваться"
+              onPress={handleRegisterPress}
+              colors={colors}
+            />
           </View>
         </View>
       </KeyboardAwareScrollView>
@@ -174,9 +178,9 @@ function useStyles(colors: IColorsTheme) {
       borderRadius: 18,
       paddingHorizontal: 17,
       fontSize: 16,
-      backgroundColor: '#242424',
+      backgroundColor: colors.inputBackground,
       fontFamily: 'Montserrat',
-      color: '#ffffff',
+      color: colors.text.title,
       width: '100%',
     },
     loginInput: {

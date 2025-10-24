@@ -1,4 +1,5 @@
-import { IColorsTheme, useTheme } from '@/features/theme';
+import { LogoutButton } from '@/features/auth';
+import { IColorsTheme, SwitchThemeButton, useTheme } from '@/features/theme';
 import { StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -7,7 +8,9 @@ export default function SettingsTab() {
   const styles = useStyles(colors);
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Settings Tab</Text>
+      <Text style={styles.title}>Настройки</Text>
+      <SwitchThemeButton colors={colors} />
+      <LogoutButton colors={colors} />
     </SafeAreaView>
   );
 }
@@ -18,10 +21,11 @@ function useStyles(colors: IColorsTheme) {
       backgroundColor: colors.background,
       paddingHorizontal: 16,
     },
-    text: {
-      fontFamily: 'Montserrat',
-      color: colors.text.title,
-      textAlign: 'center',
+    title: {
+      fontFamily: 'MontserratBold',
+      color: colors.primary.start,
+      fontSize: 24,
+      marginBottom: 20,
     },
   });
 }
