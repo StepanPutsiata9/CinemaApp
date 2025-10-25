@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-export default function MainLayout() {
+export default function TicketOrderLayout() {
   return (
     <Stack
       screenOptions={{
@@ -8,9 +8,7 @@ export default function MainLayout() {
         animation: 'fade',
       }}
     >
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="(ticketOrder)" />
-      <Stack.Screen name="(movieInfo)" />
+      <Stack.Screen name="date" />
     </Stack>
   );
 }
