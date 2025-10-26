@@ -97,12 +97,7 @@ const MovieInfoScreen = () => {
           </View>
 
           <View style={styles.content}>
-            <ScrollView
-              horizontal
-              style={styles.statisticsLine}
-              contentContainerStyle={styles.statisticsLineContent}
-              showsHorizontalScrollIndicator={false}
-            >
+            <View style={styles.statisticsLine}>
               <LinearGradient
                 colors={[colors.primary.start, colors.primary.finish]}
                 start={{ x: 0, y: 0 }}
@@ -117,15 +112,17 @@ const MovieInfoScreen = () => {
                   </Text>
                 </View>
               </LinearGradient>
-              <View style={styles.ageView}>
-                <Text style={styles.ageTextTitle}>Возрастное ограничение: </Text>
-                <Text style={styles.ageText}>{selectedMovie?.ageRating}+</Text>
+              <View style={styles.infoView}>
+                <View style={styles.ageView}>
+                  <Text style={styles.ageTextTitle}>Возрастное ограничение: </Text>
+                  <Text style={styles.ageText}>{selectedMovie?.ageRating}+</Text>
+                </View>
+                <View style={styles.movieLengthView}>
+                  <Text style={styles.movieLengthTitle}>Длина фильма: </Text>
+                  <Text style={styles.movieLengtText}>{selectedMovie?.movieLength} минут</Text>
+                </View>
               </View>
-              <View style={styles.movieLengthView}>
-                <Text style={styles.movieLengthTitle}>Длина фильма: </Text>
-                <Text style={styles.movieLengtText}>{selectedMovie?.movieLength} минут</Text>
-              </View>
-            </ScrollView>
+            </View>
             <Text style={styles.title}>{selectedMovie?.name}</Text>
             <ScrollView style={styles.genreLine} horizontal showsHorizontalScrollIndicator={false}>
               {selectedMovie?.genres?.map((g, index) => {
@@ -142,7 +139,7 @@ const MovieInfoScreen = () => {
           </View>
 
           <View style={styles.buttonContainer}>
-            <PrimaryButton title="Купить билет" onPress={handleBuyTicket} colors={colors} />
+            <PrimaryButton title="Заказать билет" onPress={handleBuyTicket} colors={colors} />
           </View>
         </ScrollView>
       )}
@@ -171,7 +168,7 @@ function useStyles(colors: IColorsTheme) {
       position: 'absolute',
       width: '100%',
       height: '100%',
-      backgroundColor: colors.inputBackground,
+      backgroundColor: colors.secondaryBackground,
       justifyContent: 'center',
       alignItems: 'center',
     },
@@ -219,12 +216,17 @@ function useStyles(colors: IColorsTheme) {
     },
     gradient: {
       borderRadius: 15,
+      paddingVertical: 4,
       alignItems: 'center',
       justifyContent: 'center',
       marginRight: 10,
     },
+    infoView: {
+      flexDirection: 'column',
+    },
     statisticsLine: {
       flexDirection: 'row',
+      alignItems: 'center',
       marginBottom: 10,
     },
     statisticsLineContent: {
@@ -278,7 +280,7 @@ function useStyles(colors: IColorsTheme) {
       flexDirection: 'row',
     },
     genre: {
-      backgroundColor: colors.inputBackground,
+      backgroundColor: colors.secondaryBackground,
       borderRadius: 15,
       paddingHorizontal: 16,
       paddingVertical: 7,

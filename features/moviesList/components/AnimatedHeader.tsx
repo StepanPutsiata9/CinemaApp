@@ -92,7 +92,7 @@ function useStyles(colors: IColorsTheme) {
       left: 14,
     },
     searchInput: {
-      backgroundColor: colors.inputBackground,
+      backgroundColor: colors.secondaryBackground,
       borderRadius: 30,
       paddingRight: 16,
       paddingLeft: 40,

@@ -51,7 +51,14 @@ const HomeTab = () => {
             onScroll={onScroll}
             scrollEventThrottle={16}
             showsVerticalScrollIndicator={false}
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={[colors.primary.start, colors.primary.finish]}
+                tintColor={colors.primary.finish}
+              />
+            }
           >
             {mainMovie && <MainMovie movie={mainMovie} />}
             {popularMovies && popularMovies.length !== 0 && (

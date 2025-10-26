@@ -1,13 +1,30 @@
+import { ErrorContainer, LoadingContainer } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
-import { StyleSheet, Text } from 'react-native';
+import { DateList } from '@/features/ticketOrder';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { useRouter } from 'expo-router';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 const DateScreen = () => {
   const { colors } = useTheme();
   const styles = useStyles(colors);
+  const router = useRouter();
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Date Picker Screen</Text>
+      {false && <LoadingContainer colors={colors} />}
+      {false && <ErrorContainer error={'error'} colors={colors} />}
+      <ScrollView style={styles.scrollContent}>
+        <View style={styles.titleView}>
+          <Text style={styles.title}>Выбор даты</Text>
+          <AntDesign
+            name="close"
+            size={24}
+            color={colors.primary.start}
+            onPress={() => router.back()}
+          />
+        </View>
+        <DateList colors={colors} />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -17,11 +34,19 @@ function useStyles(colors: IColorsTheme) {
     container: {
       backgroundColor: colors.background,
       flex: 1,
+      paddingHorizontal: 16,
     },
     title: {
-      textAlign: 'center',
-      fontSize: 16,
-      color: colors.text.title,
+      fontFamily: 'MontserratBold',
+      color: colors.primary.start,
+      fontSize: 24,
+    },
+    scrollContent: {},
+    titleView: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 20,
     },
   });
 }

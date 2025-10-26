@@ -10,7 +10,7 @@ export const darkTheme: IColorsTheme = {
     title: '#fff',
     info: '#121212',
   },
-  inputBackground: '#242424',
+  secondaryBackground: '#242424',
   error: '#FF1B44',
   tabbar: '#2b2b2b',
 } as const;
@@ -25,7 +25,7 @@ export const lightTheme: IColorsTheme = {
     title: '#000000',
     info: '#121212',
   },
-  inputBackground: '#ffffffff',
+  secondaryBackground: '#ffffffff',
   error: '#FF1B44',
   tabbar: '#d9d8d8ff',
 } as const;

@@ -8,7 +8,7 @@ export interface IColorsTheme {
     title: string;
     info: string;
   };
-  inputBackground: string;
+  secondaryBackground: string;
   error: string;
   tabbar: string;
 }
