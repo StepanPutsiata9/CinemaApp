@@ -3,6 +3,7 @@ import authReducer, { logout } from '@/features/auth/store/auth.slice';
 import moviesListReducer from '@/features/moviesList/store/moviesList.slice';
 import selectedMovieReducer from '@/features/selectedMovie/store/selectedMovie.slice';
 import themeReducer from '@/features/theme/store/theme.slice';
+import dateListReducer from '@/features/ticketOrder/store/date.slice';
 import { configureStore } from '@reduxjs/toolkit';
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     moviesList: moviesListReducer,
     selectedMovie: selectedMovieReducer,
     theme: themeReducer,
+    dateList: dateListReducer,
   },
 });
 setOnLogoutCallback(() => {
