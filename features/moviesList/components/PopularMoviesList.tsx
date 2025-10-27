@@ -4,10 +4,12 @@ import { memo } from 'react';
 import { FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Movie } from '../types';
 
-interface IPopularMoviesList {
+interface IPopularMoviesListProps {
   movies: Movie[];
 }
-export const PopularMoviesList = memo(function PopularMoviesList({ movies }: IPopularMoviesList) {
+export const PopularMoviesList = memo(function PopularMoviesList({
+  movies,
+}: IPopularMoviesListProps) {
   const router = useRouter();
   const { selectMovie } = useSelectedMovie();
 

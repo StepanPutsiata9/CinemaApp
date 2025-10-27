@@ -6,10 +6,10 @@ import React from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useAuth } from '../hooks';
 
-interface ILogoutButton {
+interface ILogoutButtonProps {
   colors: IColorsTheme;
 }
-export const LogoutButton = ({ colors }: ILogoutButton) => {
+export const LogoutButton = ({ colors }: ILogoutButtonProps) => {
   const router = useRouter();
   const styles = useStyles(colors);
   const { handleLogout } = useAuth();

@@ -4,13 +4,13 @@ import { memo, useCallback } from 'react';
 import { FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Movie } from '../types';
 
-interface IMoviesList {
+interface IMoviesListProps {
   movies: Movie[];
 }
 
 const NUM_COLUMNS = 3;
 
-export const MoviesList = memo(function MoviesList({ movies }: IMoviesList) {
+export const MoviesList = memo(function MoviesList({ movies }: IMoviesListProps) {
   const router = useRouter();
   const { selectMovie } = useSelectedMovie();
 

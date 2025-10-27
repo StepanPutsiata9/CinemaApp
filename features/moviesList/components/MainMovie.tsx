@@ -4,11 +4,11 @@ import { memo } from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Movie } from '../types';
 
-interface IMainMovie {
+interface IMainMovieProps {
   movie: Movie;
 }
 
-export const MainMovie = memo(function MainMovie({ movie }: IMainMovie) {
+export const MainMovie = memo(function MainMovie({ movie }: IMainMovieProps) {
   const router = useRouter();
   const { selectMovie } = useSelectedMovie();
 
