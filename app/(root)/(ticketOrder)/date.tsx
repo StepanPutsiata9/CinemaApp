@@ -1,6 +1,6 @@
 import { ErrorContainer, LoadingContainer } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
-import { DateList } from '@/features/ticketOrder';
+import { DateList, TimeList } from '@/features/ticketOrder';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -13,7 +13,7 @@ const DateScreen = () => {
     <SafeAreaView style={styles.container}>
       {false && <LoadingContainer colors={colors} />}
       {false && <ErrorContainer error={'error'} colors={colors} />}
-      <ScrollView style={styles.scrollContent}>
+      <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.titleView}>
           <Text style={styles.title}>Выбор даты</Text>
           <AntDesign
@@ -24,6 +24,7 @@ const DateScreen = () => {
           />
         </View>
         <DateList colors={colors} />
+        <TimeList colors={colors} />
       </ScrollView>
     </SafeAreaView>
   );

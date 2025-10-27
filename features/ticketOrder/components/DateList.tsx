@@ -26,6 +26,7 @@ export const DateList = ({ colors }: IDateListProps) => {
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.dateScrollView}
+      style={styles.container}
     >
       {data.map((c: { date: string; month: string; day: string; index: number }, index: Key) => {
         const isSelected = selectedCategory === c.index;
@@ -47,6 +48,9 @@ function useStyles(colors: IColorsTheme) {
   return StyleSheet.create({
     dateScrollView: {
       gap: 12,
+    },
+    container: {
+      marginBottom: 30,
     },
   });
 }
