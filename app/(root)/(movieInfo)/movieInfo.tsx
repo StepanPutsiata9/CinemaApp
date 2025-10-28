@@ -3,9 +3,9 @@ import { ErrorContainer, LoadingContainer, PrimaryButton } from '@/features/shar
 import { IColorsTheme, useTheme } from '@/features/theme';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -17,21 +17,31 @@ import {
 } from 'react-native';
 
 const MovieInfoScreen = () => {
-  const { selectedMovie, selectedMovieError, selectedMovieLoading, clearSelectedMovie } =
-    useSelectedMovie();
+  const {
+    selectedMovie,
+    selectedMovieError,
+    selectedMovieLoading,
+    clearSelectedMovie,
+    selectMovie,
+  } = useSelectedMovie();
   const { colors } = useTheme();
   const styles = useStyles(colors);
   const router = useRouter();
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
-
+  const { movieId } = useLocalSearchParams();
+  const numericMovieId = Number(movieId);
+  useEffect(() => {
+    selectMovie(numericMovieId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const handleClose = () => {
     router.back();
     clearSelectedMovie();
   };
 
   const handleBuyTicket = () => {
-    router.push('/(root)/(ticketOrder)/date');
+    router.push(`/(root)/(ticketOrder)/date?movieId=${selectedMovie?.id}`);
   };
 
   const handleImageLoad = () => {

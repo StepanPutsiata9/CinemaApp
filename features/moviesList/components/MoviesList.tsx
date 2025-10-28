@@ -1,4 +1,3 @@
-import { useSelectedMovie } from '@/features/selectedMovie';
 import { useRouter } from 'expo-router';
 import { memo, useCallback } from 'react';
 import { FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -12,16 +11,13 @@ const NUM_COLUMNS = 3;
 
 export const MoviesList = memo(function MoviesList({ movies }: IMoviesListProps) {
   const router = useRouter();
-  const { selectMovie } = useSelectedMovie();
 
   const handleMovie = useCallback(
     (id: number) => {
-      router.push('/(root)/(movieInfo)/movieInfo');
-      selectMovie(id);
+      router.push(`/(root)/(movieInfo)/movieInfo?=${id}`);
     },
-    [router, selectMovie]
+    [router]
   );
-
   const renderItem = useCallback(
     ({ item, index }: { item: Movie; index: number }) => {
       const isLastInRow = (index + 1) % NUM_COLUMNS === 0;

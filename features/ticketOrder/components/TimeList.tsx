@@ -1,28 +1,20 @@
 import { IColorsTheme } from '@/features/theme';
 import { StyleSheet, View } from 'react-native';
+import { ITimeItem } from '../types';
 import { TimeItem } from './TimeItem';
 
 interface ITimeListProps {
   colors: IColorsTheme;
+  timesList: ITimeItem[];
 }
 
-export const TimeList = ({ colors }: ITimeListProps) => {
+export const TimeList = ({ colors, timesList }: ITimeListProps) => {
   const styles = useStyles(colors);
   return (
     <View style={styles.container}>
-      <TimeItem colors={colors} />
-      <TimeItem colors={colors} />
-      <TimeItem colors={colors} />
-      <TimeItem colors={colors} />
-      <TimeItem colors={colors} />
-      <TimeItem colors={colors} />
-      <TimeItem colors={colors} />
-      <TimeItem colors={colors} />
-      <TimeItem colors={colors} />
-      <TimeItem colors={colors} />
-      <TimeItem colors={colors} />
-      <TimeItem colors={colors} />
-      <TimeItem colors={colors} />
+      {timesList.map((el, index) => {
+        return <TimeItem item={el} key={index} colors={colors} />;
+      })}
     </View>
   );
 };

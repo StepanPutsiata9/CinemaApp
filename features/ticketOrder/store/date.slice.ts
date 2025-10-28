@@ -10,9 +10,9 @@ const initialState: IDateState = {
 
 export const getAllDateList = createAsyncThunk(
   'date/getAllDateList',
-  async (_, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
-      const dateList = await getDateList();
+      const dateList = await getDateList(id);
       return dateList;
     } catch (error) {
       return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
@@ -24,10 +24,10 @@ const dateListSlice = createSlice({
   name: 'dateList',
   initialState,
   reducers: {
-    setDateError: (state, action) => {
+    setDateListError: (state, action) => {
       state.dateError = action.payload;
     },
-    setDateLoading: (state, action) => {
+    setDateListLoading: (state, action) => {
       state.dateLoading = action.payload;
     },
   },
@@ -47,5 +47,5 @@ const dateListSlice = createSlice({
   },
 });
 
-export const { setDateError, setDateLoading } = dateListSlice.actions;
+export const { setDateListError, setDateListLoading } = dateListSlice.actions;
 export default dateListSlice.reducer;
