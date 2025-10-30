@@ -13,6 +13,9 @@ export const getSelectedMovieInfo = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     try {
       const selectedMovie = await getMovieInfo(id);
+      console.log('====================================');
+      console.log(selectedMovie);
+      console.log('====================================');
       return selectedMovie;
     } catch (error) {
       return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');

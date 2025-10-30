@@ -10,7 +10,10 @@ interface IMainMovieProps {
 export const MainMovie = memo(function MainMovie({ movie }: IMainMovieProps) {
   const router = useRouter();
   const handleMovie = (id: number) => {
-    router.push(`/(root)/(movieInfo)/movieInfo?=${id}`);
+    router.push({
+      pathname: '/(root)/(movieInfo)/movieInfo',
+      params: { id },
+    });
   };
   return (
     <TouchableOpacity style={styles.container} onPress={() => handleMovie(movie.id)}>

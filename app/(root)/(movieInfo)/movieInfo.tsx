@@ -3,7 +3,7 @@ import { ErrorContainer, LoadingContainer, PrimaryButton } from '@/features/shar
 import { IColorsTheme, useTheme } from '@/features/theme';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import {
@@ -21,28 +21,20 @@ const MovieInfoScreen = () => {
     selectedMovie,
     selectedMovieError,
     selectedMovieLoading,
-    clearSelectedMovie,
     selectMovie,
+    handleClose,
+    handleBuyTicket,
   } = useSelectedMovie();
   const { colors } = useTheme();
   const styles = useStyles(colors);
-  const router = useRouter();
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
-  const { movieId } = useLocalSearchParams();
-  const numericMovieId = Number(movieId);
+  const { id } = useLocalSearchParams();
+  const numericMovieId = Number(id);
   useEffect(() => {
     selectMovie(numericMovieId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const handleClose = () => {
-    router.back();
-    clearSelectedMovie();
-  };
-
-  const handleBuyTicket = () => {
-    router.push(`/(root)/(ticketOrder)/date?movieId=${selectedMovie?.id}`);
-  };
 
   const handleImageLoad = () => {
     setImageLoading(false);
@@ -149,7 +141,11 @@ const MovieInfoScreen = () => {
           </View>
 
           <View style={styles.buttonContainer}>
-            <PrimaryButton title="Заказать билет" onPress={handleBuyTicket} colors={colors} />
+            <PrimaryButton
+              title="Заказать билет"
+              onPress={() => handleBuyTicket(numericMovieId)}
+              colors={colors}
+            />
           </View>
         </ScrollView>
       )}

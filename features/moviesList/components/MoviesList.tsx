@@ -14,7 +14,10 @@ export const MoviesList = memo(function MoviesList({ movies }: IMoviesListProps)
 
   const handleMovie = useCallback(
     (id: number) => {
-      router.push(`/(root)/(movieInfo)/movieInfo?=${id}`);
+      router.push({
+        pathname: '/(root)/(movieInfo)/movieInfo',
+        params: { id },
+      });
     },
     [router]
   );

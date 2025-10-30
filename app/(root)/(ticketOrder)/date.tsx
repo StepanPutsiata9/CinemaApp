@@ -10,8 +10,8 @@ const DateScreen = () => {
   const { colors } = useTheme();
   const styles = useStyles(colors);
   const router = useRouter();
-  const { movieId } = useLocalSearchParams();
-  const numericMovieId = Number(movieId);
+  const { id } = useLocalSearchParams();
+  const numericMovieId = Number(id);
   const { loadDateList, dateError, dateLoading, timesList, calendarList } = useDateList();
   useEffect(() => {
     loadDateList(numericMovieId);

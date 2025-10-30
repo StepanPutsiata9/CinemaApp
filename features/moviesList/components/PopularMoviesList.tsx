@@ -11,7 +11,10 @@ export const PopularMoviesList = memo(function PopularMoviesList({
 }: IPopularMoviesListProps) {
   const router = useRouter();
   const handleMovie = (id: number) => {
-    router.push(`/(root)/(movieInfo)/movieInfo?=${id}`);
+    router.push({
+      pathname: '/(root)/(movieInfo)/movieInfo',
+      params: { id },
+    });
   };
   return (
     <FlatList
