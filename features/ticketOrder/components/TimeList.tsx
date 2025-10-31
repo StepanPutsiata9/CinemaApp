@@ -1,11 +1,11 @@
 import { IColorsTheme } from '@/features/theme';
 import { StyleSheet, View } from 'react-native';
-import { ITimeItem } from '../types';
+import { ITime } from '../types';
 import { TimeItem } from './TimeItem';
 
 interface ITimeListProps {
   colors: IColorsTheme;
-  timesList: ITimeItem[];
+  timesList: ITime[];
 }
 
 export const TimeList = ({ colors, timesList }: ITimeListProps) => {
@@ -25,6 +25,7 @@ function useStyles(colors: IColorsTheme) {
       justifyContent: 'space-between',
       flexDirection: 'row',
       flexWrap: 'wrap',
+      paddingHorizontal: 16,
     },
   });
 }

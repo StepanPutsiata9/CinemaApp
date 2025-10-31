@@ -12,50 +12,11 @@ const DateScreen = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const numericMovieId = Number(id);
-  const { loadDateList, dateError, dateLoading, timesList, calendarList } = useDateList();
+  const { loadDateList, dateError, dateLoading, dateList, pickedDate } = useDateList();
   useEffect(() => {
     loadDateList(numericMovieId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const data1 = [
-    { date: '28', month: 'ОКТ', day: 'ПН', index: 0 },
-    { date: '18', month: 'НОЯ', day: 'СР', index: 1 },
-    { date: '28', month: 'ДЕК', day: 'ВТ', index: 2 },
-    { date: '29', month: 'ДЕК', day: 'ВТ', index: 3 },
-    { date: '30', month: 'ДЕК', day: 'ВТ', index: 4 },
-  ];
-  const data2 = [
-    {
-      time: '13:00',
-      placeCount: 32,
-      progress: 0.2,
-      hallNumber: 3,
-    },
-    {
-      time: '13:00',
-      placeCount: 32,
-      progress: 0.2,
-      hallNumber: 3,
-    },
-    {
-      time: '15:00',
-      placeCount: 12,
-      progress: 0.2,
-      hallNumber: 3,
-    },
-    {
-      time: '14:30',
-      placeCount: 12,
-      progress: 0.6,
-      hallNumber: 1,
-    },
-    {
-      time: '20:00',
-      placeCount: 22,
-      progress: 0.9,
-      hallNumber: 2,
-    },
-  ];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -72,8 +33,8 @@ const DateScreen = () => {
               onPress={() => router.back()}
             />
           </View>
-          <DateList colors={colors} dateList={data1} />
-          <TimeList colors={colors} timesList={data2} />
+          <DateList colors={colors} dateList={dateList || []} />
+          <TimeList colors={colors} timesList={pickedDate?.time || []} />
         </ScrollView>
       )}
     </SafeAreaView>
@@ -85,7 +46,6 @@ function useStyles(colors: IColorsTheme) {
     container: {
       backgroundColor: colors.background,
       flex: 1,
-      paddingHorizontal: 16,
     },
     title: {
       fontFamily: 'MontserratBold',
@@ -98,6 +58,7 @@ function useStyles(colors: IColorsTheme) {
       justifyContent: 'space-between',
       alignItems: 'center',
       marginBottom: 20,
+      paddingHorizontal: 16,
     },
   });
 }

@@ -6,6 +6,7 @@ const initialState: IDateState = {
   dateList: null,
   dateLoading: false,
   dateError: null,
+  pickedDate: null,
 };
 
 export const getAllDateList = createAsyncThunk(
@@ -30,6 +31,9 @@ const dateListSlice = createSlice({
     setDateListLoading: (state, action) => {
       state.dateLoading = action.payload;
     },
+    setPickedDate: (state, action) => {
+      state.pickedDate = state.dateList?.find(el => el.id === action.payload) || null;
+    },
   },
   extraReducers: builder => {
     builder
@@ -38,6 +42,7 @@ const dateListSlice = createSlice({
       })
       .addCase(getAllDateList.fulfilled, (state, action) => {
         state.dateList = action.payload;
+        state.pickedDate = action.payload[0];
         state.dateLoading = false;
       })
       .addCase(getAllDateList.rejected, state => {
@@ -47,5 +52,5 @@ const dateListSlice = createSlice({
   },
 });
 
-export const { setDateListError, setDateListLoading } = dateListSlice.actions;
+export const { setDateListError, setDateListLoading, setPickedDate } = dateListSlice.actions;
 export default dateListSlice.reducer;

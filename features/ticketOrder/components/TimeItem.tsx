@@ -1,11 +1,11 @@
 import { IColorsTheme } from '@/features/theme';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ITimeItem } from '../types';
+import { ITime } from '../types';
 import { GradientProgressBar } from './ProgressBar';
 
 interface ITimeItemProps {
   colors: IColorsTheme;
-  item: ITimeItem;
+  item: ITime;
 }
 export const TimeItem = ({ colors, item }: ITimeItemProps) => {
   const styles = useStyles(colors);
@@ -15,14 +15,10 @@ export const TimeItem = ({ colors, item }: ITimeItemProps) => {
         <Text style={styles.timeText}>{item.time}</Text>
       </View>
       <View style={styles.placesView}>
-        <Text style={styles.placeCount}>{item.placeCount}</Text>
+        <Text style={styles.placeCount}>12</Text>
         <Text style={styles.placeText}>мест</Text>
       </View>
-      <GradientProgressBar
-        title={`${item.hallNumber} зал`}
-        colors={colors}
-        progress={item.progress}
-      />
+      <GradientProgressBar title={`${item.hall} зал`} colors={colors} progress={0.5} />
     </TouchableOpacity>
   );
 };

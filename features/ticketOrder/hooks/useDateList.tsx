@@ -1,18 +1,33 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { useCallback } from 'react';
-import { getAllDateList, setDateListError, setDateListLoading } from '../store/date.slice';
+import { useCallback, useEffect, useState } from 'react';
+import {
+  getAllDateList,
+  setDateListError,
+  setDateListLoading,
+  setPickedDate,
+} from '../store/date.slice';
 
 export const useDateList = () => {
   const dispatch = useAppDispatch();
-  const { dateList, dateError, dateLoading } = useAppSelector(state => state.dateList);
+  const { dateList, dateError, dateLoading, pickedDate } = useAppSelector(state => state.dateList);
+
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(
+    pickedDate?.id || (dateList && dateList.length > 0 ? dateList[0].id : null)
+  );
+
+  useEffect(() => {
+    if (dateList && dateList.length > 0 && !selectedCategory) {
+      const firstDateId = dateList[0].id;
+      setSelectedCategory(firstDateId);
+    }
+  }, [dateList, selectedCategory]);
 
   const loadDateList = useCallback(
     async (id: number) => {
       try {
         dispatch(setDateListLoading(true));
         dispatch(setDateListError(null));
-
-        dispatch(getAllDateList(id));
+        await dispatch(getAllDateList(id)).unwrap();
       } catch (error) {
         dispatch(setDateListError(error instanceof Error ? error.message : 'Unknown error'));
       } finally {
@@ -22,13 +37,20 @@ export const useDateList = () => {
     [dispatch]
   );
 
-  const timesList = dateList?.times || [];
-  const calendarList = dateList?.dates || [];
+  const handleCategoryPress = (id: number) => {
+    if (id !== selectedCategory) {
+      setSelectedCategory(id);
+      dispatch(setPickedDate(id));
+    }
+  };
+
   return {
-    dateError: dateError,
-    dateLoading: dateLoading,
-    loadDateList: loadDateList,
-    timesList: timesList,
-    calendarList: calendarList,
+    dateError,
+    dateLoading,
+    loadDateList,
+    dateList,
+    pickedDate,
+    handleCategoryPress,
+    selectedCategory,
   };
 };

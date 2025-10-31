@@ -1,21 +1,17 @@
 import { IColorsTheme } from '@/features/theme';
-import { Key, useState } from 'react';
+import { Key } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import { IDateItem } from '../types';
+import { useDateList } from '../hooks';
+import { ITimeItem } from '../types';
 import { DateItem } from './DateItem';
 
 interface IDateListProps {
   colors: IColorsTheme;
-  dateList: IDateItem[];
+  dateList: ITimeItem[];
 }
 export const DateList = ({ colors, dateList }: IDateListProps) => {
   const styles = useStyles(colors);
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(0);
-  const handleCategoryPress = (index: number) => {
-    const newSelectedCategory = index;
-    setSelectedCategory(newSelectedCategory);
-  };
-
+  const { selectedCategory, handleCategoryPress } = useDateList();
   return (
     <ScrollView
       horizontal
@@ -23,20 +19,18 @@ export const DateList = ({ colors, dateList }: IDateListProps) => {
       contentContainerStyle={styles.dateScrollView}
       style={styles.container}
     >
-      {dateList.map(
-        (c: { date: string; month: string; day: string; index: number }, index: Key) => {
-          const isSelected = selectedCategory === c.index;
-          return (
-            <DateItem
-              colors={colors}
-              active={isSelected}
-              key={index}
-              onPress={() => handleCategoryPress(c.index)}
-              item={c}
-            />
-          );
-        }
-      )}
+      {dateList.map((c: ITimeItem, index: Key) => {
+        const isSelected = selectedCategory === c.id;
+        return (
+          <DateItem
+            colors={colors}
+            active={isSelected}
+            key={index}
+            onPress={() => handleCategoryPress(c.id)}
+            item={c}
+          />
+        );
+      })}
     </ScrollView>
   );
 };
@@ -48,6 +42,7 @@ function useStyles(colors: IColorsTheme) {
     },
     container: {
       marginBottom: 30,
+      paddingHorizontal: 16,
     },
   });
 }
