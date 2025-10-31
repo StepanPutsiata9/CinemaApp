@@ -33,8 +33,14 @@ const DateScreen = () => {
               onPress={() => router.back()}
             />
           </View>
-          <DateList colors={colors} dateList={dateList || []} />
-          <TimeList colors={colors} timesList={pickedDate?.time || []} />
+          {dateList?.length === 0 ? (
+            <ErrorContainer error="На данный момент свободных билетов нет!" colors={colors} />
+          ) : (
+            <>
+              <DateList colors={colors} dateList={dateList || []} />
+              <TimeList colors={colors} timesList={pickedDate?.time || []} />
+            </>
+          )}
         </ScrollView>
       )}
     </SafeAreaView>
@@ -52,7 +58,15 @@ function useStyles(colors: IColorsTheme) {
       color: colors.primary.start,
       fontSize: 24,
     },
-    scrollContent: {},
+    titleEmpty: {
+      fontFamily: 'MontserratBold',
+      color: colors.primary.start,
+      fontSize: 20,
+      textAlign: 'center',
+    },
+    scrollContent: {
+      flexGrow: 1,
+    },
     titleView: {
       flexDirection: 'row',
       justifyContent: 'space-between',

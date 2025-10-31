@@ -1,5 +1,6 @@
 import { IColorsTheme } from '@/features/theme';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useDateList } from '../hooks';
 import { ITimeItem } from '../types';
 
 interface IDateItemProps {
@@ -10,6 +11,7 @@ interface IDateItemProps {
 }
 export const DateItem = ({ colors, active, onPress, item }: IDateItemProps) => {
   const styles = useStyles(colors);
+  const { getMonthAbbreviation } = useDateList();
   return (
     <TouchableOpacity
       style={active ? styles.activeContainer : styles.inActiveContainer}
@@ -18,7 +20,7 @@ export const DateItem = ({ colors, active, onPress, item }: IDateItemProps) => {
       <Text style={active ? styles.weekActive : styles.weekInactive}>{item.day}</Text>
       <Text style={active ? styles.dayActive : styles.dayInactive}>{item.date.slice(0, 2)}</Text>
       <Text style={active ? styles.monthActive : styles.monthInactive}>
-        {item.date.slice(3, 5)}
+        {getMonthAbbreviation(item.date.slice(3, 5))}
       </Text>
     </TouchableOpacity>
   );

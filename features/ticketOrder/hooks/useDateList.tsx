@@ -43,7 +43,23 @@ export const useDateList = () => {
       dispatch(setPickedDate(id));
     }
   };
-
+  const getMonthAbbreviation = (monthNumber: string): string => {
+    const monthAbbreviations: { [key: number]: string } = {
+      '1': 'ЯНВ',
+      '2': 'ФЕВ',
+      '3': 'МАР',
+      '4': 'АПР',
+      '5': 'МАЙ',
+      '6': 'ИЮН',
+      '7': 'ИЮЛ',
+      '8': 'АВГ',
+      '9': 'СЕН',
+      '10': 'ОКТ',
+      '11': 'НОЯ',
+      '12': 'ДЕК',
+    };
+    return monthAbbreviations[Number(monthNumber)];
+  };
   return {
     dateError,
     dateLoading,
@@ -52,5 +68,6 @@ export const useDateList = () => {
     pickedDate,
     handleCategoryPress,
     selectedCategory,
+    getMonthAbbreviation,
   };
 };
