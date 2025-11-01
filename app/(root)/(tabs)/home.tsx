@@ -1,5 +1,5 @@
 import {
-  Header,
+  AnimatedHeader,
   MainMovie,
   MoviesList,
   PopularMoviesList,
@@ -36,7 +36,7 @@ const HomeTab = () => {
   return (
     <KeyboardAvoidingView style={styles.keyboardContainer} behavior={'padding'}>
       <SafeAreaView style={styles.container}>
-        <Header
+        <AnimatedHeader
           headerHeight={headerHeight}
           greetingOpacity={greetingOpacity}
           greetingTranslateY={greetingTranslateY}

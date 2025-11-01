@@ -10,7 +10,7 @@ interface IHeaderProps {
   headerHeight: Animated.AnimatedInterpolation<string | number>;
   colors: IColorsTheme;
 }
-export const Header = ({
+export const AnimatedHeader = ({
   greetingOpacity,
   greetingTranslateY,
   headerHeight,
