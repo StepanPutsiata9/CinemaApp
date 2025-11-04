@@ -9,6 +9,7 @@ export default function TicketOrderLayout() {
       }}
     >
       <Stack.Screen name="date" />
+      <Stack.Screen name="hall" />
     </Stack>
   );
 }

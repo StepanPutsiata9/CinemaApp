@@ -11,6 +11,7 @@ export {
   GreetingBanner,
   GreetingLogo,
   HeaderLogo,
+  MovieScreen,
   RegistrationBanner,
   SearchLogo,
   TVLogo,

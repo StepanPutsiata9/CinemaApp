@@ -1,4 +1,5 @@
 import { IColorsTheme } from '@/features/theme';
+import { useRouter } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ITime } from '../types';
 import { GradientProgressBar } from './ProgressBar';
@@ -9,8 +10,12 @@ interface ITimeItemProps {
 }
 export const TimeItem = ({ colors, item }: ITimeItemProps) => {
   const styles = useStyles(colors);
+  const router = useRouter();
   return (
-    <TouchableOpacity style={styles.itemCard}>
+    <TouchableOpacity
+      style={styles.itemCard}
+      onPress={() => router.push('/(root)/(ticketOrder)/hall')}
+    >
       <View style={styles.timeView}>
         <Text style={styles.timeText}>{item.time}</Text>
       </View>

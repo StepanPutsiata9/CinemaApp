@@ -11,6 +11,7 @@ export interface IColorsTheme {
   secondaryBackground: string;
   error: string;
   tabbar: string;
+  takedPlace: string;
 }
 
 export interface IThemeState {

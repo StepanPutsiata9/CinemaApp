@@ -44,12 +44,6 @@ function useStyles(colors: IColorsTheme) {
       backgroundColor: colors.background,
       flex: 1,
     },
-    titleEmpty: {
-      fontFamily: 'MontserratBold',
-      color: colors.primary.start,
-      fontSize: 20,
-      textAlign: 'center',
-    },
     scrollContent: {
       flexGrow: 1,
     },
