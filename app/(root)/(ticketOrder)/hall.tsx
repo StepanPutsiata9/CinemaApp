@@ -15,8 +15,9 @@ const HallScreen = () => {
       {false && <ErrorContainer error={'error'} colors={colors} />}
       {!false && !false && (
         <>
-          <OrderHeader colors={colors} title="Зал 1" />
           <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
+            <OrderHeader colors={colors} title="Зал 1" />
+
             <View style={styles.placeCount}>
               <Text style={styles.freeCountText}>Всего свободных мест: </Text>
               <Text style={styles.palceCountText}>25</Text>
@@ -45,9 +46,9 @@ function useStyles(colors: IColorsTheme) {
     },
     scrollContent: {
       flexGrow: 1,
-      paddingHorizontal: 16,
     },
     placeCount: {
+      paddingHorizontal: 16,
       flexDirection: 'row',
       marginBottom: 50,
     },
@@ -63,7 +64,7 @@ function useStyles(colors: IColorsTheme) {
     },
     movieScreen: {
       marginHorizontal: 'auto',
-      marginBottom: 30,
+      marginBottom: 50,
     },
     buttonContainer: {
       width: '100%',

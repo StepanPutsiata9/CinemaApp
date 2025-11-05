@@ -29,6 +29,7 @@ function useStyles(colors: IColorsTheme) {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      paddingHorizontal: 16,
     },
     placeInfo: {
       flexDirection: 'row',

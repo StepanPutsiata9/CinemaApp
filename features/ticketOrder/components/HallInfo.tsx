@@ -44,6 +44,7 @@ function useStyles(colors: IColorsTheme) {
       justifyContent: 'space-between',
       alignItems: 'center',
       marginBottom: 32,
+      paddingHorizontal: 16,
     },
     leftSide: {
       flexDirection: 'column',
