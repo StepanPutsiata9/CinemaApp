@@ -2,12 +2,13 @@ import { ErrorContainer, LoadingContainer } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
 import { DateList, OrderHeader, TimeList, useDateList } from '@/features/ticketOrder';
 
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 const DateScreen = () => {
   const { colors } = useTheme();
+  const router = useRouter();
   const styles = useStyles(colors);
   const { id } = useLocalSearchParams();
   const numericMovieId = Number(id);
@@ -23,7 +24,7 @@ const DateScreen = () => {
       {dateError && <ErrorContainer error={'error'} colors={colors} />}
       {!dateError && !dateLoading && (
         <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
-          <OrderHeader colors={colors} title="Выбор даты" />
+          <OrderHeader colors={colors} title="Выбор даты" onPress={() => router.back()} />
           {dateList?.length === 0 ? (
             <ErrorContainer error="На данный момент свободных билетов нет!" colors={colors} />
           ) : (

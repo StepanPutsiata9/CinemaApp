@@ -1,6 +1,6 @@
 import { ErrorContainer, LoadingContainer, MovieScreen, PrimaryButton } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
-import { HallInfo, HallPlaces, OrderHeader } from '@/features/ticketOrder';
+import { HallInfo, HallPlaces, OrderHeader, useHall } from '@/features/ticketOrder';
 
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const HallScreen = () => {
   const { colors } = useTheme();
   const styles = useStyles(colors);
-
+  const { hallError, hallLoading, reservedPlaceCount, reservedPlaceCost, handleBack } = useHall();
   return (
     <SafeAreaView style={styles.container}>
       {false && <LoadingContainer colors={colors} />}
@@ -16,7 +16,7 @@ const HallScreen = () => {
       {!false && !false && (
         <>
           <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
-            <OrderHeader colors={colors} title="Зал 1" />
+            <OrderHeader colors={colors} title="Зал 1" onPress={handleBack} />
 
             <View style={styles.placeCount}>
               <Text style={styles.freeCountText}>Всего свободных мест: </Text>
@@ -27,7 +27,11 @@ const HallScreen = () => {
               <MovieScreen />
             </View>
             <HallPlaces colors={colors} />
-            <HallInfo colors={colors} />
+            <HallInfo
+              colors={colors}
+              reservedPlaceCount={reservedPlaceCount}
+              reservedPlaceCost={reservedPlaceCost}
+            />
             <View style={styles.buttonContainer}>
               <PrimaryButton title="Забронировать" colors={colors} onPress={() => {}} />
             </View>

@@ -3,27 +3,21 @@ import { StyleSheet, Text, View } from 'react-native';
 
 interface IHallInfoProps {
   colors: IColorsTheme;
-  //   selectedCount: number;
-  //   cost: number;
-  //   time: number;
+  reservedPlaceCount: number;
+  reservedPlaceCost: number;
 }
-export const HallInfo = ({
-  colors,
-  //  selectedCount,
-  //   cost,
-  //   time
-}: IHallInfoProps) => {
+export const HallInfo = ({ colors, reservedPlaceCount, reservedPlaceCost }: IHallInfoProps) => {
   const styles = useStyles(colors);
   return (
     <View style={styles.container}>
       <View style={styles.leftSide}>
         <View style={styles.line}>
           <Text style={styles.placeholder}>Всего выбрано: </Text>
-          <Text style={styles.info}>3</Text>
+          <Text style={styles.info}>{reservedPlaceCount}</Text>
         </View>
         <View style={styles.line}>
           <Text style={styles.placeholder}>Стоимость: </Text>
-          <Text style={styles.info}>35.96</Text>
+          <Text style={styles.info}>{reservedPlaceCost} BYN</Text>
         </View>
       </View>
       <View style={styles.rightSide}>

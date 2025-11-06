@@ -1,23 +1,17 @@
 import { IColorsTheme } from '@/features/theme';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useRouter } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 interface IOrderHeaderProps {
   colors: IColorsTheme;
   title: string;
+  onPress: () => void;
 }
-export const OrderHeader = ({ colors, title }: IOrderHeaderProps) => {
+export const OrderHeader = ({ colors, title, onPress }: IOrderHeaderProps) => {
   const styles = useStyles(colors);
-  const router = useRouter();
   return (
     <View style={styles.titleView}>
       <Text style={styles.title}>{title}</Text>
-      <AntDesign
-        name="close"
-        size={24}
-        color={colors.primary.start}
-        onPress={() => router.back()}
-      />
+      <AntDesign name="close" size={24} color={colors.primary.start} onPress={onPress} />
     </View>
   );
 };

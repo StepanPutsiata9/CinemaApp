@@ -4,6 +4,7 @@ import moviesListReducer from '@/features/moviesList/store/moviesList.slice';
 import selectedMovieReducer from '@/features/selectedMovie/store/selectedMovie.slice';
 import themeReducer from '@/features/theme/store/theme.slice';
 import dateListReducer from '@/features/ticketOrder/store/date.slice';
+import hallReducer from '@/features/ticketOrder/store/hall.slice';
 import { configureStore } from '@reduxjs/toolkit';
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     selectedMovie: selectedMovieReducer,
     theme: themeReducer,
     dateList: dateListReducer,
+    hall: hallReducer,
   },
 });
 setOnLogoutCallback(() => {
