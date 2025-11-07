@@ -8,7 +8,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const HallScreen = () => {
   const { colors } = useTheme();
   const styles = useStyles(colors);
-  const { hallError, hallLoading, reservedPlaceCount, reservedPlaceCost, handleBack } = useHall();
+  const {
+    hallError,
+    hallLoading,
+    reservedPlaceCount,
+    reservedPlaceCost,
+    handleBack,
+    handleBookingPress,
+  } = useHall();
   return (
     <SafeAreaView style={styles.container}>
       {false && <LoadingContainer colors={colors} />}
@@ -31,9 +38,10 @@ const HallScreen = () => {
               colors={colors}
               reservedPlaceCount={reservedPlaceCount}
               reservedPlaceCost={reservedPlaceCost}
+              time="22:00"
             />
             <View style={styles.buttonContainer}>
-              <PrimaryButton title="Забронировать" colors={colors} onPress={() => {}} />
+              <PrimaryButton title="Забронировать" colors={colors} onPress={handleBookingPress} />
             </View>
           </ScrollView>
         </>

@@ -5,8 +5,14 @@ interface IHallInfoProps {
   colors: IColorsTheme;
   reservedPlaceCount: number;
   reservedPlaceCost: number;
+  time: string;
 }
-export const HallInfo = ({ colors, reservedPlaceCount, reservedPlaceCost }: IHallInfoProps) => {
+export const HallInfo = ({
+  colors,
+  reservedPlaceCount,
+  reservedPlaceCost,
+  time,
+}: IHallInfoProps) => {
   const styles = useStyles(colors);
   return (
     <View style={styles.container}>
@@ -22,7 +28,7 @@ export const HallInfo = ({ colors, reservedPlaceCount, reservedPlaceCost }: IHal
       </View>
       <View style={styles.rightSide}>
         <Text style={styles.placeholder}>Время сеанса: </Text>
-        <Text style={styles.info}>22:00</Text>
+        <Text style={styles.info}>{time}</Text>
       </View>
     </View>
   );

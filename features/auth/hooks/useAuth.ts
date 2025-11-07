@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useRouter } from 'expo-router';
+import { Alert } from 'react-native';
 import { loginApi, registrationApi } from '../api';
 import { logoutApi } from '../api/authApi';
 import { isFirstLaunch, setAppLaunched } from '../storage';
@@ -88,6 +89,31 @@ export const useAuth = () => {
       dispatch(setLoading(false));
     }
   };
+  const handleLogoutPress = () => {
+    Alert.alert(
+      'Выход',
+      'Вы уверены, что хотите выйти?',
+      [
+        {
+          text: 'Отмена',
+          style: 'cancel',
+        },
+        {
+          text: 'Выйти',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await handleLogout();
+              router.replace('/(auth)/login');
+            } catch (error) {
+              console.error('Logout error:', error);
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
   const checkFirstLaunch = async () => {
     const launch = await isFirstLaunch();
     dispatch(setIsFirstLaunch(launch));
@@ -111,6 +137,6 @@ export const useAuth = () => {
     loadApp,
     checkFirstLaunch,
     firstLaunch,
-    handleLogout,
+    handleLogoutPress,
   };
 };
