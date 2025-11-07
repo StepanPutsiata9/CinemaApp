@@ -1,11 +1,11 @@
 import { IColorsTheme } from '@/features/theme';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useHall } from '../hooks';
+import { TLine } from '../types';
 
 interface IHallPlanProps {
   colors: IColorsTheme;
 }
-export type TLine = { id: number; mode: 'free' | 'selected' | 'taken' };
 
 interface ILineViewProps {
   line: TLine[];
@@ -21,6 +21,7 @@ const LineView = ({ line, colors, onSeatPress, lineIndex }: ILineViewProps) => {
       {line.map((el, index) => {
         return (
           <TouchableOpacity
+            hitSlop={{ top: 3, bottom: 3, left: 3, right: 3 }}
             onPress={() => onSeatPress(lineIndex, index)}
             style={[
               styles.placeItem,

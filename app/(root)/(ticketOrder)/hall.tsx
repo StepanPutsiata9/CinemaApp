@@ -18,9 +18,9 @@ const HallScreen = () => {
   } = useHall();
   return (
     <SafeAreaView style={styles.container}>
-      {false && <LoadingContainer colors={colors} />}
-      {false && <ErrorContainer error={'error'} colors={colors} />}
-      {!false && !false && (
+      {hallLoading && <LoadingContainer colors={colors} />}
+      {hallError && <ErrorContainer error={hallError} colors={colors} />}
+      {!hallLoading && !hallError && (
         <>
           <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
             <OrderHeader colors={colors} title="Зал 1" onPress={handleBack} />
@@ -41,7 +41,11 @@ const HallScreen = () => {
               time="22:00"
             />
             <View style={styles.buttonContainer}>
-              <PrimaryButton title="Забронировать" colors={colors} onPress={handleBookingPress} />
+              <PrimaryButton
+                title="Забронировать"
+                colors={colors}
+                onPress={reservedPlaceCount !== 0 ? handleBookingPress : () => {}}
+              />
             </View>
           </ScrollView>
         </>

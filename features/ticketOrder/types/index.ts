@@ -24,3 +24,4 @@ export interface IHallState {
   reservedPlaceCost: number;
   reservedPlaceCount: number;
 }
+export type TLine = { id: number; mode: 'free' | 'selected' | 'taken' };

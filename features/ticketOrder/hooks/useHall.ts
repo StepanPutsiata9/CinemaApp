@@ -2,8 +2,8 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert } from 'react-native';
-import { TLine } from '../components/HallPlan';
 import { removeSelectedPlaces, selectPlace } from '../store/hall.slice';
+import { TLine } from '../types';
 
 export const useHall = () => {
   const { hallError, hallLoading, hallPlaces, reservedPlaceCount, reservedPlaceCost } =
@@ -185,6 +185,8 @@ export const useHall = () => {
           onPress: async () => {
             try {
               await handleBooking();
+              dispatch(removeSelectedPlaces());
+              router.replace('/(root)/(tabs)/home');
               Alert.alert('Успешно!', 'Место успешно забронировано!', [
                 { text: 'OK', style: 'default' },
               ]);

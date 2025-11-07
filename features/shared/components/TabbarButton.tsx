@@ -73,6 +73,7 @@ function TabbarButton({
       onPress={onPress}
       onLongPress={onLongPress}
       style={styles.tabbarItem}
+      hitSlop={{ top: 15, bottom: 15, left: 35, right: 35 }}
     >
       <Animated.View style={[animatedIconStyle]}>
         {IconComponent
