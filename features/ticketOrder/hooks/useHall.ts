@@ -2,12 +2,19 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert } from 'react-native';
-import { removeSelectedPlaces, selectPlace } from '../store/hall.slice';
+import { bookingPlace, removeSelectedPlaces, selectPlace } from '../store/hall.slice';
 import { TLine } from '../types';
 
 export const useHall = () => {
-  const { hallError, hallLoading, hallPlaces, reservedPlaceCount, reservedPlaceCost } =
-    useAppSelector(state => state.hall);
+  const {
+    hallError,
+    hallLoading,
+    hallPlaces,
+    reservedPlaceCount,
+    reservedPlaceCost,
+    bookingLoading,
+    bookingError,
+  } = useAppSelector(state => state.hall);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [seatsData, setSeatsData] = useState<TLine[][]>([
@@ -174,6 +181,19 @@ export const useHall = () => {
     dispatch(removeSelectedPlaces());
     router.back();
   };
+  const handleEmptyBookingPress = () => {
+    Alert.alert(
+      'Бронирование места',
+      'Сначала выберите места для бронирования',
+      [
+        {
+          text: 'Понятно',
+          style: 'default',
+        },
+      ],
+      { cancelable: true }
+    );
+  };
   const handleBookingPress = () => {
     Alert.alert(
       'Бронирование места',
@@ -184,12 +204,19 @@ export const useHall = () => {
           style: 'default',
           onPress: async () => {
             try {
-              await handleBooking();
-              dispatch(removeSelectedPlaces());
-              router.replace('/(root)/(tabs)/home');
-              Alert.alert('Успешно!', 'Место успешно забронировано!', [
-                { text: 'OK', style: 'default' },
-              ]);
+              const result = await dispatch(bookingPlace([1, 2, 3])).unwrap();
+
+              if (result) {
+                router.push('/(root)/(tabs)/home');
+                dispatch(removeSelectedPlaces());
+                Alert.alert('Успешно!', 'Место успешно забронировано!', [
+                  { text: 'OK', style: 'default' },
+                ]);
+              } else {
+                Alert.alert('Ошибка', 'Не удалось забронировать место. Попробуйте еще раз.', [
+                  { text: 'OK', style: 'destructive' },
+                ]);
+              }
             } catch {
               Alert.alert('Ошибка', 'Не удалось забронировать место. Попробуйте еще раз.', [
                 { text: 'OK', style: 'destructive' },
@@ -206,9 +233,6 @@ export const useHall = () => {
     );
   };
 
-  const handleBooking = async () => {
-    return new Promise(resolve => setTimeout(resolve, 1000));
-  };
   return {
     seatsData: seatsData,
     handleSeatPress: handleSeatPress,
@@ -219,5 +243,8 @@ export const useHall = () => {
     reservedPlaceCost: reservedPlaceCost,
     handleBack: handleBack,
     handleBookingPress: handleBookingPress,
+    bookingLoading: bookingLoading,
+    bookingError: bookingError,
+    handleEmptyBookingPress: handleEmptyBookingPress,
   };
 };

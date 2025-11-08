@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getHall } from '../services';
+import { booking, getHall } from '../services';
 import { IHallState } from '../types';
 
 const initialState: IHallState = {
@@ -7,7 +7,10 @@ const initialState: IHallState = {
   hallLoading: false,
   hallError: null,
   reservedPlaceCount: 0,
+  bookingLoading: false,
+  bookingError: null,
   reservedPlaceCost: 0,
+  isBookingSucsess: false,
 };
 
 export const getHallPlaces = createAsyncThunk(
@@ -21,7 +24,17 @@ export const getHallPlaces = createAsyncThunk(
     }
   }
 );
-
+export const bookingPlace = createAsyncThunk(
+  'hall/bookingPlace',
+  async (idArray: number[], { rejectWithValue }) => {
+    try {
+      const isBooking = await booking(idArray);
+      return isBooking;
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
+    }
+  }
+);
 const hallSlice = createSlice({
   name: 'hall',
   initialState,
@@ -59,6 +72,17 @@ const hallSlice = createSlice({
       .addCase(getHallPlaces.rejected, state => {
         state.hallPlaces = null;
         state.hallLoading = false;
+      })
+
+      .addCase(bookingPlace.pending, state => {
+        state.bookingLoading = true;
+      })
+      .addCase(bookingPlace.fulfilled, (state, action) => {
+        state.isBookingSucsess = action.payload as unknown as boolean;
+        state.bookingLoading = false;
+      })
+      .addCase(bookingPlace.rejected, state => {
+        state.bookingLoading = false;
       });
   },
 });

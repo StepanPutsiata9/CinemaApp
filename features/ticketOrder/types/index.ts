@@ -23,5 +23,8 @@ export interface IHallState {
   hallError: string | null;
   reservedPlaceCost: number;
   reservedPlaceCount: number;
+  bookingLoading: boolean;
+  bookingError: string | null;
+  isBookingSucsess: boolean;
 }
 export type TLine = { id: number; mode: 'free' | 'selected' | 'taken' };

@@ -15,6 +15,7 @@ const HallScreen = () => {
     reservedPlaceCost,
     handleBack,
     handleBookingPress,
+    handleEmptyBookingPress,
   } = useHall();
   return (
     <SafeAreaView style={styles.container}>
@@ -44,7 +45,7 @@ const HallScreen = () => {
               <PrimaryButton
                 title="Забронировать"
                 colors={colors}
-                onPress={reservedPlaceCount !== 0 ? handleBookingPress : () => {}}
+                onPress={reservedPlaceCount !== 0 ? handleBookingPress : handleEmptyBookingPress}
               />
             </View>
           </ScrollView>
