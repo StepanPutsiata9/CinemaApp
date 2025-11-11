@@ -1,9 +1,15 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
-import { bookingPlace, removeSelectedPlaces, selectPlace } from '../store/hall.slice';
-import { TLine } from '../types';
+import {
+  bookingPlace,
+  getHallPlaces,
+  removeSelectedPlaces,
+  selectPlace,
+  setHallError,
+} from '../store/hall.slice';
+import { TPlace } from '../types';
 
 export const useHall = () => {
   const {
@@ -17,157 +23,28 @@ export const useHall = () => {
   } = useAppSelector(state => state.hall);
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [seatsData, setSeatsData] = useState<TLine[][]>([
-    [
-      { id: 1, mode: 'free' },
-      { id: 2, mode: 'free' },
-      { id: 3, mode: 'free' },
-      { id: 4, mode: 'free' },
-      { id: 5, mode: 'free' },
-      { id: 6, mode: 'free' },
-      { id: 7, mode: 'free' },
-      { id: 8, mode: 'free' },
-      { id: 9, mode: 'free' },
-      { id: 10, mode: 'free' },
-      { id: 11, mode: 'free' },
-    ],
-    [
-      { id: 1, mode: 'taken' },
-      { id: 2, mode: 'free' },
-      { id: 3, mode: 'free' },
-      { id: 4, mode: 'free' },
-      { id: 5, mode: 'free' },
-      { id: 6, mode: 'taken' },
-      { id: 7, mode: 'free' },
-      { id: 8, mode: 'free' },
-      { id: 9, mode: 'free' },
-      { id: 10, mode: 'free' },
-      { id: 11, mode: 'free' },
-    ],
-    [
-      { id: 12, mode: 'free' },
-      { id: 13, mode: 'free' },
-      { id: 14, mode: 'free' },
-      { id: 15, mode: 'taken' },
-      { id: 16, mode: 'taken' },
-      { id: 17, mode: 'free' },
-      { id: 18, mode: 'free' },
-      { id: 19, mode: 'free' },
-      { id: 20, mode: 'taken' },
-      { id: 21, mode: 'free' },
-      { id: 22, mode: 'free' },
-      { id: 23, mode: 'free' },
-      { id: 24, mode: 'free' },
-    ],
-    [
-      { id: 12, mode: 'free' },
-      { id: 13, mode: 'free' },
-      { id: 14, mode: 'free' },
-      { id: 15, mode: 'free' },
-      { id: 16, mode: 'taken' },
-      { id: 17, mode: 'free' },
-      { id: 18, mode: 'taken' },
-      { id: 19, mode: 'taken' },
-      { id: 20, mode: 'free' },
-      { id: 21, mode: 'free' },
-      { id: 22, mode: 'free' },
-      { id: 23, mode: 'free' },
-      { id: 24, mode: 'free' },
-    ],
-    [
-      { id: 12, mode: 'taken' },
-      { id: 13, mode: 'free' },
-      { id: 14, mode: 'taken' },
-      { id: 15, mode: 'free' },
-      { id: 16, mode: 'taken' },
-      { id: 17, mode: 'taken' },
-      { id: 18, mode: 'taken' },
-      { id: 19, mode: 'taken' },
-      { id: 20, mode: 'taken' },
-      { id: 21, mode: 'free' },
-      { id: 22, mode: 'free' },
-      { id: 23, mode: 'free' },
-      { id: 24, mode: 'free' },
-    ],
-    [
-      { id: 12, mode: 'taken' },
-      { id: 13, mode: 'free' },
-      { id: 14, mode: 'taken' },
-      { id: 15, mode: 'free' },
-      { id: 16, mode: 'taken' },
-      { id: 17, mode: 'free' },
-      { id: 18, mode: 'taken' },
-      { id: 19, mode: 'taken' },
-      { id: 20, mode: 'taken' },
-      { id: 21, mode: 'taken' },
-      { id: 22, mode: 'free' },
-      { id: 23, mode: 'free' },
-      { id: 24, mode: 'free' },
-    ],
-    [
-      { id: 12, mode: 'free' },
-      { id: 13, mode: 'free' },
-      { id: 14, mode: 'free' },
-      { id: 22, mode: 'free' },
-      { id: 15, mode: 'free' },
-      { id: 16, mode: 'taken' },
-      { id: 17, mode: 'free' },
-      { id: 18, mode: 'free' },
-      { id: 19, mode: 'free' },
-      { id: 24, mode: 'free' },
-      { id: 20, mode: 'free' },
-      { id: 21, mode: 'free' },
-      { id: 23, mode: 'free' },
-    ],
-    [
-      { id: 22, mode: 'free' },
-      { id: 23, mode: 'free' },
-      { id: 24, mode: 'free' },
-      { id: 12, mode: 'free' },
-      { id: 13, mode: 'free' },
-      { id: 14, mode: 'free' },
-      { id: 15, mode: 'free' },
-      { id: 16, mode: 'taken' },
-      { id: 17, mode: 'free' },
-      { id: 18, mode: 'free' },
-      { id: 19, mode: 'free' },
-      { id: 20, mode: 'free' },
-      { id: 21, mode: 'free' },
-    ],
-    [
-      { id: 12, mode: 'free' },
-      { id: 13, mode: 'free' },
-      { id: 14, mode: 'free' },
-      { id: 22, mode: 'free' },
-      { id: 23, mode: 'free' },
-      { id: 24, mode: 'free' },
-      { id: 15, mode: 'free' },
-      { id: 16, mode: 'taken' },
-      { id: 17, mode: 'free' },
-      { id: 18, mode: 'free' },
-      { id: 19, mode: 'free' },
-      { id: 20, mode: 'free' },
-      { id: 21, mode: 'free' },
-    ],
-    [
-      { id: 12, mode: 'free' },
-      { id: 13, mode: 'free' },
-      { id: 14, mode: 'taken' },
-      { id: 15, mode: 'free' },
-      { id: 16, mode: 'taken' },
-      { id: 17, mode: 'taken' },
-      { id: 18, mode: 'free' },
-      { id: 19, mode: 'free' },
-      { id: 20, mode: 'free' },
-      { id: 21, mode: 'free' },
-      { id: 22, mode: 'free' },
-      { id: 23, mode: 'free' },
-      { id: 24, mode: 'free' },
-    ],
-  ]);
+  const [seatsData, setSeatsData] = useState<TPlace[][] | null>(hallPlaces || null);
+
+  useEffect(() => {
+    setSeatsData(hallPlaces);
+  }, [hallPlaces]);
+
+  const loadHall = useCallback(
+    async (id: string, time: string) => {
+      try {
+        await dispatch(getHallPlaces({ id, time })).unwrap();
+      } catch (error) {
+        dispatch(setHallError(error instanceof Error ? error.message : 'Unknown error'));
+      }
+    },
+    [dispatch]
+  );
   const handleSeatPress = (lineIndex: number, seatIndex: number) => {
-    const updatedData = [...seatsData];
+    if (!seatsData) return;
+
+    const updatedData = JSON.parse(JSON.stringify(seatsData)) as TPlace[][];
     const seat = updatedData[lineIndex][seatIndex];
+
     if (seat.mode === 'free') {
       seat.mode = 'selected';
       dispatch(selectPlace('select'));
@@ -175,6 +52,7 @@ export const useHall = () => {
       seat.mode = 'free';
       dispatch(selectPlace('free'));
     }
+
     setSeatsData(updatedData);
   };
   const handleBack = () => {
@@ -246,5 +124,6 @@ export const useHall = () => {
     bookingLoading: bookingLoading,
     bookingError: bookingError,
     handleEmptyBookingPress: handleEmptyBookingPress,
+    loadHall: loadHall,
   };
 };

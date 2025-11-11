@@ -1,6 +1,8 @@
 import { ErrorContainer, LoadingContainer, MovieScreen, PrimaryButton } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
 import { HallInfo, HallPlaces, OrderHeader, useHall } from '@/features/ticketOrder';
+import { useLocalSearchParams } from 'expo-router';
+import { useEffect } from 'react';
 
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,6 +10,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const HallScreen = () => {
   const { colors } = useTheme();
   const styles = useStyles(colors);
+  const { id, time, bookedPlaces } = useLocalSearchParams();
+  const bookedPlacesNumber = Number(bookedPlaces);
+  const showsId = id.toString();
+  const showsTime = time.toString();
   const {
     hallError,
     hallLoading,
@@ -16,7 +22,12 @@ const HallScreen = () => {
     handleBack,
     handleBookingPress,
     handleEmptyBookingPress,
+    loadHall,
   } = useHall();
+  useEffect(() => {
+    loadHall(showsId, showsTime);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       {hallLoading && <LoadingContainer colors={colors} />}
@@ -28,7 +39,7 @@ const HallScreen = () => {
 
             <View style={styles.placeCount}>
               <Text style={styles.freeCountText}>Всего свободных мест: </Text>
-              <Text style={styles.palceCountText}>25</Text>
+              <Text style={styles.palceCountText}>{25 - bookedPlacesNumber}</Text>
             </View>
 
             <View style={styles.movieScreen}>
@@ -39,7 +50,7 @@ const HallScreen = () => {
               colors={colors}
               reservedPlaceCount={reservedPlaceCount}
               reservedPlaceCost={reservedPlaceCost}
-              time="22:00"
+              time={showsTime}
             />
             <View style={styles.buttonContainer}>
               <PrimaryButton

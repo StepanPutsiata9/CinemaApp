@@ -15,10 +15,10 @@ const initialState: IHallState = {
 
 export const getHallPlaces = createAsyncThunk(
   'hall/getHallPlaces',
-  async (id: number, { rejectWithValue }) => {
+  async ({ id, time }: { id: string; time: string }, { rejectWithValue }) => {
     try {
-      const dateList = await getHall(id);
-      return dateList;
+      const hallList = await getHall(id, time);
+      return hallList;
     } catch (error) {
       return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
     }

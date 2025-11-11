@@ -7,23 +7,34 @@ import { GradientProgressBar } from './ProgressBar';
 interface ITimeItemProps {
   colors: IColorsTheme;
   item: ITime;
+  id: number;
 }
-export const TimeItem = ({ colors, item }: ITimeItemProps) => {
+export const TimeItem = ({ colors, item, id }: ITimeItemProps) => {
   const styles = useStyles(colors);
   const router = useRouter();
+
   return (
     <TouchableOpacity
       style={styles.itemCard}
-      onPress={() => router.push('/(root)/(ticketOrder)/hall')}
+      onPress={() =>
+        router.push({
+          pathname: '/(root)/(ticketOrder)/hall',
+          params: { id: id, time: item.time, bookedPlaces: item.bookedPlaces },
+        })
+      }
     >
       <View style={styles.timeView}>
         <Text style={styles.timeText}>{item.time}</Text>
       </View>
       <View style={styles.placesView}>
-        <Text style={styles.placeCount}>12</Text>
+        <Text style={styles.placeCount}>{25 - item.bookedPlaces}</Text>
         <Text style={styles.placeText}>мест</Text>
       </View>
-      <GradientProgressBar title={`${item.hall} зал`} colors={colors} progress={0.5} />
+      <GradientProgressBar
+        title={`${item.hall} зал`}
+        colors={colors}
+        progress={item.bookedPlaces === 0 ? 0 : item.bookedPlaces / 25}
+      />
     </TouchableOpacity>
   );
 };

@@ -6,14 +6,15 @@ import { TimeItem } from './TimeItem';
 interface ITimeListProps {
   colors: IColorsTheme;
   timesList: ITime[];
+  id: number;
 }
 
-export const TimeList = ({ colors, timesList }: ITimeListProps) => {
+export const TimeList = ({ colors, timesList, id }: ITimeListProps) => {
   const styles = useStyles(colors);
   return (
     <View style={styles.container}>
       {timesList.map((el, index) => {
-        return <TimeItem item={el} key={index} colors={colors} />;
+        return <TimeItem item={el} key={index} colors={colors} id={id} />;
       })}
     </View>
   );

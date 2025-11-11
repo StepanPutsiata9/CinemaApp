@@ -1,14 +1,14 @@
 import { IColorsTheme } from '@/features/theme';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useHall } from '../hooks';
-import { TLine } from '../types';
+import { TPlace } from '../types';
 
 interface IHallPlanProps {
   colors: IColorsTheme;
 }
 
 interface ILineViewProps {
-  line: TLine[];
+  line: TPlace[];
   colors: IColorsTheme;
   onSeatPress: (lineIndex: number, seatIndex: number) => void;
   lineIndex: number;
@@ -54,7 +54,7 @@ export const HallPlan = ({ colors }: IHallPlanProps) => {
       showsHorizontalScrollIndicator={false}
     >
       <View style={styles.contentContainer}>
-        {seatsData.map((line, index) => {
+        {seatsData?.map((line, index) => {
           return (
             <LineView
               line={line}

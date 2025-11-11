@@ -1,11 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useCallback, useEffect, useState } from 'react';
-import {
-  getAllDateList,
-  setDateListError,
-  setDateListLoading,
-  setPickedDate,
-} from '../store/date.slice';
+import { getAllDateList, setDateListError, setPickedDate } from '../store/date.slice';
 
 export const useDateList = () => {
   const dispatch = useAppDispatch();
@@ -25,13 +20,9 @@ export const useDateList = () => {
   const loadDateList = useCallback(
     async (id: number) => {
       try {
-        dispatch(setDateListLoading(true));
-        dispatch(setDateListError(null));
         await dispatch(getAllDateList(id)).unwrap();
       } catch (error) {
         dispatch(setDateListError(error instanceof Error ? error.message : 'Unknown error'));
-      } finally {
-        dispatch(setDateListLoading(false));
       }
     },
     [dispatch]

@@ -30,7 +30,11 @@ const DateScreen = () => {
           ) : (
             <>
               <DateList colors={colors} dateList={dateList || []} />
-              <TimeList colors={colors} timesList={pickedDate?.time || []} />
+              <TimeList
+                colors={colors}
+                timesList={pickedDate?.time || []}
+                id={pickedDate?.id || 0}
+              />
             </>
           )}
         </ScrollView>

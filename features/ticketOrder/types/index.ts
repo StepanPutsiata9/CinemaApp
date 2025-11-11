@@ -11,14 +11,16 @@ export interface ITimeItem {
   time: ITime[];
   movieId: number;
   hall: number;
+  bookedTickets: number;
 }
 export interface ITime {
   time: string;
   hall: number;
+  bookedPlaces: number;
 }
 
 export interface IHallState {
-  hallPlaces: any[] | null;
+  hallPlaces: TPlace[][] | null;
   hallLoading: boolean;
   hallError: string | null;
   reservedPlaceCost: number;
@@ -27,4 +29,4 @@ export interface IHallState {
   bookingError: string | null;
   isBookingSucsess: boolean;
 }
-export type TLine = { id: number; mode: 'free' | 'selected' | 'taken' };
+export type TPlace = { id: number; mode: 'free' | 'selected' | 'taken' };
