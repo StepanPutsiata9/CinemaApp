@@ -11,7 +11,6 @@ export interface ITimeItem {
   time: ITime[];
   movieId: number;
   hall: number;
-  bookedTickets: number;
 }
 export interface ITime {
   time: string;
@@ -28,5 +27,15 @@ export interface IHallState {
   bookingLoading: boolean;
   bookingError: string | null;
   isBookingSucsess: boolean;
+  bookingPlaces: IBookingPlace[] | null;
 }
 export type TPlace = { id: number; mode: 'free' | 'selected' | 'taken' };
+
+export interface IBookingPlaces {
+  time: string;
+  tickets: IBookingPlace[];
+}
+export interface IBookingPlace {
+  row: number;
+  place: number;
+}

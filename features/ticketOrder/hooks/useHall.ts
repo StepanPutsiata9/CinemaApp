@@ -4,12 +4,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import {
   bookingPlace,
+  clearBookingPlace,
   getHallPlaces,
   removeSelectedPlaces,
   selectPlace,
+  setBookingPlace,
   setHallError,
 } from '../store/hall.slice';
-import { TPlace } from '../types';
+import { IBookingPlaces, TPlace } from '../types';
 
 export const useHall = () => {
   const {
@@ -20,6 +22,7 @@ export const useHall = () => {
     reservedPlaceCost,
     bookingLoading,
     bookingError,
+    bookingPlaces,
   } = useAppSelector(state => state.hall);
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -48,6 +51,7 @@ export const useHall = () => {
     if (seat.mode === 'free') {
       seat.mode = 'selected';
       dispatch(selectPlace('select'));
+      dispatch(setBookingPlace({ place: seatIndex, row: lineIndex }));
     } else if (seat.mode === 'selected') {
       seat.mode = 'free';
       dispatch(selectPlace('free'));
@@ -57,6 +61,7 @@ export const useHall = () => {
   };
   const handleBack = () => {
     dispatch(removeSelectedPlaces());
+    dispatch(clearBookingPlace());
     router.back();
   };
   const handleEmptyBookingPress = () => {
@@ -72,7 +77,7 @@ export const useHall = () => {
       { cancelable: true }
     );
   };
-  const handleBookingPress = () => {
+  const handleBookingPress = ({ id, places }: { places: IBookingPlaces; id: string }) => {
     Alert.alert(
       'Бронирование места',
       'Вы уверены, что хотите забронировать это место?',
@@ -82,8 +87,12 @@ export const useHall = () => {
           style: 'default',
           onPress: async () => {
             try {
-              const result = await dispatch(bookingPlace([1, 2, 3])).unwrap();
-
+              const result = await dispatch(
+                bookingPlace({
+                  places: places,
+                  id: id,
+                })
+              ).unwrap();
               if (result) {
                 router.push('/(root)/(tabs)/home');
                 dispatch(removeSelectedPlaces());
@@ -125,5 +134,6 @@ export const useHall = () => {
     bookingError: bookingError,
     handleEmptyBookingPress: handleEmptyBookingPress,
     loadHall: loadHall,
+    bookingPlaces: bookingPlaces,
   };
 };

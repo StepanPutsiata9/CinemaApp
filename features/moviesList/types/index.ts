@@ -8,7 +8,8 @@ export interface IMoviesListState {
 export interface Movie {
   id: number;
   name: string;
-  url: string;
+  url?: string;
+  poster?: string;
 }
 
 export interface MoviesData {

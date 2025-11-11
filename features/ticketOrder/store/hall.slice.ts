@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { booking, getHall } from '../services';
-import { IHallState } from '../types';
+import { IBookingPlace, IBookingPlaces, IHallState } from '../types';
 
 const initialState: IHallState = {
   hallPlaces: null,
@@ -11,6 +11,7 @@ const initialState: IHallState = {
   bookingError: null,
   reservedPlaceCost: 0,
   isBookingSucsess: false,
+  bookingPlaces: null,
 };
 
 export const getHallPlaces = createAsyncThunk(
@@ -26,9 +27,9 @@ export const getHallPlaces = createAsyncThunk(
 );
 export const bookingPlace = createAsyncThunk(
   'hall/bookingPlace',
-  async (idArray: number[], { rejectWithValue }) => {
+  async ({ places, id }: { places: IBookingPlaces; id: string }, { rejectWithValue }) => {
     try {
-      const isBooking = await booking(idArray);
+      const isBooking = await booking(places, id);
       return isBooking;
     } catch (error) {
       return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
@@ -59,6 +60,26 @@ const hallSlice = createSlice({
       state.reservedPlaceCost = 0;
       state.reservedPlaceCount = 0;
     },
+    clearBookingPlace: state => {
+      state.bookingPlaces = null;
+    },
+    setBookingPlace: (state, action: PayloadAction<IBookingPlace>) => {
+      const { row, place } = action.payload;
+      console.log(row, place, ' row place');
+
+      if (!state.bookingPlaces) {
+        state.bookingPlaces = [];
+      }
+      const existingIndex = state.bookingPlaces.findIndex(
+        item => item.row === row && item.place === place
+      );
+
+      if (existingIndex === -1) {
+        state.bookingPlaces.push({ row, place });
+      } else {
+        state.bookingPlaces.splice(existingIndex, 1);
+      }
+    },
   },
   extraReducers: builder => {
     builder
@@ -78,7 +99,7 @@ const hallSlice = createSlice({
         state.bookingLoading = true;
       })
       .addCase(bookingPlace.fulfilled, (state, action) => {
-        state.isBookingSucsess = action.payload as unknown as boolean;
+        // state.isBookingSucsess = action.payload as unknown as boolean;
         state.bookingLoading = false;
       })
       .addCase(bookingPlace.rejected, state => {
@@ -87,6 +108,12 @@ const hallSlice = createSlice({
   },
 });
 
-export const { setHallError, setHallLoading, selectPlace, removeSelectedPlaces } =
-  hallSlice.actions;
+export const {
+  setHallError,
+  setHallLoading,
+  selectPlace,
+  removeSelectedPlaces,
+  setBookingPlace,
+  clearBookingPlace,
+} = hallSlice.actions;
 export default hallSlice.reducer;

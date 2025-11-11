@@ -1,6 +1,10 @@
-export const booking = async (idArray: number[]) => {
-  //   const { data } = await api.post(`booking`,{[id,id,id,id]});
-  //   const bookingResponse = data as boolean;
-  //   return bookingResponse;
-  return new Promise(resolve => setTimeout(() => resolve(true), 2000));
+import { api } from '@/api';
+import { IBookingPlaces } from '../types';
+
+export const booking = async (places: IBookingPlaces, id: string) => {
+  console.log('places ', places, ' ', places.tickets[0]);
+
+  const { data } = await api.post(`movies/tickets/create/${id}`, JSON.stringify(places));
+  const bookingResponse = data as boolean;
+  return bookingResponse;
 };

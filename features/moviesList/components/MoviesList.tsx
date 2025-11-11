@@ -24,14 +24,13 @@ export const MoviesList = memo(function MoviesList({ movies }: IMoviesListProps)
   const renderItem = useCallback(
     ({ item, index }: { item: Movie; index: number }) => {
       const isLastInRow = (index + 1) % NUM_COLUMNS === 0;
-
       return (
         <TouchableOpacity
           style={[styles.card, isLastInRow && styles.lastInRow]}
           onPress={() => handleMovie(item.id)}
         >
           <Image
-            source={item.url ? { uri: item.url } : require('@/assets/images/icon.png')}
+            source={item.poster ? { uri: item.poster } : require('@/assets/images/icon.png')}
             style={styles.image}
             resizeMode="cover"
           />

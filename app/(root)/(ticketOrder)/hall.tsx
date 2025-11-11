@@ -1,14 +1,15 @@
 import { ErrorContainer, LoadingContainer, MovieScreen, PrimaryButton } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
 import { HallInfo, HallPlaces, OrderHeader, useHall } from '@/features/ticketOrder';
-import { useLocalSearchParams } from 'expo-router';
-import { useEffect } from 'react';
+import { useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { useCallback, useEffect } from 'react';
 
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const HallScreen = () => {
   const { colors } = useTheme();
+  const { bookingPlaces } = useHall();
   const styles = useStyles(colors);
   const { id, time, bookedPlaces } = useLocalSearchParams();
   const bookedPlacesNumber = Number(bookedPlaces);
@@ -28,6 +29,14 @@ const HallScreen = () => {
     loadHall(showsId, showsTime);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        handleBack();
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+  );
   return (
     <SafeAreaView style={styles.container}>
       {hallLoading && <LoadingContainer colors={colors} />}
@@ -56,7 +65,15 @@ const HallScreen = () => {
               <PrimaryButton
                 title="Забронировать"
                 colors={colors}
-                onPress={reservedPlaceCount !== 0 ? handleBookingPress : handleEmptyBookingPress}
+                onPress={
+                  reservedPlaceCount !== 0
+                    ? () =>
+                        handleBookingPress({
+                          id: showsId,
+                          places: { tickets: bookingPlaces || [], time: showsTime },
+                        })
+                    : handleEmptyBookingPress
+                }
               />
             </View>
           </ScrollView>
