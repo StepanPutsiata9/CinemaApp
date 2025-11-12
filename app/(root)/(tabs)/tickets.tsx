@@ -7,7 +7,7 @@ export default function TicketsTab() {
   const styles = useStyles(colors);
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Ticket Tab</Text>
+      <Text style={styles.title}>Билеты</Text>
     </SafeAreaView>
   );
 }
@@ -18,10 +18,11 @@ function useStyles(colors: IColorsTheme) {
       backgroundColor: colors.background,
       paddingHorizontal: 16,
     },
-    text: {
-      fontFamily: 'Montserrat',
-      color: colors.text.title,
-      textAlign: 'center',
+    title: {
+      fontFamily: 'MontserratBold',
+      color: colors.primary.start,
+      fontSize: 24,
+      marginBottom: 20,
     },
   });
 }

@@ -7,7 +7,7 @@ interface IHallPlacesProps {
   colors: IColorsTheme;
 }
 export const HallPlaces = ({ colors }: IHallPlacesProps) => {
-  const styles = useStyles(colors);
+  const styles = useStyles();
   return (
     <View style={styles.container}>
       <HallPlan colors={colors} />
@@ -15,7 +15,7 @@ export const HallPlaces = ({ colors }: IHallPlacesProps) => {
     </View>
   );
 };
-function useStyles(colors: IColorsTheme) {
+function useStyles() {
   return StyleSheet.create({
     container: {
       marginBottom: 20,

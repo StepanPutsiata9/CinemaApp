@@ -27,7 +27,7 @@ export function PrimaryButton({ title, onPress, colors }: PrimaryButtonProps) {
   );
 }
 
-function useStyles(colors: IColorsTheme) {
+function (colors: IColorsTheme) {
   return StyleSheet.create({
     gradient: {
       borderRadius: 20,

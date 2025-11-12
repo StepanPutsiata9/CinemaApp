@@ -15,7 +15,7 @@ interface ILineViewProps {
 }
 
 const LineView = ({ line, colors, onSeatPress, lineIndex }: ILineViewProps) => {
-  const styles = useStyles(colors);
+  const styles = useStyles();
   return (
     <View style={styles.line}>
       {line.map((el, index) => {
@@ -43,7 +43,7 @@ const LineView = ({ line, colors, onSeatPress, lineIndex }: ILineViewProps) => {
 };
 
 export const HallPlan = ({ colors }: IHallPlanProps) => {
-  const styles = useStyles(colors);
+  const styles = useStyles();
   const { seatsData, handleSeatPress } = useHall();
 
   return (
@@ -70,7 +70,7 @@ export const HallPlan = ({ colors }: IHallPlanProps) => {
   );
 };
 
-function useStyles(colors: IColorsTheme) {
+function useStyles() {
   return StyleSheet.create({
     scrollView: {
       marginBottom: 30,

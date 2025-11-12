@@ -8,12 +8,13 @@ export const ErrorContainer = ({ error, colors }: IErrorContainerProps) => {
   const styles = useStyles(colors);
   return (
     <View style={styles.container}>
-      <Text style={{ color: '#fff' }}>{error}</Text>
+      <Text style={styles.text}>{error}</Text>
     </View>
   );
 };
 function useStyles(colors: IColorsTheme) {
   return StyleSheet.create({
     container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    text: { color: colors.text.title },
   });
 }
