@@ -1,46 +1,18 @@
 import { IColorsTheme } from '@/features/theme';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-
-import { useRouter } from 'expo-router';
 import React from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useAuth } from '../hooks';
 
-interface ILogoutButton {
+interface ILogoutButtonProps {
   colors: IColorsTheme;
 }
-export const LogoutButton = ({ colors }: ILogoutButton) => {
-  const router = useRouter();
+export const LogoutButton = ({ colors }: ILogoutButtonProps) => {
   const styles = useStyles(colors);
-  const { handleLogout } = useAuth();
-  const logout = () => {
-    Alert.alert(
-      'Выход',
-      'Вы уверены, что хотите выйти?',
-      [
-        {
-          text: 'Отмена',
-          style: 'cancel',
-        },
-        {
-          text: 'Выйти',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await handleLogout();
-              router.replace('/(auth)/login');
-            } catch (error) {
-              console.error('Logout error:', error);
-            }
-          },
-        },
-      ],
-      { cancelable: true }
-    );
-  };
+  const { handleLogoutPress } = useAuth();
 
   return (
-    <TouchableOpacity style={styles.button} onPress={logout}>
+    <TouchableOpacity style={styles.button} onPress={handleLogoutPress}>
       <Text style={styles.buttonText}>Выйти из аккаунта</Text>
       <MaterialIcons name="logout" size={24} color={colors.error} />
     </TouchableOpacity>

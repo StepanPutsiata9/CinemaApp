@@ -1,5 +1,5 @@
 import {
-  Header,
+  AnimatedHeader,
   MainMovie,
   MoviesList,
   PopularMoviesList,
@@ -36,7 +36,7 @@ const HomeTab = () => {
   return (
     <KeyboardAvoidingView style={styles.keyboardContainer} behavior={'padding'}>
       <SafeAreaView style={styles.container}>
-        <Header
+        <AnimatedHeader
           headerHeight={headerHeight}
           greetingOpacity={greetingOpacity}
           greetingTranslateY={greetingTranslateY}
@@ -51,7 +51,14 @@ const HomeTab = () => {
             onScroll={onScroll}
             scrollEventThrottle={16}
             showsVerticalScrollIndicator={false}
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={[colors.primary.start, colors.primary.finish]}
+                tintColor={colors.primary.finish}
+              />
+            }
           >
             {mainMovie && <MainMovie movie={mainMovie} />}
             {popularMovies && popularMovies.length !== 0 && (

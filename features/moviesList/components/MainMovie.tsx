@@ -1,20 +1,19 @@
-import { useSelectedMovie } from '@/features/selectedMovie';
 import { useRouter } from 'expo-router';
 import { memo } from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Movie } from '../types';
 
-interface IMainMovie {
+interface IMainMovieProps {
   movie: Movie;
 }
 
-export const MainMovie = memo(function MainMovie({ movie }: IMainMovie) {
+export const MainMovie = memo(function MainMovie({ movie }: IMainMovieProps) {
   const router = useRouter();
-  const { selectMovie } = useSelectedMovie();
-
   const handleMovie = (id: number) => {
-    router.push('/(root)/(movieInfo)/movieInfo');
-    selectMovie(id);
+    router.push({
+      pathname: '/(root)/(movieInfo)/movieInfo',
+      params: { id },
+    });
   };
   return (
     <TouchableOpacity style={styles.container} onPress={() => handleMovie(movie.id)}>

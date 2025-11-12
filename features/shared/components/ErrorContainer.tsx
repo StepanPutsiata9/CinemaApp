@@ -1,10 +1,10 @@
 import { IColorsTheme } from '@/features/theme';
 import { StyleSheet, Text, View } from 'react-native';
-interface IErrorContainer {
+interface IErrorContainerProps {
   error: string;
   colors: IColorsTheme;
 }
-export const ErrorContainer = ({ error, colors }: IErrorContainer) => {
+export const ErrorContainer = ({ error, colors }: IErrorContainerProps) => {
   const styles = useStyles(colors);
   return (
     <View style={styles.container}>

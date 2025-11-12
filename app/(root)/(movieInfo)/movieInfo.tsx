@@ -3,19 +3,47 @@ import { ErrorContainer, LoadingContainer, PrimaryButton } from '@/features/shar
 import { IColorsTheme, useTheme } from '@/features/theme';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 const MovieInfoScreen = () => {
-  const { selectedMovie, selectedMovieError, selectedMovieLoading, clearSelectedMovie } =
-    useSelectedMovie();
+  const {
+    selectedMovie,
+    selectedMovieError,
+    selectedMovieLoading,
+    selectMovie,
+    handleClose,
+    handleBuyTicket,
+  } = useSelectedMovie();
   const { colors } = useTheme();
   const styles = useStyles(colors);
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
+  const { id } = useLocalSearchParams();
+  const numericMovieId = Number(id);
+  useEffect(() => {
+    selectMovie(numericMovieId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const handleClose = () => {
-    router.back();
-    clearSelectedMovie();
+  const handleImageLoad = () => {
+    setImageLoading(false);
+    setImageError(false);
+  };
+
+  const handleImageError = () => {
+    setImageLoading(false);
+    setImageError(true);
   };
 
   return (
@@ -27,18 +55,36 @@ const MovieInfoScreen = () => {
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
           <View style={styles.containerImage}>
             {selectedMovie?.poster ? (
-              <Image
-                source={{ uri: selectedMovie.poster }}
-                style={styles.image}
-                resizeMode="cover"
-              />
+              <>
+                <Image
+                  source={{ uri: selectedMovie.poster }}
+                  style={styles.image}
+                  resizeMode="cover"
+                  onLoad={handleImageLoad}
+                  onError={handleImageError}
+                />
+
+                {imageLoading && (
+                  <View style={styles.imagePlaceholder}>
+                    <ActivityIndicator size="large" color={colors.primary.finish} />
+                    <Text style={styles.loadingText}>Загрузка изображения...</Text>
+                  </View>
+                )}
+
+                {imageError && (
+                  <View style={styles.imagePlaceholder}>
+                    <AntDesign name="picture" size={50} color={colors.primary.finish} />
+                    <Text style={styles.errorText}>Не удалось загрузить изображение</Text>
+                  </View>
+                )}
+              </>
             ) : (
-              <Image
-                source={require('@/assets/images/icon.png')}
-                style={styles.image}
-                resizeMode="cover"
-              />
+              <View style={styles.imagePlaceholder}>
+                <AntDesign name="camera" size={50} color={colors.text.info} />
+                <Text style={styles.placeholderText}>Изображение отсутствует</Text>
+              </View>
             )}
+
             <LinearGradient
               colors={['transparent', 'rgba(18,18,18,0.3)', 'rgba(18,18,18,1.0)']}
               locations={[0.4, 0.7, 0.9]}
@@ -53,12 +99,7 @@ const MovieInfoScreen = () => {
           </View>
 
           <View style={styles.content}>
-            <ScrollView
-              horizontal
-              style={styles.statisticsLine}
-              contentContainerStyle={styles.statisticsLineContent}
-              showsHorizontalScrollIndicator={false}
-            >
+            <View style={styles.statisticsLine}>
               <LinearGradient
                 colors={[colors.primary.start, colors.primary.finish]}
                 start={{ x: 0, y: 0 }}
@@ -69,22 +110,24 @@ const MovieInfoScreen = () => {
                   <AntDesign name="star" size={18} color="black" />
                   <Text style={styles.ratingText}>
                     {' '}
-                    {selectedMovie?.rating.toString().slice(0, 4)}
+                    {selectedMovie?.rating?.toString().slice(0, 4)}
                   </Text>
                 </View>
               </LinearGradient>
-              <View style={styles.ageView}>
-                <Text style={styles.ageTextTitle}>Возрастное ограничение: </Text>
-                <Text style={styles.ageText}>{selectedMovie?.ageRating}+</Text>
+              <View style={styles.infoView}>
+                <View style={styles.ageView}>
+                  <Text style={styles.ageTextTitle}>Возрастное ограничение: </Text>
+                  <Text style={styles.ageText}>{selectedMovie?.ageRating}+</Text>
+                </View>
+                <View style={styles.movieLengthView}>
+                  <Text style={styles.movieLengthTitle}>Длина фильма: </Text>
+                  <Text style={styles.movieLengtText}>{selectedMovie?.movieLength} минут</Text>
+                </View>
               </View>
-              <View style={styles.movieLengthView}>
-                <Text style={styles.movieLengthTitle}>Длина фильма: </Text>
-                <Text style={styles.movieLengtText}>{selectedMovie?.movieLength} минут</Text>
-              </View>
-            </ScrollView>
+            </View>
             <Text style={styles.title}>{selectedMovie?.name}</Text>
             <ScrollView style={styles.genreLine} horizontal showsHorizontalScrollIndicator={false}>
-              {selectedMovie?.genres.map((g, index) => {
+              {selectedMovie?.genres?.map((g, index) => {
                 return (
                   <View style={styles.genre} key={index}>
                     <Text style={styles.genreText}>{g}</Text>
@@ -98,7 +141,11 @@ const MovieInfoScreen = () => {
           </View>
 
           <View style={styles.buttonContainer}>
-            <PrimaryButton title="Купить билет" onPress={() => {}} colors={colors} />
+            <PrimaryButton
+              title="Заказать билет"
+              onPress={() => handleBuyTicket(numericMovieId)}
+              colors={colors}
+            />
           </View>
         </ScrollView>
       )}
@@ -122,6 +169,32 @@ function useStyles(colors: IColorsTheme) {
       position: 'absolute',
       width: '100%',
       height: '100%',
+    },
+    imagePlaceholder: {
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      backgroundColor: colors.secondaryBackground,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    loadingText: {
+      marginTop: 10,
+      fontFamily: 'Montserrat',
+      fontSize: 14,
+      color: colors.primary.finish,
+    },
+    errorText: {
+      marginTop: 10,
+      fontFamily: 'Montserrat',
+      fontSize: 14,
+      color: colors.error,
+    },
+    placeholderText: {
+      marginTop: 10,
+      fontFamily: 'Montserrat',
+      fontSize: 14,
+      color: colors.primary.finish,
     },
     gradientOverlay: {
       position: 'absolute',
@@ -149,12 +222,17 @@ function useStyles(colors: IColorsTheme) {
     },
     gradient: {
       borderRadius: 15,
+      paddingVertical: 4,
       alignItems: 'center',
       justifyContent: 'center',
       marginRight: 10,
     },
+    infoView: {
+      flexDirection: 'column',
+    },
     statisticsLine: {
       flexDirection: 'row',
+      alignItems: 'center',
       marginBottom: 10,
     },
     statisticsLineContent: {
@@ -208,7 +286,7 @@ function useStyles(colors: IColorsTheme) {
       flexDirection: 'row',
     },
     genre: {
-      backgroundColor: colors.inputBackground,
+      backgroundColor: colors.secondaryBackground,
       borderRadius: 15,
       paddingHorizontal: 16,
       paddingVertical: 7,

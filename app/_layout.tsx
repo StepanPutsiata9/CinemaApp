@@ -1,6 +1,7 @@
 import { useAuth } from '@/features/auth';
 import { LoadingModal } from '@/features/shared';
 import { useTheme } from '@/features/theme';
+import { useHall } from '@/features/ticketOrder';
 import { store } from '@/store';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -14,6 +15,7 @@ SplashScreen.preventAutoHideAsync();
 
 function AppNavigationStack() {
   const { user, isLoading, loadApp } = useAuth();
+  const { bookingLoading } = useHall();
   const { loadTheme } = useTheme();
   useEffect(() => {
     loadApp();
@@ -24,7 +26,7 @@ function AppNavigationStack() {
   return (
     <>
       <StatusBar style="light" />
-      <LoadingModal visible={isLoading} />
+      <LoadingModal visible={isLoading || bookingLoading} />
       <Stack
         screenOptions={{
           headerShown: false,

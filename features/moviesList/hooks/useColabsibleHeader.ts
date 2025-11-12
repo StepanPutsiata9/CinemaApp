@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { Animated } from 'react-native';
-interface IHeaderConfig {
+interface IHeaderConfigProps {
   expandedHeight?: number;
   collapsedHeight?: number;
   fadeStart?: number;
@@ -8,7 +8,7 @@ interface IHeaderConfig {
   translateStart?: number;
   translateEnd?: number;
 }
-export const useCollapsibleHeader = (config: IHeaderConfig) => {
+export const useCollapsibleHeader = (config: IHeaderConfigProps) => {
   const {
     expandedHeight = 100,
     collapsedHeight = 60,

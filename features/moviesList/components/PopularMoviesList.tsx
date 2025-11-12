@@ -1,19 +1,20 @@
-import { useSelectedMovie } from '@/features/selectedMovie';
 import { useRouter } from 'expo-router';
 import { memo } from 'react';
 import { FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Movie } from '../types';
 
-interface IPopularMoviesList {
+interface IPopularMoviesListProps {
   movies: Movie[];
 }
-export const PopularMoviesList = memo(function PopularMoviesList({ movies }: IPopularMoviesList) {
+export const PopularMoviesList = memo(function PopularMoviesList({
+  movies,
+}: IPopularMoviesListProps) {
   const router = useRouter();
-  const { selectMovie } = useSelectedMovie();
-
   const handleMovie = (id: number) => {
-    router.push('/(root)/(movieInfo)/movieInfo');
-    selectMovie(id);
+    router.push({
+      pathname: '/(root)/(movieInfo)/movieInfo',
+      params: { id },
+    });
   };
   return (
     <FlatList
