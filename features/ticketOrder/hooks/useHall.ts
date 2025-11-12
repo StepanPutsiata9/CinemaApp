@@ -51,7 +51,7 @@ export const useHall = () => {
     if (seat.mode === 'free') {
       seat.mode = 'selected';
       dispatch(selectPlace('select'));
-      dispatch(setBookingPlace({ place: seatIndex, row: lineIndex }));
+      dispatch(setBookingPlace({ place: seatIndex + 1, row: lineIndex }));
     } else if (seat.mode === 'selected') {
       seat.mode = 'free';
       dispatch(selectPlace('free'));
@@ -59,9 +59,11 @@ export const useHall = () => {
 
     setSeatsData(updatedData);
   };
-  const handleBack = () => {
+  const clearAllData = () => {
     dispatch(removeSelectedPlaces());
     dispatch(clearBookingPlace());
+  };
+  const handleBack = () => {
     router.back();
   };
   const handleEmptyBookingPress = () => {
@@ -94,11 +96,11 @@ export const useHall = () => {
                 })
               ).unwrap();
               if (result) {
-                router.push('/(root)/(tabs)/home');
-                dispatch(removeSelectedPlaces());
                 Alert.alert('Успешно!', 'Место успешно забронировано!', [
                   { text: 'OK', style: 'default' },
                 ]);
+                dispatch(removeSelectedPlaces());
+                router.navigate('/(root)/(tabs)/home');
               } else {
                 Alert.alert('Ошибка', 'Не удалось забронировать место. Попробуйте еще раз.', [
                   { text: 'OK', style: 'destructive' },
@@ -135,5 +137,6 @@ export const useHall = () => {
     handleEmptyBookingPress: handleEmptyBookingPress,
     loadHall: loadHall,
     bookingPlaces: bookingPlaces,
+    clearAllData: clearAllData,
   };
 };

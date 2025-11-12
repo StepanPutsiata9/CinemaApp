@@ -26,7 +26,6 @@ export interface IHallState {
   reservedPlaceCount: number;
   bookingLoading: boolean;
   bookingError: string | null;
-  isBookingSucsess: boolean;
   bookingPlaces: IBookingPlace[] | null;
 }
 export type TPlace = { id: number; mode: 'free' | 'selected' | 'taken' };

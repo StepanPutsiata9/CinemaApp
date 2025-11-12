@@ -17,7 +17,7 @@ export const TimeItem = ({ colors, item, id }: ITimeItemProps) => {
     <TouchableOpacity
       style={styles.itemCard}
       onPress={() =>
-        router.push({
+        router.navigate({
           pathname: '/(root)/(ticketOrder)/hall',
           params: { id: id, time: item.time, bookedPlaces: item.bookedPlaces },
         })
@@ -27,13 +27,13 @@ export const TimeItem = ({ colors, item, id }: ITimeItemProps) => {
         <Text style={styles.timeText}>{item.time}</Text>
       </View>
       <View style={styles.placesView}>
-        <Text style={styles.placeCount}>{25 - item.bookedPlaces}</Text>
+        <Text style={styles.placeCount}>{126 - item.bookedPlaces}</Text>
         <Text style={styles.placeText}>мест</Text>
       </View>
       <GradientProgressBar
         title={`${item.hall} зал`}
         colors={colors}
-        progress={item.bookedPlaces === 0 ? 0 : item.bookedPlaces / 25}
+        progress={item.bookedPlaces === 0 ? 0 : item.bookedPlaces / 126}
       />
     </TouchableOpacity>
   );

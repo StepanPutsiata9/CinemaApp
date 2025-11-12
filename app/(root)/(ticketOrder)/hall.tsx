@@ -21,6 +21,7 @@ const HallScreen = () => {
     reservedPlaceCount,
     reservedPlaceCost,
     handleBack,
+    clearAllData,
     handleBookingPress,
     handleEmptyBookingPress,
     loadHall,
@@ -32,7 +33,7 @@ const HallScreen = () => {
   useFocusEffect(
     useCallback(() => {
       return () => {
-        handleBack();
+        clearAllData();
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -48,7 +49,7 @@ const HallScreen = () => {
 
             <View style={styles.placeCount}>
               <Text style={styles.freeCountText}>Всего свободных мест: </Text>
-              <Text style={styles.palceCountText}>{25 - bookedPlacesNumber}</Text>
+              <Text style={styles.palceCountText}>{126 - bookedPlacesNumber}</Text>
             </View>
 
             <View style={styles.movieScreen}>

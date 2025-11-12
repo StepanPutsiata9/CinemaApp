@@ -10,7 +10,6 @@ const initialState: IHallState = {
   bookingLoading: false,
   bookingError: null,
   reservedPlaceCost: 0,
-  isBookingSucsess: false,
   bookingPlaces: null,
 };
 
@@ -65,8 +64,6 @@ const hallSlice = createSlice({
     },
     setBookingPlace: (state, action: PayloadAction<IBookingPlace>) => {
       const { row, place } = action.payload;
-      console.log(row, place, ' row place');
-
       if (!state.bookingPlaces) {
         state.bookingPlaces = [];
       }
