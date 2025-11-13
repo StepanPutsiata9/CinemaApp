@@ -52,7 +52,7 @@ export const useMoviesList = () => {
 
       searchTimeoutRef.current = setTimeout(() => {
         dispatch(searchMovieByTitle(movieTitle));
-      }, 300) as unknown as number;
+      }, 300);
     },
     [dispatch]
   );

@@ -96,7 +96,6 @@ const hallSlice = createSlice({
         state.bookingLoading = true;
       })
       .addCase(bookingPlace.fulfilled, (state, action) => {
-        // state.isBookingSucsess = action.payload as unknown as boolean;
         state.bookingLoading = false;
       })
       .addCase(bookingPlace.rejected, state => {
