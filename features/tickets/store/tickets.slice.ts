@@ -20,10 +20,14 @@ export const getAllTickets = createAsyncThunk(
   }
 );
 
-const moviesListSlice = createSlice({
-  name: 'moviesList',
+const ticketsSlice = createSlice({
+  name: 'tickets',
   initialState,
-  reducers: {},
+  reducers: {
+    setTicketsError: (state, action) => {
+      state.ticketsError = action.payload;
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(getAllTickets.pending, state => {
@@ -40,5 +44,5 @@ const moviesListSlice = createSlice({
   },
 });
 
-export const {} = moviesListSlice.actions;
-export default moviesListSlice.reducer;
+export const { setTicketsError } = ticketsSlice.actions;
+export default ticketsSlice.reducer;
