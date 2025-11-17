@@ -4,10 +4,15 @@ export interface ITicketsState {
   ticketsError: string | null;
 }
 export interface ITicket {
+  id: number;
   title: string;
   date: string;
   time: string;
   hall: number;
   row: number;
-  places: number[] | number;
+  place: number;
+  day: string;
+  cost: number;
+  userId: string;
+  showId: string;
 }

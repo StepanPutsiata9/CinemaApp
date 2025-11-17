@@ -1,9 +1,9 @@
 import { ErrorContainer, LoadingContainer } from '@/features/shared';
 import { IColorsTheme, useTheme } from '@/features/theme';
-import { TicketItem } from '@/features/tickets';
+import { TicketList } from '@/features/tickets';
 import { useTicketsList } from '@/features/tickets/hooks';
 import { useEffect } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { ScrollView, StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function TicketsTab() {
@@ -16,24 +16,12 @@ export default function TicketsTab() {
   }, []);
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Билеты</Text>
-      {ticketsLoading && <LoadingContainer colors={colors} />}
-      {ticketsError && <ErrorContainer error={'ticketsError'} colors={colors} />}
-      {!ticketsError && !ticketsLoading && (
-        // <View>
-        //   <Text>Tickets</Text>
-        // </View>
-        <TicketItem
-          ticket={{
-            movieTitle: 'Дюна: Часть вторая',
-            date: '15 ноября, сб',
-            time: '19:30',
-            hall: 'IMAX 3D',
-            row: 7,
-            seat: 14,
-          }}
-        />
-      )}
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <Text style={styles.title}>Билеты</Text>
+        {ticketsLoading && <LoadingContainer colors={colors} />}
+        {ticketsError && <ErrorContainer error={'ticketsError'} colors={colors} />}
+        {!ticketsError && !ticketsLoading && <TicketList colors={colors} />}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -50,6 +38,10 @@ function useStyles(colors: IColorsTheme) {
       fontSize: 24,
       marginBottom: 20,
       paddingHorizontal: 16,
+    },
+    scrollContent: {
+      flexGrow: 1,
+      paddingBottom: 100,
     },
   });
 }

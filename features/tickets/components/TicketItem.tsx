@@ -1,26 +1,25 @@
+import { IColorsTheme } from '@/features/theme';
+import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { ITicket } from '../types';
 
-export interface TicketData {
-  movieTitle: string;
-  date: string;
-  time: string;
-  hall: string;
-  row: number;
-  seat: number;
-}
 interface ITicketItemProps {
-  ticket: TicketData;
+  ticket: ITicket;
+  colors: IColorsTheme;
 }
-export const TicketItem = ({ ticket }: ITicketItemProps) => {
+export const TicketItem = ({ ticket, colors }: ITicketItemProps) => {
+  const styles = useStyles(colors);
   return (
     <View style={styles.card}>
       <View style={styles.mainPart}>
-        <Text style={styles.movie}>{ticket.movieTitle}</Text>
+        <Text style={styles.movie}>
+          {ticket.title.length > 20 ? ticket.title.slice(0, 20) + '...' : ticket.title}
+        </Text>
         <View style={styles.details}>
-          <Detail label="Дата" value={ticket.date} />
-          <Detail label="Время" value={ticket.time} />
-          <Detail label="Зал" value={ticket.hall} />
+          <Detail label="Дата" value={ticket.date} colors={colors} />
+          <Detail label="Время" value={ticket.time} colors={colors} />
+          <Detail label="Зал" value={ticket.hall.toString()} colors={colors} />
         </View>
       </View>
       <View style={styles.perforation}>
@@ -28,100 +27,113 @@ export const TicketItem = ({ ticket }: ITicketItemProps) => {
           <View key={i} style={styles.tooth} />
         ))}
       </View>
-      <View style={styles.stub}>
+      <LinearGradient
+        colors={[colors.primary.finish, colors.primary.start]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={styles.stub}
+      >
         <Text style={styles.stubLabel}>Ваше место</Text>
-        <Text style={styles.stubSeat}>{ticket.seat}</Text>
-        <Text style={styles.stubRow}>ряд {ticket.row}</Text>
-      </View>
+        <Text style={styles.stubSeat}>{ticket.place}</Text>
+        <Text style={styles.stubRow}>ряд {ticket.row + 1}</Text>
+      </LinearGradient>
     </View>
   );
 };
 
-const Detail = ({ label, value }: { label: string; value: string }) => (
-  <View style={styles.detailItem}>
-    <Text style={styles.detailLabel}>{label}</Text>
-    <Text style={styles.detailValue}>{value}</Text>
-  </View>
-);
+interface IDetailProps {
+  label: string;
+  value: string;
+  colors: IColorsTheme;
+}
+const Detail = ({ label, value, colors }: IDetailProps) => {
+  const styles = useStyles(colors);
+  return (
+    <View style={styles.detailItem}>
+      <Text style={styles.detailLabel}>{label}</Text>
+      <Text style={styles.detailValue}>{value}</Text>
+    </View>
+  );
+};
 
-const styles = StyleSheet.create({
-  card: {
-    flexDirection: 'row',
-    backgroundColor: '#242424',
-    borderRadius: 16,
-    overflow: 'hidden',
-    marginHorizontal: 16,
-    marginVertical: 8,
-    height: 110,
-  },
-  mainPart: {
-    flex: 1,
-    padding: 16,
-    justifyContent: 'center',
-  },
-  movie: {
-    color: '#FFFFFF',
-    fontSize: 17,
-    fontWeight: '700',
-    fontFamily: 'Montserrat',
-    marginBottom: 10,
-  },
-  details: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  detailItem: {
-    marginRight: 16,
-    marginBottom: 4,
-  },
-  detailLabel: {
-    color: '#FFFFFF',
-    fontSize: 11,
-    opacity: 0.6,
-    fontFamily: 'Montserrat',
-  },
-  detailValue: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  perforation: {
-    width: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#242424',
-  },
-  tooth: {
-    width: 6,
-    height: 6,
-    backgroundColor: '#141414',
-    borderRadius: 3,
-    marginVertical: 2,
-  },
-  stub: {
-    width: 100,
-    backgroundColor: '#FFA31A',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 12,
-  },
-  stubLabel: {
-    color: '#141414',
-    fontSize: 10,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginBottom: 4,
-  },
-  stubSeat: {
-    color: '#141414',
-    fontSize: 26,
-    fontWeight: '800',
-  },
-  stubRow: {
-    color: '#141414',
-    fontSize: 14,
-    fontWeight: '500',
-    marginTop: 2,
-  },
-});
+function useStyles(colors: IColorsTheme) {
+  return StyleSheet.create({
+    card: {
+      flexDirection: 'row',
+      backgroundColor: colors.secondaryBackground,
+      borderRadius: 16,
+      overflow: 'hidden',
+      marginHorizontal: 16,
+      marginBottom: 16,
+      height: 125,
+    },
+    mainPart: {
+      flex: 1,
+      padding: 16,
+      justifyContent: 'center',
+    },
+    movie: {
+      color: colors.text.title,
+      fontSize: 17,
+      fontFamily: 'MontserratBold',
+      marginBottom: 10,
+    },
+    details: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
+    detailItem: {
+      marginRight: 16,
+      marginBottom: 4,
+    },
+    detailLabel: {
+      color: colors.text.title,
+      fontSize: 12,
+      opacity: 0.6,
+      fontFamily: 'Montserrat',
+    },
+    detailValue: {
+      color: colors.text.title,
+      fontSize: 12,
+      fontWeight: '600',
+      fontFamily: 'Montserrat',
+    },
+    perforation: {
+      width: 12,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.secondaryBackground,
+    },
+    tooth: {
+      width: 6,
+      height: 6,
+      backgroundColor: colors.background,
+      borderRadius: 3,
+      marginVertical: 2,
+    },
+    stub: {
+      width: 100,
+      backgroundColor: colors.primary.start,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingVertical: 12,
+    },
+    stubLabel: {
+      color: colors.secondaryBackground,
+      fontSize: 12,
+      textTransform: 'uppercase',
+      marginBottom: 2,
+      fontFamily: 'Montserrat',
+    },
+    stubSeat: {
+      color: colors.background,
+      fontSize: 26,
+      fontFamily: 'MontserratBold',
+    },
+    stubRow: {
+      color: colors.background,
+      fontSize: 14,
+      fontFamily: 'Montserrat',
+    },
+  });
+}

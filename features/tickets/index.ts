@@ -1,1 +1,1 @@
-export { TicketItem } from './components';
+export { TicketItem, TicketList } from './components';
