@@ -14,7 +14,9 @@ export const TicketItem = ({ ticket, colors }: ITicketItemProps) => {
     <View style={styles.card}>
       <View style={styles.mainPart}>
         <Text style={styles.movie}>
-          {ticket.title.length > 20 ? ticket.title.slice(0, 20) + '...' : ticket.title}
+          {/* {ticket.title.length > 20 ? ticket.title.slice(0, 20) + '...' : ticket.title}
+           */}
+          Название
         </Text>
         <View style={styles.details}>
           <Detail label="Дата" value={ticket.date} colors={colors} />
@@ -105,10 +107,10 @@ function useStyles(colors: IColorsTheme) {
       backgroundColor: colors.secondaryBackground,
     },
     tooth: {
-      width: 6,
-      height: 6,
+      width: 8,
+      height: 8,
       backgroundColor: colors.background,
-      borderRadius: 3,
+      borderRadius: 4,
       marginVertical: 2,
     },
     stub: {
