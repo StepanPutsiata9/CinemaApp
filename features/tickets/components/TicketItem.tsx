@@ -14,9 +14,7 @@ export const TicketItem = ({ ticket, colors }: ITicketItemProps) => {
     <View style={styles.card}>
       <View style={styles.mainPart}>
         <Text style={styles.movie}>
-          {/* {ticket.title.length > 20 ? ticket.title.slice(0, 20) + '...' : ticket.title}
-           */}
-          Название
+          {ticket.name.length > 20 ? ticket.name.slice(0, 20) + '...' : ticket.name}
         </Text>
         <View style={styles.details}>
           <Detail label="Дата" value={ticket.date} colors={colors} />
@@ -67,7 +65,7 @@ function useStyles(colors: IColorsTheme) {
       overflow: 'hidden',
       marginHorizontal: 16,
       marginBottom: 16,
-      height: 125,
+      height: 115,
     },
     mainPart: {
       flex: 1,
@@ -76,7 +74,7 @@ function useStyles(colors: IColorsTheme) {
     },
     movie: {
       color: colors.text.title,
-      fontSize: 17,
+      fontSize: 18,
       fontFamily: 'MontserratBold',
       marginBottom: 10,
     },

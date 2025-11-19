@@ -40,7 +40,6 @@ function TabbarButton({
   onLongPress,
   isFocused,
   routeName,
-  label,
 }: IProps) {
   const { buildHref } = useLinkBuilder();
   const scale = useSharedValue(0);

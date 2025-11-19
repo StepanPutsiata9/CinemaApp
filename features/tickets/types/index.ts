@@ -5,7 +5,7 @@ export interface ITicketsState {
 }
 export interface ITicket {
   id: number;
-  title: string;
+  name: string;
   date: string;
   time: string;
   hall: number;
