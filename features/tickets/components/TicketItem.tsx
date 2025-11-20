@@ -2,9 +2,10 @@ import { IColorsTheme } from '@/features/theme';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import Reanimated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
+import { useTicketsList } from '../hooks';
 import { ITicket } from '../types';
 interface ITicketItemProps {
   ticket: ITicket;
@@ -13,14 +14,14 @@ interface ITicketItemProps {
 
 export const TicketItem = ({ ticket, colors }: ITicketItemProps) => {
   const styles = useStyles(colors);
+  const { handleDeleteTicket } = useTicketsList();
   return (
     <ReanimatedSwipeable
-      // containerStyle={styles.swipeable}
       friction={2}
       overshootRight={false}
       enableTrackpadTwoFingerGesture
       rightThreshold={0}
-      renderRightActions={RightAction}
+      renderRightActions={drag => RightAction(drag, () => handleDeleteTicket(ticket.id), colors)}
     >
       <View style={styles.card}>
         <View style={styles.mainPart}>
@@ -68,20 +69,19 @@ const Detail = ({ label, value, colors }: IDetailProps) => {
   );
 };
 
-function RightAction(drag: SharedValue<number>) {
-  const styles = useStyles();
+function RightAction(drag: SharedValue<number>, onPress: () => void, colors: IColorsTheme) {
+  const styles = useStyles(colors);
   const styleAnimation = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: drag.value }],
     };
   });
-
   return (
     <Reanimated.View style={[styleAnimation, styles.deleteButton]}>
-      <View style={styles.deleteContent}>
+      <TouchableOpacity style={styles.deleteContent} onPress={onPress} activeOpacity={0.7}>
         <FontAwesome name="trash-o" size={32} color="white" />
         <Text style={styles.deleteText}>Отменить бронь</Text>
-      </View>
+      </TouchableOpacity>
     </Reanimated.View>
   );
 }
@@ -187,12 +187,6 @@ function useStyles(colors?: IColorsTheme) {
       color: colors?.background,
       fontSize: 14,
       fontFamily: 'Montserrat',
-    },
-
-    rightAction: {
-      width: 100,
-      height: 125,
-      backgroundColor: 'purple',
     },
   });
 }
