@@ -65,7 +65,7 @@ function useStyles(colors: IColorsTheme) {
       overflow: 'hidden',
       marginHorizontal: 16,
       marginBottom: 16,
-      height: 115,
+      height: 125,
     },
     mainPart: {
       flex: 1,
