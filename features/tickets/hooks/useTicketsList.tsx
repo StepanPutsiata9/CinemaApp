@@ -34,7 +34,6 @@ export const useTicketsList = () => {
   const confirmDelete = async (ticketId: number) => {
     try {
       await dispatch(deleteTicketItem(ticketId)).unwrap();
-      Alert.alert('Успех', 'Бронь успешно отменена');
     } catch (error) {
       console.error('Ошибка при удалении:', error);
       Alert.alert('Ошибка', 'Произошла ошибка при отмене брони. Пожалуйста, попробуйте еще раз.');
