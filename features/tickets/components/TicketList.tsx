@@ -1,8 +1,8 @@
 import { IColorsTheme } from '@/features/theme';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useTicketsList } from '../hooks';
 import { TicketItem } from './TicketItem';
-
 interface ITicketListProps {
   colors: IColorsTheme;
 }
@@ -22,19 +22,21 @@ export const TicketList = ({ colors }: ITicketListProps) => {
   );
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={ticketsList}
-        renderItem={({ item }) => <TicketItem ticket={item} colors={colors} />}
-        keyExtractor={(item, index) => item.id?.toString() || index.toString()}
-        scrollEnabled={false}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={
-          ticketsList?.length === 0 ? styles.emptyContent : styles.scrollContent
-        }
-        ListEmptyComponent={EmptyList}
-      />
-    </View>
+    <GestureHandlerRootView>
+      <View style={styles.container}>
+        <FlatList
+          data={ticketsList}
+          renderItem={({ item }) => <TicketItem ticket={item} colors={colors} />}
+          keyExtractor={(item, index) => item.id?.toString() || index.toString()}
+          scrollEnabled={false}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={
+            ticketsList?.length === 0 ? styles.emptyContent : styles.scrollContent
+          }
+          ListEmptyComponent={EmptyList}
+        />
+      </View>
+    </GestureHandlerRootView>
   );
 };
 

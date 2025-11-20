@@ -1,43 +1,55 @@
 import { IColorsTheme } from '@/features/theme';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
+import Reanimated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { ITicket } from '../types';
-
 interface ITicketItemProps {
   ticket: ITicket;
   colors: IColorsTheme;
 }
+
 export const TicketItem = ({ ticket, colors }: ITicketItemProps) => {
   const styles = useStyles(colors);
   return (
-    <View style={styles.card}>
-      <View style={styles.mainPart}>
-        <Text style={styles.movie}>
-          {ticket.name.length > 20 ? ticket.name.slice(0, 20) + '...' : ticket.name}
-        </Text>
-        <View style={styles.details}>
-          <Detail label="Дата" value={ticket.date} colors={colors} />
-          <Detail label="Время" value={ticket.time} colors={colors} />
-          <Detail label="Зал" value={ticket.hall.toString()} colors={colors} />
+    <ReanimatedSwipeable
+      // containerStyle={styles.swipeable}
+      friction={2}
+      overshootRight={false}
+      enableTrackpadTwoFingerGesture
+      rightThreshold={0}
+      renderRightActions={RightAction}
+    >
+      <View style={styles.card}>
+        <View style={styles.mainPart}>
+          <Text style={styles.movie}>
+            {ticket.name.length > 20 ? ticket.name.slice(0, 20) + '...' : ticket.name}
+          </Text>
+          <View style={styles.details}>
+            <Detail label="Дата" value={ticket.date} colors={colors} />
+            <Detail label="Время" value={ticket.time} colors={colors} />
+            <Detail label="Зал" value={ticket.hall.toString()} colors={colors} />
+          </View>
         </View>
+        <View style={styles.perforation}>
+          {[...Array(16)].map((_, i) => (
+            <View key={i} style={styles.tooth} />
+          ))}
+        </View>
+        <LinearGradient
+          colors={[colors.primary.finish, colors.primary.start]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.stub}
+        >
+          <Text style={styles.stubLabel}>Ваше место</Text>
+          <Text style={styles.stubSeat}>{ticket.place}</Text>
+          <Text style={styles.stubRow}>ряд {ticket.row + 1}</Text>
+        </LinearGradient>
       </View>
-      <View style={styles.perforation}>
-        {[...Array(16)].map((_, i) => (
-          <View key={i} style={styles.tooth} />
-        ))}
-      </View>
-      <LinearGradient
-        colors={[colors.primary.finish, colors.primary.start]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={styles.stub}
-      >
-        <Text style={styles.stubLabel}>Ваше место</Text>
-        <Text style={styles.stubSeat}>{ticket.place}</Text>
-        <Text style={styles.stubRow}>ряд {ticket.row + 1}</Text>
-      </LinearGradient>
-    </View>
+    </ReanimatedSwipeable>
   );
 };
 
@@ -56,11 +68,52 @@ const Detail = ({ label, value, colors }: IDetailProps) => {
   );
 };
 
-function useStyles(colors: IColorsTheme) {
+function RightAction(drag: SharedValue<number>) {
+  const styles = useStyles();
+  const styleAnimation = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: drag.value }],
+    };
+  });
+
+  return (
+    <Reanimated.View style={[styleAnimation, styles.deleteButton]}>
+      <View style={styles.deleteContent}>
+        <FontAwesome name="trash-o" size={32} color="white" />
+        <Text style={styles.deleteText}>Отменить бронь</Text>
+      </View>
+    </Reanimated.View>
+  );
+}
+
+function useStyles(colors?: IColorsTheme) {
   return StyleSheet.create({
+    deleteContent: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 12,
+    },
+    deleteText: {
+      color: '#FFFFFF',
+      fontSize: 11,
+      fontFamily: 'Montserrat',
+      textAlign: 'center',
+    },
+    deleteButton: {
+      backgroundColor: '#FF3B30',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: 130,
+      height: 125,
+      borderTopRightRadius: 16,
+      borderBottomRightRadius: 16,
+      marginRight: 16,
+      marginLeft: -30,
+      elevation: 3,
+    },
     card: {
       flexDirection: 'row',
-      backgroundColor: colors.secondaryBackground,
+      backgroundColor: colors?.secondaryBackground,
       borderRadius: 16,
       overflow: 'hidden',
       marginHorizontal: 16,
@@ -73,7 +126,7 @@ function useStyles(colors: IColorsTheme) {
       justifyContent: 'center',
     },
     movie: {
-      color: colors.text.title,
+      color: colors?.text.title,
       fontSize: 18,
       fontFamily: 'MontserratBold',
       marginBottom: 10,
@@ -87,13 +140,13 @@ function useStyles(colors: IColorsTheme) {
       marginBottom: 4,
     },
     detailLabel: {
-      color: colors.text.title,
+      color: colors?.text.title,
       fontSize: 12,
       opacity: 0.6,
       fontFamily: 'Montserrat',
     },
     detailValue: {
-      color: colors.text.title,
+      color: colors?.text.title,
       fontSize: 12,
       fontWeight: '600',
       fontFamily: 'Montserrat',
@@ -102,38 +155,44 @@ function useStyles(colors: IColorsTheme) {
       width: 12,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: colors.secondaryBackground,
+      backgroundColor: colors?.secondaryBackground,
     },
     tooth: {
       width: 8,
       height: 8,
-      backgroundColor: colors.background,
+      backgroundColor: colors?.background,
       borderRadius: 4,
       marginVertical: 2,
     },
     stub: {
       width: 100,
-      backgroundColor: colors.primary.start,
+      backgroundColor: colors?.primary.start,
       justifyContent: 'center',
       alignItems: 'center',
       paddingVertical: 12,
     },
     stubLabel: {
-      color: colors.secondaryBackground,
+      color: colors?.secondaryBackground,
       fontSize: 12,
       textTransform: 'uppercase',
       marginBottom: 2,
       fontFamily: 'Montserrat',
     },
     stubSeat: {
-      color: colors.background,
+      color: colors?.background,
       fontSize: 26,
       fontFamily: 'MontserratBold',
     },
     stubRow: {
-      color: colors.background,
+      color: colors?.background,
       fontSize: 14,
       fontFamily: 'Montserrat',
+    },
+
+    rightAction: {
+      width: 100,
+      height: 125,
+      backgroundColor: 'purple',
     },
   });
 }

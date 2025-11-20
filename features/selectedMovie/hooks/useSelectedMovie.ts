@@ -19,7 +19,7 @@ export const useSelectedMovie = () => {
     clearSelectedMovie();
   };
 
-  const handleBuyTicket = (id: number) => {
+  const handleBookingTicket = (id: number) => {
     router.push({
       pathname: '/(root)/(ticketOrder)/date',
       params: { id },
@@ -33,6 +33,6 @@ export const useSelectedMovie = () => {
     selectMovie: selectMovie,
     clearSelectedMovie: clearSelectedMovie,
     handleClose: handleClose,
-    handleBuyTicket: handleBuyTicket,
+    handleBookingTicket: handleBookingTicket,
   };
 };
