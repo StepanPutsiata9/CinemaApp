@@ -1,0 +1,1 @@
+export { getAllMovies } from './moviesListApi';

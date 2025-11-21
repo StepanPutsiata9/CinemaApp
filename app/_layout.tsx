@@ -1,5 +1,71 @@
-import { Stack } from "expo-router";
+import { useAuth } from '@/features/auth';
+import { LoadingModal } from '@/features/shared';
+import { useTheme } from '@/features/theme';
+import { useHall } from '@/features/ticketOrder';
+import { store } from '@/store';
+import { useFonts } from 'expo-font';
+import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { Provider } from 'react-redux';
+
+SplashScreen.preventAutoHideAsync();
+
+function AppNavigationStack() {
+  const { user, isLoading, loadApp } = useAuth();
+  const { bookingLoading } = useHall();
+  const { loadTheme } = useTheme();
+  useEffect(() => {
+    loadApp();
+    loadTheme();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <>
+      <StatusBar style="light" />
+      <LoadingModal visible={isLoading || bookingLoading} />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          animation: 'fade',
+        }}
+      >
+        <Stack.Protected guard={!!user}>
+          <Stack.Screen name="(root)" />
+        </Stack.Protected>
+        <Stack.Protected guard={!user}>
+          <Stack.Screen name="(auth)" />
+        </Stack.Protected>
+      </Stack>
+    </>
+  );
+}
 
 export default function RootLayout() {
-  return <Stack />;
+  const [loaded, error] = useFonts({
+    Montserrat: require('@/assets/fonts/Montserrat.ttf'),
+    MontserratBold: require('@/assets/fonts/MontserratBold.ttf'),
+    MontserratRegular: require('@/assets/fonts/MontserratRegular.ttf'),
+  });
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) {
+    return null;
+  }
+
+  return (
+    <Provider store={store}>
+      <KeyboardProvider>
+        <AppNavigationStack />
+      </KeyboardProvider>
+    </Provider>
+  );
 }

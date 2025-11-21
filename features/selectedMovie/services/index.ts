@@ -1,0 +1,1 @@
+export { getMovieInfo } from './selectedMovieApi';
