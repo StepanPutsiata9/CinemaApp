@@ -23,7 +23,7 @@ const MovieInfoScreen = () => {
     selectedMovieLoading,
     selectMovie,
     handleClose,
-    handleBuyTicket,
+    handleBookingTicket,
   } = useSelectedMovie();
   const { colors } = useTheme();
   const styles = useStyles(colors);
@@ -142,8 +142,8 @@ const MovieInfoScreen = () => {
 
           <View style={styles.buttonContainer}>
             <PrimaryButton
-              title="Заказать билет"
-              onPress={() => handleBuyTicket(numericMovieId)}
+              title="Забронировать билет"
+              onPress={() => handleBookingTicket(numericMovieId)}
               colors={colors}
             />
           </View>

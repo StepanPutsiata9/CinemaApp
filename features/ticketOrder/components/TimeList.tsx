@@ -10,7 +10,7 @@ interface ITimeListProps {
 }
 
 export const TimeList = ({ colors, timesList, id }: ITimeListProps) => {
-  const styles = useStyles(colors);
+  const styles = useStyles();
   return (
     <View style={styles.container}>
       {timesList.map((el, index) => {
@@ -20,7 +20,7 @@ export const TimeList = ({ colors, timesList, id }: ITimeListProps) => {
   );
 };
 
-function useStyles(colors: IColorsTheme) {
+function useStyles() {
   return StyleSheet.create({
     container: {
       justifyContent: 'space-between',

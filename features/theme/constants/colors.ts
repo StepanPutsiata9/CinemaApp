@@ -21,13 +21,13 @@ export const lightTheme: IColorsTheme = {
     start: '#ff9900',
     finish: '#FFB412',
   },
-  background: '#e4e4e4ff',
+  background: '#FFF4E5',
   text: {
     title: '#000000',
     info: '#121212',
   },
-  secondaryBackground: '#ffffffff',
+  secondaryBackground: '#FFEACB',
   error: '#FF1B44',
-  tabbar: '#d9d8d8ff',
-  takedPlace: '#c7c4c4ff',
+  tabbar: '#FFE3B9',
+  takedPlace: '#C1C1C1',
 } as const;

@@ -1,11 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useCallback, useRef, useState } from 'react';
-import {
-  getAllMoviesList,
-  searchMovieByTitle,
-  setMoviesError,
-  setMoviesLoading,
-} from '../store/moviesList.slice';
+import { getAllMoviesList, searchMovieByTitle, setMoviesError } from '../store/moviesList.slice';
 
 export const useMoviesList = () => {
   const dispatch = useAppDispatch();
@@ -18,14 +13,9 @@ export const useMoviesList = () => {
 
   const loadMoviesList = useCallback(async () => {
     try {
-      dispatch(setMoviesLoading(true));
-      dispatch(setMoviesError(null));
-
       dispatch(getAllMoviesList());
     } catch (error) {
       dispatch(setMoviesError(error instanceof Error ? error.message : 'Unknown error'));
-    } finally {
-      dispatch(setMoviesLoading(false));
     }
   }, [dispatch]);
 
@@ -52,7 +42,7 @@ export const useMoviesList = () => {
 
       searchTimeoutRef.current = setTimeout(() => {
         dispatch(searchMovieByTitle(movieTitle));
-      }, 300) as unknown as number;
+      }, 300);
     },
     [dispatch]
   );

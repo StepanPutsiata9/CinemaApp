@@ -10,7 +10,7 @@ interface IDateListProps {
   dateList: ITimeItem[];
 }
 export const DateList = ({ colors, dateList }: IDateListProps) => {
-  const styles = useStyles(colors);
+  const styles = useStyles();
   const { selectedCategory, handleCategoryPress } = useDateList();
   return (
     <ScrollView
@@ -35,7 +35,7 @@ export const DateList = ({ colors, dateList }: IDateListProps) => {
   );
 };
 
-function useStyles(colors: IColorsTheme) {
+function useStyles() {
   return StyleSheet.create({
     dateScrollView: {
       gap: 12,
