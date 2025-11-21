@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useMemo } from 'react';
-import { darkTheme, lightTheme } from '../constans/colors';
+import { darkTheme, lightTheme } from '../constants/colors';
 import { getTheme, storeTheme } from '../storage';
 import { setTheme, toggleTheme } from '../store/theme.slice';
 import { IColorsTheme, ThemeMode } from '../types';
