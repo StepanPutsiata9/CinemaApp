@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "react-native.config.js", "features/ticketOrder/store/.slice.ts"  ]
+, "react-native.config.ts", "features/ticketOrder/store/.slice.ts", "eslint.config.ts"  ]
 }

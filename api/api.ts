@@ -25,7 +25,6 @@ api.interceptors.response.use(
   async error => {
     const originalRequest = error.config;
     const tokens = await getTokens();
-
     if (error.response?.status === 403) {
       if (onLogoutCallback) {
         onLogoutCallback();

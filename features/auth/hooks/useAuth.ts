@@ -1,8 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useRouter } from 'expo-router';
 import { Alert } from 'react-native';
-import { loginApi, registrationApi } from '../api';
-import { logoutApi } from '../api/authApi';
+import { loginApi, logoutApi, registrationApi } from '../services';
 import { isFirstLaunch, setAppLaunched } from '../storage';
 import {
   loadUser,
